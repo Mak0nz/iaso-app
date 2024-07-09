@@ -158,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           inheritThemeColors: true,
         ).show(context);
 
-        Navigator.pushReplacementNamed(context, '/navigation_menu');
+        Navigator.pushReplacementNamed(context, '/enable_notifications');
       } else {
       CherryToast.error(
         title: Text(AppLocalizations.of(context)!.error),
