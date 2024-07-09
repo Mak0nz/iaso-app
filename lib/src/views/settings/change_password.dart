@@ -4,7 +4,9 @@ import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/services/backend/firebase_auth.dart';
 import 'package:iaso/src/widgets/animated_button.dart';
 import 'package:iaso/src/widgets/app_text.dart';
@@ -44,7 +46,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
       });
 
       CherryToast.success(
-        title: const Text("Jelszó sikeresen módosítva",),
+        title: Text(AppLocalizations.of(context)!.change_password_success),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,
@@ -80,16 +82,16 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
         WoltModalSheet.show(context: context, pageListBuilder: (context) {
           return [ WoltModalSheetPage(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 65),
+              padding: const EdgeInsets.fromLTRB(edgeInset, 0, edgeInset, 65),
               child: Column(
                 children: [
-                  const AppText.heading("Jelszó módosítása:"),
+                  AppText.heading("${AppLocalizations.of(context)!.change_password}:"),
                   
                   const SizedBox(height: 25,),
 
                   FormContainer(
                     controller: _oldPasswordController,
-                    hintText: "Régi jelszó",
+                    hintText: AppLocalizations.of(context)!.old_password,
                     isPasswordField: true,
                   ),
                   
@@ -97,7 +99,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                   
                   FormContainer(
                     controller: _newPasswordController,
-                    hintText: "Új jelszó",
+                    hintText: AppLocalizations.of(context)!.new_password,
                     isPasswordField: true,
                   ),
 
@@ -107,7 +109,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                     onTap: () {
                       changePassword();
                     }, 
-                    text: "Jelszó módosítása", 
+                    text: AppLocalizations.of(context)!.change_password, 
                     progressEvent: _loading
                   ),
                 ],
