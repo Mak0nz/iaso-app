@@ -1,0 +1,1 @@
+const double edgeInset = 12.0;
