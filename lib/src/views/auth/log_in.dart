@@ -96,6 +96,44 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
 
                 const SizedBox(height: 20),
+                /*
+              // or continue with
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey.shade500,
+                      )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text('Vagy jelentkezzen be google-al',),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey.shade500,
+                      )
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15,),
+              // login using google
+                InkWell(
+                  onTap: _signInWithGoogle,
+                  borderRadius: BorderRadius.circular(15),
+                  child: Ink(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.black12,
+                    ),
+                    child: Image.asset('assets/google.png', height: 40,),
+                  ),
+                ),
+              */
               // Don't have an account? Register
                 Row(mainAxisAlignment: MainAxisAlignment.center,
                   children : [
