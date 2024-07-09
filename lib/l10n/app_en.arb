@@ -31,5 +31,6 @@
     "enable_notifications": "Enable notifications",
     "med_notification_description": "Notify me when meds are about to run out.",
     "finish": "Finish",
-    "enabled": "Enabled"
+    "enabled": "Enabled",
+    "hello": "Hello"
 }

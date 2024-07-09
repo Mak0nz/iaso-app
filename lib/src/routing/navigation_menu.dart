@@ -17,11 +17,11 @@ class NavigationMenu extends StatefulWidget {
 
 class _NavigationMenuState extends State<NavigationMenu> {
   int currentIndex = 0;
-  List pages = const[
-    HomeScreen(),
-    StatsScreen(),
-    MedsScreen(),
-    SettingsScreen()
+  List pages = [
+    const HomeScreen(),
+    const StatsScreen(),
+    const MedsScreen(),
+    const SettingsScreen()
   ];
 
   @override

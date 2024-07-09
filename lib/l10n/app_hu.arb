@@ -31,5 +31,6 @@
     "enable_notifications": "Értesítések engedélyezése",
     "med_notification_description": "Értesítsen, ha a gyógyszerek hamarosan kifogynak.",
     "finish": "Befejezés",
-    "enabled": "Engedélyezve"
+    "enabled": "Engedélyezve",
+    "hello": "Helló"
 }

@@ -124,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(width: 5,),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/login');
+                        Navigator.pushReplacementNamed(context, '/login');
                       },
                       child: Text(AppLocalizations.of(context)!.login,style: TextStyle(color: Colors.blue.shade400, fontWeight: FontWeight.bold)),
                     ),
@@ -158,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           inheritThemeColors: true,
         ).show(context);
 
-        Navigator.pushReplacementNamed(context, '/enable_notifications');
+        Navigator.pushNamedAndRemoveUntil(context, '/enable_notifications', (Route<dynamic> route) => false,);
       } else {
       CherryToast.error(
         title: Text(AppLocalizations.of(context)!.error),

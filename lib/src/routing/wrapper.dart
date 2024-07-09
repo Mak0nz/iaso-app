@@ -10,6 +10,7 @@ import 'package:iaso/src/utils/theme/theme.dart';
 import 'package:iaso/src/views/auth/log_in.dart';
 import 'package:iaso/src/views/auth/sign_up.dart';
 import 'package:iaso/src/views/home_screen.dart';
+import 'package:iaso/src/views/onboarding/enable_notifications.dart';
 
 class Wrapper extends ConsumerWidget {
   const Wrapper({super.key});
@@ -23,10 +24,11 @@ class Wrapper extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       routes: {
-        '/navigationMenu': (context) => const NavigationMenu(),
+        '/navigation_menu': (context) => const NavigationMenu(),
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LogInScreen(),
         '/signup': (context) => const SignUpScreen(),
+        '/enable_notifications': (context) => const EnableNotifications(),
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

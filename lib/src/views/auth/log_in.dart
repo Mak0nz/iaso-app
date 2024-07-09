@@ -141,7 +141,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     const SizedBox(width: 5,),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/signup');
+                        Navigator.pushReplacementNamed(context, '/signup');
                       },
                       child: Text(AppLocalizations.of(context)!.register,style: TextStyle(color: Colors.blue.shade400, fontWeight: FontWeight.bold)),
                     ),
@@ -172,7 +172,7 @@ class _LogInScreenState extends State<LogInScreen> {
         inheritThemeColors: true,
       ).show(context);
 
-      Navigator.pushReplacementNamed(context, '/navigation_menu');
+      Navigator.pushNamedAndRemoveUntil(context, '/navigation_menu', (Route<dynamic> route) => false,);
 
     } catch (e) {
       CherryToast.error(

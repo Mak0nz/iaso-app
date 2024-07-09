@@ -22,6 +22,11 @@ class AppText extends StatelessWidget {
     fontWeight: FontWeight.bold,
   );
 
+  const AppText.bold(this.text, {super.key})
+  : style = const TextStyle(
+    fontWeight: FontWeight.bold,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Text(

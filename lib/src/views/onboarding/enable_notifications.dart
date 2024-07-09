@@ -62,7 +62,7 @@ class _EnableNotificationsState extends State<EnableNotifications> {
         margin: const EdgeInsets.only(left: 20,right: 20,bottom: 12),
         child: GestureDetector(
           child: Text(AppLocalizations.of(context)!.finish, style: TextStyle(color: Colors.blue.shade400, fontWeight: FontWeight.bold, fontSize: 22),),
-          onTap:() => Navigator.pushReplacementNamed(context, '/navigation_menu'),
+          onTap:() => Navigator.pushNamedAndRemoveUntil(context, '/navigation_menu', (Route<dynamic> route) => false,),
         ),
         
       ),
