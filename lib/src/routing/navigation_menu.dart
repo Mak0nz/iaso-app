@@ -42,11 +42,9 @@ class _NavigationMenuState extends State<NavigationMenu> {
               spreadRadius: 10,
             )
           ],
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.grey.shade900.withAlpha(20), width: 2.0, style: BorderStyle.solid),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(12.5),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
             child: NavigationBar(

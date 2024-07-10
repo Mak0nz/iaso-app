@@ -6,13 +6,16 @@ class AppTheme {
     fontFamily: 'Poppins',
     brightness: Brightness.light,
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: Colors.white.withAlpha(200),
+      backgroundColor: Colors.blueGrey.shade100.withAlpha(200),
       indicatorColor: Colors.blue.shade400,
       elevation: 3,
+      height: 50,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+      indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5))
     ),
     colorScheme: ColorScheme.light(
       primary: Colors.blue.shade400,
+      surface: Colors.blueGrey.shade100,
     ),
   );
 
@@ -21,13 +24,23 @@ class AppTheme {
     fontFamily: 'Poppins',
     brightness: Brightness.dark,
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: Colors.black26.withAlpha(220),
+      backgroundColor: Colors.blueGrey.shade900.withAlpha(220),
       indicatorColor: Colors.blue.shade400,
+      iconTheme: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return IconThemeData(color: Colors.blueGrey.shade900.withAlpha(220));
+        }
+        return const IconThemeData(color: Colors.white); // Default color for unselected icons
+      }),
       elevation: 3,
+      height: 50,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+      indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5))
     ),
     colorScheme: ColorScheme.dark(
       primary: Colors.blue.shade400,
+      surface: Colors.blueGrey.shade900,
+      background: const Color(0xFF1D2326),
     ),
   ); 
 }

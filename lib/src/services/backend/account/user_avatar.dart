@@ -25,7 +25,8 @@ class InitialAvatar extends StatelessWidget {
         style: TextStyle(
           color:  textColor,
           fontWeight: FontWeight.bold,
-          fontSize: radius * 1.25,
+          fontFamily: 'LilitaOne',
+          fontSize: radius * 1.4,
         ),
       ),
     );

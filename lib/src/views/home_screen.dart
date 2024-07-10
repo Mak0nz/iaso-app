@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/services/backend/account/user_avatar.dart';
 import 'package:iaso/src/services/backend/account/username_manager.dart';
-import 'package:iaso/src/widgets/app_text.dart';
+import 'package:iaso/src/widgets/appbar.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -17,38 +19,26 @@ class HomeScreen extends ConsumerWidget {
     final username = ref.watch(usernameProvider) ?? 'User';
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: edgeInset),
-          child: InitialAvatar(
-            username: username
-          ),
-        ),
-        title: AppText.bold("${AppLocalizations.of(context)!.hello} $username",),
-        // temporary logout button until settings page is done
-        actions: [
-          GestureDetector(
-            onTap: () {
-              FirebaseAuth.instance.signOut();
-              UsernameManager().clearUsername();
-              Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false,);
-              
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(right: edgeInset),
-              child: Icon(FontAwesomeIcons.rightFromBracket,),
-            ),
-          )
-        ],
+      appBar: CustomAppBar(
+        leading: InitialAvatar(username: username),
+        title: "${AppLocalizations.of(context)!.hello} $username",
+      // temporary logout button until settings page is done
+        actions: Icon(FontAwesomeIcons.rightFromBracket,),
+        actionsEvent: () {
+          FirebaseAuth.instance.signOut();
+          UsernameManager().clearUsername();
+          Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false,); 
+        },
       ),
       body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: edgeInset),
+        padding: const EdgeInsets.symmetric(horizontal: edgeInset),
+        child: SingleChildScrollView(
           child: Column(
-            children: [
-              Text(username),
-            ],
-          ),
+              children: [
+
+              ],
+            ),
+        ),
       ),
     );
   }

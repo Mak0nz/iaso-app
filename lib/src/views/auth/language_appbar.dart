@@ -11,6 +11,7 @@ class LanguageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      forceMaterialTransparency: true,
       actions: const [
         LanguagePopupMenu(),
         SizedBox(width: edgeInset,)
