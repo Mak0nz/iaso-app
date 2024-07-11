@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iaso/src/services/backend/account/user_avatar.dart';
-import 'package:iaso/src/services/backend/account/username_manager.dart';
+import 'package:iaso/src/services/account/user_avatar.dart';
+import 'package:iaso/src/services/account/username_manager.dart';
 import 'package:iaso/src/widgets/appbar.dart';
 import 'package:iaso/src/widgets/body.dart';
 

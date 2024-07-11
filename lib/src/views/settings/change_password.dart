@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/src/constants/sizes.dart';
-import 'package:iaso/src/services/backend/firebase_auth.dart';
+import 'package:iaso/src/services/firebase_auth.dart';
 import 'package:iaso/src/widgets/animated_button.dart';
 import 'package:iaso/src/widgets/app_text.dart';
 import 'package:iaso/src/widgets/form_container.dart';
