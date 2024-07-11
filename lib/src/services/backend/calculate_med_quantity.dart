@@ -2,20 +2,22 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 List<DocumentSnapshot> _medications = [];
-String? _currentUserEmail;
+String? _currentUserUid;
 
 Future<void> _fetchData() async {
   // Retrieve the current user's email
-  _currentUserEmail = FirebaseAuth.instance.currentUser?.email;
+  _currentUserUid = FirebaseAuth.instance.currentUser?.uid;
 
-  if (_currentUserEmail != null) {
+  if (_currentUserUid != null) {
     try {
       // Get a reference to the MedsForUser subcollection for the current user
       final medsCollectionRef = FirebaseFirestore.instance
           .collection('users')
-          .doc(_currentUserEmail)
+          .doc(_currentUserUid)
           .collection('MedsForUser');
 
       // Query the subcollection, order by a specific field (e.g., 'name')
@@ -36,7 +38,7 @@ Future<void> _fetchData() async {
 }
 
 Future<void> _updateCurrentQuantities() async {
-  if (_currentUserEmail != null) {
+  if (_currentUserUid != null) {
     try {
       for (final medication in _medications) {
         final today = DateTime.now();
@@ -47,10 +49,8 @@ Future<void> _updateCurrentQuantities() async {
         if (lastUpdatedDateTimestamp.toDate().year == today.year &&
             lastUpdatedDateTimestamp.toDate().month == today.month &&
             lastUpdatedDateTimestamp.toDate().day == today.day) {
-              // It's the same date
               isTodaySameDay = true;
            } else {
-              // It's a different date
               isTodaySameDay = false;
            }
         
@@ -114,7 +114,7 @@ Future<void> _updateCurrentQuantities() async {
           if (updatedValues != null) {
             await FirebaseFirestore.instance
                 .collection('users')
-                .doc(_currentUserEmail)
+                .doc(_currentUserUid)
                 .collection('MedsForUser')
                 .doc(medication.id)
                 .update(updatedValues);
@@ -125,8 +125,8 @@ Future<void> _updateCurrentQuantities() async {
                 content: NotificationContent(
                   id: medication.id.hashCode,
                   channelKey: 'med_updates',
-                  title: '${medication['name']} fogyóban van!',
-                  body: 'Már csak ${totalDoses-1} napnyi van.'
+                  title: "AppLocalizations.of(context)!.medication_running_out(medication['name'])",
+                  body: "AppLocalizations.of(context)!.remaining_medication(totalDoses-1)",
                 )
               );
             }

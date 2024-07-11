@@ -22,7 +22,7 @@
     "have_account": "Már van fiókod?",
     "login_success": "Sikeres Bejelentkezés",
     "success": "Siker",
-    "error": "Hiba történt.",
+    "error": "Hiba történt",
     "email_already_in_use": "Az email cím már használatban van.",
     "channel_error": "Minden mező szükséges.",
     "weak_password": "Gyenge jelszó.",
@@ -50,5 +50,15 @@
     "delete_account_description": "Ezzel véglegesen törli fiókját és annak adatait, beleértve a napi statisztikákat és a gyógyszertárat.",
     "cancel": "Mégsem",
     "delete": "Törlés",
-    "success_delete": "Sikeresen törölve"
+    "success_delete": "Sikeresen törölve",
+    "no_data_text": "Nincs adat a jelen napra",
+    "weight": "Súly",
+    "temperature": "Hőmérséklet",
+    "morning_blood_pressure": "Reggeli vérnyomás",
+    "night_blood_pressure": "Esti vérnyomás",
+    "todays_stats": "Mai mérések",
+    "pulse": "Pulzus",
+    "error_saving": "Hiba mentésnél",
+    "medication_running_out": "{medication} fogyóban van!",
+    "remaining_medication": "Már csak {remainder} napnyi van."
 }

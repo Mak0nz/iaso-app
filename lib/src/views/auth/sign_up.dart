@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:iaso/src/constants/images.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/constants/text_strings.dart';
-import 'package:iaso/src/services/backend/firebase_auth.dart';
+import 'package:iaso/src/services/firebase_auth.dart';
 import 'package:iaso/src/views/auth/language_appbar.dart';
 import 'package:iaso/src/widgets/form_container.dart';
 import 'package:iaso/src/widgets/animated_button.dart';

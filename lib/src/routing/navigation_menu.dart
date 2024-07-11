@@ -5,8 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/src/views/home_screen.dart';
 import 'package:iaso/src/views/meds_screen.dart';
-import 'package:iaso/src/views/settings_screen.dart';
-import 'package:iaso/src/views/stats_screen.dart';
+import 'package:iaso/src/views/settings/settings_screen.dart';
+import 'package:iaso/src/views/stats/stats_screen.dart';
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({super.key});

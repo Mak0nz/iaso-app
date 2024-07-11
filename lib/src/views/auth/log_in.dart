@@ -4,7 +4,7 @@ import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:iaso/src/constants/sizes.dart';
-import 'package:iaso/src/services/backend/firebase_auth.dart';
+import 'package:iaso/src/services/firebase_auth.dart';
 import 'package:iaso/src/views/auth/language_appbar.dart';
 import 'package:iaso/src/views/settings/reset_password.dart';
 import 'package:iaso/src/widgets/animated_button.dart';
