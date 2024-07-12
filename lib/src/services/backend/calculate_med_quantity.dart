@@ -2,8 +2,9 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/src/utils/language/language.dart';
+import 'package:iaso/src/utils/language/language_repository.dart';
 
 List<DocumentSnapshot> _medications = [];
 String? _currentUserUid;
@@ -37,9 +38,12 @@ Future<void> _fetchData() async {
   }
 }
 
-Future<void> _updateCurrentQuantities() async {
+Future<void> _updateCurrentQuantities(WidgetRef ref) async {
   if (_currentUserUid != null) {
     try {
+      final languageRepository = ref.read(languageRepositoryProvider);
+      final currentLanguage = await languageRepository.getLanguage();
+
       for (final medication in _medications) {
         final today = DateTime.now();
         var lastUpdatedDateTimestamp = medication['lastUpdatedDate'] as Timestamp;
@@ -121,12 +125,16 @@ Future<void> _updateCurrentQuantities() async {
             
             // send notification
             if (totalDoses-1 <= 14) {
+              String notificationTitle = _getLocalizedMedicationRunningOut(medication['name'], currentLanguage);
+              String totalDosesValue = (totalDoses-1) as String;
+              String notificationBody = _getRemainingMedication(totalDosesValue, currentLanguage);
+
               AwesomeNotifications().createNotification(
                 content: NotificationContent(
                   id: medication.id.hashCode,
                   channelKey: 'med_updates',
-                  title: "AppLocalizations.of(context)!.medication_running_out(medication['name'])",
-                  body: "AppLocalizations.of(context)!.remaining_medication(totalDoses-1)",
+                  title: notificationTitle,
+                  body: notificationBody,
                 )
               );
             }
@@ -145,7 +153,27 @@ Future<void> _updateCurrentQuantities() async {
   }
 }
 
-Future<void> calculateMedQuantities() async {
+String _getLocalizedMedicationRunningOut(String medicationName, Language language) {
+  Map<Language, String> translations = {
+    Language.english: '{medication} is running out!',
+    Language.hungarian: '{medication} fogyóban van!',
+  };
+
+  String template = translations[language] ?? translations[Language.english]!;
+  return template.replaceAll('{medication}', medicationName);
+}
+
+String _getRemainingMedication(String remaining, Language language) {
+  Map<Language, String> translations = {
+    Language.english: 'Theres only {remaining} days worth left.',
+    Language.hungarian: 'Már csak {remaining} napnyi van.',
+  };
+
+  String template = translations[language] ?? translations[Language.english]!;
+  return template.replaceAll('{remaining}', remaining);
+}
+
+Future<void> calculateMedQuantities(WidgetRef ref) async {
   await _fetchData();
-  await _updateCurrentQuantities();
+  await _updateCurrentQuantities(ref);
 }

@@ -58,7 +58,5 @@
     "night_blood_pressure": "Evening blood pressure",
     "todays_stats": "Todays Stats",
     "pulse": "Pulse",
-    "error_saving": "Error Saving",
-    "medication_running_out": "{medication} is running out!",
-    "remaining_medication": "Theres only {remainder} days worth left."
+    "error_saving": "Error Saving"
 }

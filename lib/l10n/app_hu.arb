@@ -58,7 +58,5 @@
     "night_blood_pressure": "Esti vérnyomás",
     "todays_stats": "Mai mérések",
     "pulse": "Pulzus",
-    "error_saving": "Hiba mentésnél",
-    "medication_running_out": "{medication} fogyóban van!",
-    "remaining_medication": "Már csak {remainder} napnyi van."
+    "error_saving": "Hiba mentésnél"
 }
