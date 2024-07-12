@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/constants/text_strings.dart';
 import 'package:iaso/src/services/account/user_avatar.dart';
 import 'package:iaso/src/services/account/username_manager.dart';
@@ -129,7 +130,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
         ),
 
-        const SizedBox(height: 80,),
+        const SizedBox(height: 75,),
       
         CustomOutlinedButton(
           onTap: _logout,
@@ -144,7 +145,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         
         const DeleteAccount(),
 
-        const SizedBox(height: 75), // Add some bottom padding
+        const SizedBox(height: navBar+15), // Add some bottom padding
       ])
     );
   }

@@ -37,8 +37,8 @@ Future<void> main() async {
     [
       NotificationChannel(
         channelKey: 'med_updates',
-        channelName: 'Gyógyszer értesítések', 
-        channelDescription: 'Fogyó gyógyszer értesítési csatorna',
+        channelName: 'Medication updates', 
+        channelDescription: 'Get reminders when a medication is running out.',
       )
     ],
     debug: false,

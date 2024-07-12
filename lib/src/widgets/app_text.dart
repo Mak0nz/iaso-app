@@ -18,7 +18,7 @@ class AppText extends StatelessWidget {
 
   const AppText.subHeading(this.text, {super.key})
   : style = const TextStyle(
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: FontWeight.bold,
   );
 

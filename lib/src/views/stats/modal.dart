@@ -21,7 +21,7 @@ class StatsModal extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 60), // to not hide behind navigation bar
+      padding: const EdgeInsets.only(bottom: navBar),
       child: FloatingActionButton(
         onPressed: () {
           WoltModalSheet.show(

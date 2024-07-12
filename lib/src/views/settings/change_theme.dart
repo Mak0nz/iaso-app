@@ -12,6 +12,7 @@ class SettingChangeTheme extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final themeModeNotifier = ref.read(themeModeProvider.notifier);
     final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, left: 6),
@@ -23,7 +24,7 @@ class SettingChangeTheme extends ConsumerWidget {
             fontSize: 20,
           ),),
           PopupMenuButton<AppThemeMode>(
-            onSelected: (value) => ref.read(themeRepositoryProvider).setThemeMode(value),
+            onSelected: (value) => themeModeNotifier.setThemeMode(value),
             itemBuilder: (context) => [
             for (var value in AppThemeMode.values) 
               PopupMenuItem(

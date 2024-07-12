@@ -3,10 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/services/account/user_avatar.dart';
 import 'package:iaso/src/services/account/username_manager.dart';
+import 'package:iaso/src/views/meds/meds_display.dart';
 import 'package:iaso/src/widgets/appbar.dart';
-import 'package:iaso/src/widgets/body.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -21,9 +22,10 @@ class HomeScreen extends ConsumerWidget {
         leading: InitialAvatar(username: username),
         title: "${AppLocalizations.of(context)!.hello} $username",
       ),
-      body: Body(children: [
-        
-      ])
+      body: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: edgeInset),
+        child: DisplayMeds(showAll: false),
+      ),
     );
   }
 }

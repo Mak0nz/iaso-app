@@ -6,7 +6,7 @@ class AppTheme {
     fontFamily: 'Poppins',
     brightness: Brightness.light,
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: Colors.blueGrey.shade100.withAlpha(200),
+      backgroundColor: Colors.lightBlue.shade50.withAlpha(200),
       indicatorColor: Colors.blue.shade400,
       elevation: 3,
       height: 50,
@@ -15,7 +15,7 @@ class AppTheme {
     ),
     colorScheme: ColorScheme.light(
       primary: Colors.blue.shade400,
-      surface: Colors.blueGrey.shade100,
+      surface: Colors.lightBlue.shade50,
     ),
   );
 
