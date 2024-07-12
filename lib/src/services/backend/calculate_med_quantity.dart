@@ -2,12 +2,16 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iaso/src/utils/language/language.dart';
-import 'package:iaso/src/utils/language/language_repository.dart';
 
 List<DocumentSnapshot> _medications = [];
 String? _currentUserUid;
+
+Future<void> calculateMedQuantities() async {
+  await _fetchData();
+  await _updateCurrentQuantities();
+}
 
 Future<void> _fetchData() async {
   // Retrieve the current user's email
@@ -38,11 +42,10 @@ Future<void> _fetchData() async {
   }
 }
 
-Future<void> _updateCurrentQuantities(WidgetRef ref) async {
+Future<void> _updateCurrentQuantities() async {
   if (_currentUserUid != null) {
     try {
-      final languageRepository = ref.read(languageRepositoryProvider);
-      final currentLanguage = await languageRepository.getLanguage();
+      final currentLanguage = await _getLanguageFromPreferences();
 
       for (final medication in _medications) {
         final today = DateTime.now();
@@ -153,6 +156,15 @@ Future<void> _updateCurrentQuantities(WidgetRef ref) async {
   }
 }
 
+Future<Language> _getLanguageFromPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+  final languageCode = prefs.getString('language_code') ?? 'en';
+  return Language.values.firstWhere(
+    (lang) => lang.code == languageCode,
+    orElse: () => Language.english,
+  );
+}
+
 String _getLocalizedMedicationRunningOut(String medicationName, Language language) {
   Map<Language, String> translations = {
     Language.english: '{medication} is running out!',
@@ -171,9 +183,4 @@ String _getRemainingMedication(String remaining, Language language) {
 
   String template = translations[language] ?? translations[Language.english]!;
   return template.replaceAll('{remaining}', remaining);
-}
-
-Future<void> calculateMedQuantities(WidgetRef ref) async {
-  await _fetchData();
-  await _updateCurrentQuantities(ref);
 }
