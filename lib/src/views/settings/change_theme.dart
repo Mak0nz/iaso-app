@@ -12,12 +12,13 @@ class SettingChangeTheme extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, left: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(AppLocalizations.of(context)!.change_theme, 
+          Text(l10n.change_theme, 
           style: const TextStyle(
             fontSize: 20,
           ),),
@@ -31,7 +32,7 @@ class SettingChangeTheme extends ConsumerWidget {
                   children: [
                     Icon(value.icon),
                     const SizedBox(width: 8,),
-                    Text(value.name),
+                    Text(value.getName(context)),
                   ],
                 )
               )
@@ -40,7 +41,7 @@ class SettingChangeTheme extends ConsumerWidget {
               children: [
                 Icon(themeMode.icon),
                 const SizedBox(width: 8),
-                Text(themeMode.name, 
+                Text(themeMode.getName(context),
                   style: const TextStyle(fontSize: 18,),
                 ),
               ],
