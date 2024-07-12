@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/src/routing/navigation_menu.dart';
 import 'package:iaso/src/utils/language/language.dart';
 import 'package:iaso/src/utils/theme/theme.dart';
+import 'package:iaso/src/utils/theme/theme_mode.dart';
 import 'package:iaso/src/views/auth/log_in.dart';
 import 'package:iaso/src/views/auth/sign_up.dart';
 import 'package:iaso/src/views/home_screen.dart';
@@ -18,11 +19,16 @@ class Wrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(languageProvider);
+    final themeMode = ref.watch(themeModeProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: switch (themeMode) {
+        AppThemeMode.system => ThemeMode.system,
+        AppThemeMode.light => ThemeMode.light,
+        AppThemeMode.dark => ThemeMode.dark,
+      },
       routes: {
         '/navigation_menu': (context) => const NavigationMenu(),
         '/home': (context) => const HomeScreen(),

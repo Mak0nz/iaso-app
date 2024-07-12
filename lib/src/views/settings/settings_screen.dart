@@ -13,6 +13,7 @@ import 'package:iaso/src/services/account/user_avatar.dart';
 import 'package:iaso/src/services/account/username_manager.dart';
 import 'package:iaso/src/views/settings/change_language.dart';
 import 'package:iaso/src/views/settings/change_password.dart';
+import 'package:iaso/src/views/settings/change_theme.dart';
 import 'package:iaso/src/views/settings/delete_account.dart';
 import 'package:iaso/src/views/settings/edit_username.dart';
 import 'package:iaso/src/widgets/appbar.dart';
@@ -97,6 +98,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
 
         const SettingChangeLanguage(),
+
+        const SettingChangeTheme(),
         
         SettingOption(
           title: AppLocalizations.of(context)!.notifications,
@@ -126,7 +129,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
         ),
 
-        const SizedBox(height: 100,),
+        const SizedBox(height: 80,),
       
         CustomOutlinedButton(
           onTap: _logout,
