@@ -16,10 +16,29 @@ import 'package:iaso/src/widgets/input_text_form.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class StatsModal extends ConsumerWidget {
-  const StatsModal({super.key});
+  final DateTime selectedDate;
+
+  const StatsModal({super.key, required this.selectedDate});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selected = selectedDate;
+    List months = [
+      (AppLocalizations.of(context)!.january),
+      (AppLocalizations.of(context)!.february),
+      (AppLocalizations.of(context)!.march),
+      (AppLocalizations.of(context)!.april),
+      (AppLocalizations.of(context)!.may),
+      (AppLocalizations.of(context)!.june),
+      (AppLocalizations.of(context)!.july),
+      (AppLocalizations.of(context)!.august),
+      (AppLocalizations.of(context)!.september),
+      (AppLocalizations.of(context)!.october),
+      (AppLocalizations.of(context)!.november),
+      (AppLocalizations.of(context)!.december)
+    ];
+    final month = months[selected.month-1];
+
     return Padding(
       padding: const EdgeInsets.only(bottom: navBar),
       child: FloatingActionButton(
@@ -29,8 +48,8 @@ class StatsModal extends ConsumerWidget {
             pageListBuilder: (context) {
               return [
                 WoltModalSheetPage(
-                  child: const StatsForm(),
-                  topBarTitle: AppText.heading(AppLocalizations.of(context)!.todays_stats),
+                  child: StatsForm(selectedDate: selectedDate),
+                  topBarTitle: AppText.heading("$month ${selected.day}"),
                   isTopBarLayerAlwaysVisible: true,
                   trailingNavBarWidget: IconButton(
                     padding: const EdgeInsets.only(right: 20),
@@ -50,7 +69,9 @@ class StatsModal extends ConsumerWidget {
 }
 
 class StatsForm extends ConsumerStatefulWidget {
-  const StatsForm({super.key});
+  final DateTime selectedDate;
+
+  const StatsForm({super.key, required this.selectedDate});
 
   @override
   ConsumerState<StatsForm> createState() => _StatsFormState();

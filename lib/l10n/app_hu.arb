@@ -60,7 +60,6 @@
     "temperature": "Hőmérséklet",
     "morning_blood_pressure": "Reggeli vérnyomás",
     "night_blood_pressure": "Esti vérnyomás",
-    "todays_stats": "Mai mérések",
     "pulse": "Pulzus",
     "error_saving": "Hiba mentésnél",
     "create_med": "Új gyógyszer",
@@ -87,5 +86,17 @@
     "create": "Létrehozás",
     "update": "Fríssítés",
     "delete_med": "Gyógyszer Törlése",
-    "delete_med_description": "Biztosan törli ezt a gyógyszert?"
+    "delete_med_description": "Biztosan törli ezt a gyógyszert?",
+    "january":"Január",
+    "february":"Február",
+    "march":"Március",
+    "april":"Április",
+    "may":"Május",
+    "june":"Június",
+    "july":"Július",
+    "august":"Augusztus",
+    "september":"Szeptember",
+    "october":"Október",
+    "november":"November",
+    "december":"December"
 }

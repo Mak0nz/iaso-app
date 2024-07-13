@@ -21,7 +21,7 @@ class StatsScreen extends ConsumerWidget {
       appBar: CustomAppBar(
         title: AppLocalizations.of(context)!.stats,
       ),
-      floatingActionButton: const StatsModal(),
+      floatingActionButton: StatsModal(selectedDate: selectedDate),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: edgeInset),
