@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/src/routing/navigation_menu.dart';
 import 'package:iaso/src/utils/language/language.dart';
 import 'package:iaso/src/utils/theme/theme.dart';
-import 'package:iaso/src/utils/theme/theme_mode.dart';
+import 'package:iaso/src/utils/theme/theme_manager.dart';
 import 'package:iaso/src/views/auth/log_in.dart';
 import 'package:iaso/src/views/auth/sign_up.dart';
 import 'package:iaso/src/views/home_screen.dart';
@@ -15,6 +13,30 @@ import 'package:iaso/src/views/onboarding/enable_notifications.dart';
 
 class Wrapper extends ConsumerWidget {
   const Wrapper({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FutureBuilder(
+      future: ref.read(themeModeProvider.notifier).loadTheme(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return const AppWrapper();
+        } else {
+          return const MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+class AppWrapper extends ConsumerWidget {
+  const AppWrapper({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,7 +61,6 @@ class Wrapper extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(language.code),
-      // return either home | loading | login widget based on authState
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User?> snapshot) {
