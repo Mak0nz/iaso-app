@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/src/services/stats/stats.dart';
+import 'package:iaso/src/views/stats/blood_sugar_card.dart';
 import 'package:iaso/src/widgets/app_text.dart';
 import 'package:iaso/src/widgets/card.dart';
 
@@ -101,7 +102,10 @@ class StatsDisplay extends StatelessWidget {
               ],
               ),
             ),
-    
+
+          if (stats!.bloodSugar != null && stats!.bloodSugar!.isNotEmpty)
+            ExpandableBloodSugarCard(bloodSugar: stats!.bloodSugar!),
+            
         ],
       ),
     );

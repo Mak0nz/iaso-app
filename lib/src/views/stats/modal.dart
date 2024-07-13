@@ -272,7 +272,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
             ),
           ),
           IconButton(
-            icon: Icon(index == _bloodSugarControllers.length - 1 ? Icons.add : Icons.remove),
+            icon: Icon(index == _bloodSugarControllers.length - 1 ? FontAwesomeIcons.plus : FontAwesomeIcons.minus),
             onPressed: () {
               setState(() {
                 if (index == _bloodSugarControllers.length - 1) {
