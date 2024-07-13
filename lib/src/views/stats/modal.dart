@@ -129,11 +129,44 @@ class _StatsFormState extends ConsumerState<StatsForm> {
         padding: const EdgeInsets.fromLTRB(edgeInset, edgeInset, edgeInset, 35),
         child: Column(
           children: [
-            const SizedBox(height: 9,),
-            Text("${AppLocalizations.of(context)!.morning_blood_pressure}:", style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
-            const SizedBox(height: 2,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                AppText.subHeading("${AppLocalizations.of(context)!.weight}:"),
+                const SizedBox(width: 8,),
+                InputTextForm(
+                  width: 80.0,
+                  controller: _controllers['weight'],
+                  labelText: '00.0',
+                ),
+                const Text("Kg", style: TextStyle(fontSize: 16),),
+              ],
+            ),
+            
+            const SizedBox(height: 10,),
+        
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                AppText.subHeading("${AppLocalizations.of(context)!.temperature}:"),
+                const SizedBox(width: 8,),
+                InputTextForm(
+                  width: 80.0,
+                  controller: _controllers['temp'],
+                  labelText: '00.0',
+                ),
+                const Text("°C", style: TextStyle(fontSize: 16),),
+              ],
+            ),
+            
+            const SizedBox(height: 10,),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: AppText.subHeading("${AppLocalizations.of(context)!.morning_blood_pressure}:"),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 InputTextForm(
                   width: 60.0,
@@ -159,42 +192,14 @@ class _StatsFormState extends ConsumerState<StatsForm> {
               ],
             ), 
             
-            const SizedBox(height: 22,),
+            const SizedBox(height: 10,),
         
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("${AppLocalizations.of(context)!.temperature}:   ", style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
-                InputTextForm(
-                  width: 80.0,
-                  controller: _controllers['temp'],
-                  labelText: '00.0',
-                ),
-                const Text("°C", style: TextStyle(fontSize: 16),),
-              ],
+            Align(
+              alignment: Alignment.centerLeft,
+              child: AppText.subHeading("${AppLocalizations.of(context)!.night_blood_pressure}:"),
             ),
-            
-            const SizedBox(height: 22,),
-        
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("${AppLocalizations.of(context)!.weight}:   ", style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
-                InputTextForm(
-                  width: 80.0,
-                  controller: _controllers['weight'],
-                  labelText: '00.0',
-                ),
-                const Text("Kg", style: TextStyle(fontSize: 16),),
-              ],
-            ),
-            
-            const SizedBox(height: 22,),
-        
-            Text("${AppLocalizations.of(context)!.night_blood_pressure}:", style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
-            const SizedBox(height: 2,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 InputTextForm(
                   width: 60.0,

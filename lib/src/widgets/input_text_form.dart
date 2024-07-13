@@ -24,7 +24,7 @@ class _InputTextFormState extends State<InputTextForm> {
   Widget build(BuildContext context) {
     return new Container(
       child: Padding(
-        padding: const EdgeInsets.all(4.0), // Adjust padding as needed
+        padding: const EdgeInsets.all(2.0), // Adjust padding as needed
         child: SizedBox(
           width: widget.width, // Set a fixed width for better layout control
           child: TextFormField(
@@ -35,7 +35,9 @@ class _InputTextFormState extends State<InputTextForm> {
                 borderRadius: BorderRadius.circular(15.0,),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.grey),
+                borderSide: Theme.of(context).brightness == Brightness.light
+                ? const BorderSide(color: Colors.black) // Light theme
+                : const BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(15.0,),
               ),
               labelText: widget.labelText,

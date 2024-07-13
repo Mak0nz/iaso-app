@@ -54,7 +54,9 @@ class _InputMedFormState extends State<InputMedForm> {
                   borderRadius: BorderRadius.circular(15.0,),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey),
+                  borderSide: Theme.of(context).brightness == Brightness.light
+                    ? const BorderSide(color: Colors.black) // Light theme
+                    : const BorderSide(color: Colors.white),
                   borderRadius: BorderRadius.circular(15.0,),
                 ),
                 errorBorder: OutlineInputBorder(
