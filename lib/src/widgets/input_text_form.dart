@@ -24,7 +24,7 @@ class _InputTextFormState extends State<InputTextForm> {
   Widget build(BuildContext context) {
     return new Container(
       child: Padding(
-        padding: const EdgeInsets.all(2.0), // Adjust padding as needed
+        padding: const EdgeInsets.all(6.0), // Adjust padding as needed
         child: SizedBox(
           width: widget.width, // Set a fixed width for better layout control
           child: TextFormField(

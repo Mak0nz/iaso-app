@@ -9,6 +9,7 @@ class Stats {
   final int? bpNightSYS;
   final int? bpNightDIA;
   final int? bpNightPulse;
+  final List<double>? bloodSugar;
   final DateTime dateField;
 
   Stats({
@@ -20,6 +21,7 @@ class Stats {
     this.bpNightSYS,
     this.bpNightDIA,
     this.bpNightPulse,
+    this.bloodSugar,
     required this.dateField,
   });
 
@@ -33,6 +35,7 @@ class Stats {
     if (bpNightSYS != null) data['bpNightSYS'] = bpNightSYS;
     if (bpNightDIA != null) data['bpNightDIA'] = bpNightDIA;
     if (bpNightPulse != null) data['bpNightPulse'] = bpNightPulse;
+    if (bloodSugar != null && bloodSugar!.isNotEmpty) data['bloodSugar'] = bloodSugar;
     data['dateField'] = dateField;
     return data;
   }
@@ -47,6 +50,7 @@ class Stats {
       bpNightSYS: json['bpNightSYS'],
       bpNightDIA: json['bpNightDIA'],
       bpNightPulse: json['bpNightPulse'],
+      bloodSugar: json['bloodSugar'] != null ? List<double>.from(json['bloodSugar']) : null,
       dateField: (json['dateField'] as Timestamp).toDate(),
     );
   }

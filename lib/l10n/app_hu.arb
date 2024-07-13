@@ -60,6 +60,7 @@
     "temperature": "Hőmérséklet",
     "morning_blood_pressure": "Reggeli vérnyomás",
     "night_blood_pressure": "Esti vérnyomás",
+    "blood_sugar": "Vércukor",
     "pulse": "Pulzus",
     "error_saving": "Hiba mentésnél",
     "create_med": "Új gyógyszer",

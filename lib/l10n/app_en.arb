@@ -60,6 +60,7 @@
     "temperature": "Temperature",
     "morning_blood_pressure": "Morning blood pressure",
     "night_blood_pressure": "Evening blood pressure",
+    "blood_sugar": "Blood sugar",
     "pulse": "Pulse",
     "error_saving": "Error Saving",
     "create_med": "Create medication",

@@ -81,6 +81,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   bool _loading = false;
   final _formKey = GlobalKey<FormState>();
   final _controllers = <String, TextEditingController>{};
+  final List<TextEditingController> _bloodSugarControllers = [];
 
   @override
   void initState() {
@@ -93,6 +94,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
     for (var field in ['bpMorningSYS', 'bpMorningDIA', 'bpMorningPulse', 'weight', 'temp', 'bpNightSYS', 'bpNightDIA', 'bpNightPulse']) {
       _controllers[field] = TextEditingController();
     }
+    _bloodSugarControllers.add(TextEditingController());
   }
 
   void _loadExistingData() {
@@ -109,6 +111,16 @@ class _StatsFormState extends ConsumerState<StatsForm> {
           _controllers['bpNightDIA']?.text = stats.bpNightDIA?.toString() ?? '';
           _controllers['bpNightPulse']?.text = stats.bpNightPulse?.toString() ?? '';
         });
+
+        // Load blood sugar values
+        _bloodSugarControllers.clear();
+        if (stats.bloodSugar != null && stats.bloodSugar!.isNotEmpty) {
+          for (var value in stats.bloodSugar!) {
+            _bloodSugarControllers.add(TextEditingController(text: value.toString()));
+          }
+        } else {
+          _bloodSugarControllers.add(TextEditingController());
+        }
       }
     });
   }
@@ -116,6 +128,9 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   @override
   void dispose() {
     for (var controller in _controllers.values) {
+      controller.dispose();
+    }
+    for (var controller in _bloodSugarControllers) {
       controller.dispose();
     }
     super.dispose();
@@ -133,7 +148,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 AppText.subHeading("${AppLocalizations.of(context)!.weight}:"),
-                const SizedBox(width: 8,),
+                const SizedBox(width: 4,),
                 InputTextForm(
                   width: 80.0,
                   controller: _controllers['weight'],
@@ -143,13 +158,13 @@ class _StatsFormState extends ConsumerState<StatsForm> {
               ],
             ),
             
-            const SizedBox(height: 10,),
+            const SizedBox(height: 5,),
         
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 AppText.subHeading("${AppLocalizations.of(context)!.temperature}:"),
-                const SizedBox(width: 8,),
+                const SizedBox(width: 4,),
                 InputTextForm(
                   width: 80.0,
                   controller: _controllers['temp'],
@@ -159,7 +174,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
               ],
             ),
             
-            const SizedBox(height: 10,),
+            const SizedBox(height: 5,),
 
             Align(
               alignment: Alignment.centerLeft,
@@ -192,7 +207,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
               ],
             ), 
             
-            const SizedBox(height: 10,),
+            const SizedBox(height: 5,),
         
             Align(
               alignment: Alignment.centerLeft,
@@ -224,6 +239,15 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                 const Text("bpm", style: TextStyle(fontSize: 16),),
               ],
             ),
+
+            const SizedBox(height: 5),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: AppText.subHeading("${AppLocalizations.of(context)!.blood_sugar}:"),
+            ),
+            ..._buildBloodSugarFields(),
+
             const SizedBox(height: 16,),
 
             AnimatedButton(
@@ -237,12 +261,45 @@ class _StatsFormState extends ConsumerState<StatsForm> {
     );
   }
 
+  List<Widget> _buildBloodSugarFields() {
+    return List.generate(_bloodSugarControllers.length, (index) {
+      return Row(
+        children: [
+          Expanded(
+            child: InputTextForm(
+              controller: _bloodSugarControllers[index],
+              labelText: 'mg/dL',
+            ),
+          ),
+          IconButton(
+            icon: Icon(index == _bloodSugarControllers.length - 1 ? Icons.add : Icons.remove),
+            onPressed: () {
+              setState(() {
+                if (index == _bloodSugarControllers.length - 1) {
+                  _bloodSugarControllers.add(TextEditingController());
+                } else {
+                  _bloodSugarControllers.removeAt(index);
+                }
+              });
+            },
+          ),
+        ],
+      );
+    });
+  }
+
   void _submitForm() async {
     setState(() {
       _loading = true;
     });
 
     if (_formKey.currentState!.validate()) {
+      final bloodSugarValues = _bloodSugarControllers
+        .map((controller) => double.tryParse(controller.text))
+        .where((value) => value != null)
+        .map((value) => value!)  // This line ensures we have non-nullable doubles
+        .toList();
+
       final stats = Stats(
         bpMorningSYS: int.tryParse(_controllers['bpMorningSYS']!.text),
         bpMorningDIA: int.tryParse(_controllers['bpMorningDIA']!.text),
@@ -252,6 +309,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
         bpNightSYS: int.tryParse(_controllers['bpNightSYS']!.text),
         bpNightDIA: int.tryParse(_controllers['bpNightDIA']!.text),
         bpNightPulse: int.tryParse(_controllers['bpNightPulse']!.text),
+        bloodSugar: bloodSugarValues.isNotEmpty ? bloodSugarValues : null,
         dateField: ref.read(selectedDateProvider),
       );
 
@@ -277,7 +335,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
     }
 
     setState(() {
-      _loading = true;
+      _loading = false;
     });
   }
 }
