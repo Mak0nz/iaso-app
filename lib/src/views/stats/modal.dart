@@ -10,6 +10,7 @@ import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/services/stats/firestore_service.dart';
 import 'package:iaso/src/services/stats/provider.dart';
 import 'package:iaso/src/services/stats/stats.dart';
+import 'package:iaso/src/views/settings/stats_view.dart';
 import 'package:iaso/src/widgets/animated_button.dart';
 import 'package:iaso/src/widgets/app_text.dart';
 import 'package:iaso/src/widgets/input_text_form.dart';
@@ -138,117 +139,30 @@ class _StatsFormState extends ConsumerState<StatsForm> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(statsViewSettingsProvider);
+    
     return Form(
       key: _formKey,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(edgeInset, edgeInset, edgeInset, 35),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                AppText.subHeading("${AppLocalizations.of(context)!.weight}:"),
-                const SizedBox(width: 4,),
-                InputTextForm(
-                  width: 80.0,
-                  controller: _controllers['weight'],
-                  labelText: '00.0',
-                ),
-                const Text("Kg", style: TextStyle(fontSize: 16),),
-              ],
-            ),
-            
-            const SizedBox(height: 5,),
-        
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                AppText.subHeading("${AppLocalizations.of(context)!.temperature}:"),
-                const SizedBox(width: 4,),
-                InputTextForm(
-                  width: 80.0,
-                  controller: _controllers['temp'],
-                  labelText: '00.0',
-                ),
-                const Text("°C", style: TextStyle(fontSize: 16),),
-              ],
-            ),
-            
-            const SizedBox(height: 5,),
+            if (settings['weight'] ?? true)
+              _buildWeightField(),
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: AppText.subHeading("${AppLocalizations.of(context)!.morning_blood_pressure}:"),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InputTextForm(
-                  width: 60.0,
-                  controller: _controllers['bpMorningSYS'],
-                  labelText: 'SYS',
-                ),
-                const Text("/", style: TextStyle(fontSize: 16),),
-                InputTextForm(
-                  width: 60.0,
-                  controller: _controllers['bpMorningDIA'],
-                  labelText: 'DIA',
-                ),
-                const Text("mmHg", style: TextStyle(fontSize: 16),),
-                const SizedBox(
-                  width: 10.0, // Add horizontal spacing between the fields
-                ),
-                InputTextForm(
-                  width: 80.0,
-                  controller: _controllers['bpMorningPulse'],
-                  labelText: AppLocalizations.of(context)!.pulse,
-                ),
-                const Text("bpm", style: TextStyle(fontSize: 16),),
-              ],
-            ), 
-            
-            const SizedBox(height: 5,),
-        
-            Align(
-              alignment: Alignment.centerLeft,
-              child: AppText.subHeading("${AppLocalizations.of(context)!.night_blood_pressure}:"),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InputTextForm(
-                  width: 60.0,
-                  controller: _controllers['bpNightSYS'],
-                  labelText: 'SYS',
-                ),
-                const Text("/", style: TextStyle(fontSize: 16),),
-                InputTextForm(
-                  width: 60.0,
-                  controller: _controllers['bpNightDIA'],
-                  labelText: 'DIA',
-                ),
-                const Text("mmHg", style: TextStyle(fontSize: 16),),
-                const SizedBox(
-                  width: 10.0, // Add horizontal spacing between the fields
-                ),
-                InputTextForm(
-                  width: 80.0,
-                  controller: _controllers['bpNightPulse'],
-                  labelText: AppLocalizations.of(context)!.pulse,
-                ),
-                const Text("bpm", style: TextStyle(fontSize: 16),),
-              ],
-            ),
+            if (settings['temperature'] ?? true)
+              _buildTemperatureField(),
 
-            const SizedBox(height: 5),
+            if (settings['morningBP'] ?? true)
+              _buildMorningBPField(),
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: AppText.subHeading("${AppLocalizations.of(context)!.blood_sugar}:"),
-            ),
-            ..._buildBloodSugarFields(),
+            if (settings['nightBP'] ?? true)
+              _buildNightBPField(),
 
-            const SizedBox(height: 16,),
+            if (settings['bloodSugar'] ?? true)
+              _buildBSField(),
+
+            const SizedBox(height: 11,),
 
             AnimatedButton(
               onTap: _submitForm, 
@@ -258,6 +172,133 @@ class _StatsFormState extends ConsumerState<StatsForm> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildWeightField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          AppText.subHeading("${AppLocalizations.of(context)!.weight}:"),
+          const SizedBox(width: 4,),
+          InputTextForm(
+            width: 80.0,
+            controller: _controllers['weight'],
+            labelText: '00.0',
+          ),
+          const Text("Kg", style: TextStyle(fontSize: 16),),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTemperatureField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          AppText.subHeading("${AppLocalizations.of(context)!.temperature}:"),
+          const SizedBox(width: 4,),
+          InputTextForm(
+            width: 80.0,
+            controller: _controllers['temp'],
+            labelText: '00.0',
+          ),
+          const Text("°C", style: TextStyle(fontSize: 16),),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMorningBPField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Column( children: [ 
+        Align(
+          alignment: Alignment.centerLeft,
+          child: AppText.subHeading("${AppLocalizations.of(context)!.morning_blood_pressure}:"),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            InputTextForm(
+              width: 60.0,
+              controller: _controllers['bpMorningSYS'],
+              labelText: 'SYS',
+            ),
+            const Text("/", style: TextStyle(fontSize: 16),),
+            InputTextForm(
+              width: 60.0,
+              controller: _controllers['bpMorningDIA'],
+              labelText: 'DIA',
+            ),
+            const Text("mmHg", style: TextStyle(fontSize: 16),),
+            const SizedBox(
+              width: 10.0, // Add horizontal spacing between the fields
+            ),
+            InputTextForm(
+              width: 80.0,
+              controller: _controllers['bpMorningPulse'],
+              labelText: AppLocalizations.of(context)!.pulse,
+            ),
+            const Text("bpm", style: TextStyle(fontSize: 16),),
+          ],
+        ),
+      ],)
+    );
+  }
+
+  Widget _buildNightBPField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Column(children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: AppText.subHeading("${AppLocalizations.of(context)!.night_blood_pressure}:"),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            InputTextForm(
+              width: 60.0,
+              controller: _controllers['bpNightSYS'],
+              labelText: 'SYS',
+            ),
+            const Text("/", style: TextStyle(fontSize: 16),),
+            InputTextForm(
+              width: 60.0,
+              controller: _controllers['bpNightDIA'],
+              labelText: 'DIA',
+            ),
+            const Text("mmHg", style: TextStyle(fontSize: 16),),
+            const SizedBox(
+              width: 10.0, // Add horizontal spacing between the fields
+            ),
+            InputTextForm(
+              width: 80.0,
+              controller: _controllers['bpNightPulse'],
+              labelText: AppLocalizations.of(context)!.pulse,
+            ),
+            const Text("bpm", style: TextStyle(fontSize: 16),),
+          ],
+        ),
+      ],)
+    );
+  }
+
+  Widget _buildBSField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Column(children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: AppText.subHeading("${AppLocalizations.of(context)!.blood_sugar}:"),
+        ),
+        ..._buildBloodSugarFields(),
+      ],)
     );
   }
 

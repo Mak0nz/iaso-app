@@ -17,6 +17,7 @@ import 'package:iaso/src/views/settings/change_password.dart';
 import 'package:iaso/src/views/settings/change_theme.dart';
 import 'package:iaso/src/views/settings/delete_account.dart';
 import 'package:iaso/src/views/settings/edit_username.dart';
+import 'package:iaso/src/views/settings/stats_view.dart';
 import 'package:iaso/src/widgets/appbar.dart';
 import 'package:iaso/src/widgets/body.dart';
 import 'package:iaso/src/widgets/outlined_button.dart';
@@ -118,6 +119,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
 
         SettingOption(
+          title: AppLocalizations.of(context)!.stats_view,
+          trailing: const StatsViewSettingsModal(),
+        ),
+
+        SettingOption(
           title: AppLocalizations.of(context)!.privacy_policy, 
           trailing: GestureDetector(
             onTap: () async {
@@ -130,7 +136,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
         ),
 
-        const SizedBox(height: 75,),
+        const SizedBox(height: 35,),
       
         CustomOutlinedButton(
           onTap: _logout,
