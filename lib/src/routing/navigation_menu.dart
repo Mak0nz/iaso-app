@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:animations/animations.dart';
 import 'package:iaso/src/views/home_screen.dart';
 import 'package:iaso/src/views/meds/meds_screen.dart';
 import 'package:iaso/src/views/settings/settings_screen.dart';
@@ -17,7 +18,8 @@ class NavigationMenu extends StatefulWidget {
 
 class _NavigationMenuState extends State<NavigationMenu> {
   int currentIndex = 0;
-  List pages = [
+  int _previousIndex = 0;
+  List<Widget> pages = [
     const HomeScreen(),
     const StatsScreen(),
     const MedsScreen(),
@@ -25,17 +27,13 @@ class _NavigationMenuState extends State<NavigationMenu> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(left: 12,right: 12,bottom: 12),
-        decoration: BoxDecoration(boxShadow: [
+        margin: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+        decoration: BoxDecoration(
+          boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(20),
               blurRadius: 20,
@@ -48,11 +46,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
             child: NavigationBar(
-              //backgroundColor: Colors.transparent,
               selectedIndex: currentIndex,
               labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
               onDestinationSelected: (index) {
                 setState(() {
+                  _previousIndex = currentIndex;
                   currentIndex = index;
                 });
               },
@@ -66,7 +64,23 @@ class _NavigationMenuState extends State<NavigationMenu> {
           ),
         ),
       ),
-      body: pages[currentIndex],
+      body: PageTransitionSwitcher(
+        duration: const Duration(milliseconds: 300),
+        reverse: currentIndex < _previousIndex,
+        transitionBuilder: (
+          Widget child,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+        ) {
+          return SharedAxisTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.horizontal,
+            child: child,
+          );
+        },
+        child: pages[currentIndex],
+      ),
     );
   }
 }

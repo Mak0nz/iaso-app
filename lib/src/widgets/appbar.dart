@@ -32,12 +32,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      flexibleSpace: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-          child: Container(color: Colors.transparent,),
-        ),
-      ),
       automaticallyImplyLeading: false,
       centerTitle: true,
       title: AppText.bold(widget.title),
