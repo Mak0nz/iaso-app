@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iaso/src/services/stats/stats.dart';
-import 'package:intl/intl.dart';
 
 class StatsFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -11,12 +10,13 @@ class StatsFirestoreService {
     final user = _auth.currentUser;
     if (user == null) throw Exception('No user logged in');
 
-    final formattedDate = DateFormat('yyyy.M.d').format(stats.dateField);
     final docRef = _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('StatsForUser')
-        .doc(formattedDate);
+      .collection('users')
+      .doc(user.uid)
+      .collection('StatsForUser')
+      .doc(stats.dateField.year.toString())
+      .collection(stats.dateField.month.toString())
+      .doc(stats.dateField.day.toString());
 
     await docRef.set(stats.toJson());
   }
@@ -25,12 +25,13 @@ class StatsFirestoreService {
     final user = _auth.currentUser;
     if (user == null) throw Exception('No user logged in');
 
-    final formattedDate = DateFormat('yyyy.M.d').format(selectedDate);
     final docRef = _firestore
         .collection('users')
         .doc(user.uid)
         .collection('StatsForUser')
-        .doc(formattedDate);
+        .doc(selectedDate.year.toString())
+        .collection(selectedDate.month.toString())
+        .doc(selectedDate.day.toString());
 
     final docSnapshot = await docRef.get();
     if (docSnapshot.exists) {
