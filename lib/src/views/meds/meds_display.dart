@@ -45,7 +45,9 @@ class DisplayMeds extends ConsumerWidget {
                 title: AppText.subHeading(AppLocalizations.of(context)!.meds_not_running_out)
               )
             else
+              if (showAll) const SizedBox(height: edgeInset),
               ...filteredMeds.map((med) => MedCard(medication: med)),
+              const SizedBox(height: 75,), // add bottom padding to not hide behind floatingActionButton
           ],
         );
       },
