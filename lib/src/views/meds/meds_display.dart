@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/src/constants/sizes.dart';
+import 'package:iaso/src/services/meds/med_sort_manager.dart';
 import 'package:iaso/src/services/meds/provider.dart';
 import 'package:iaso/src/views/meds/med_card.dart';
 import 'package:iaso/src/widgets/app_text.dart';
@@ -11,8 +12,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DisplayMeds extends ConsumerWidget {
   final bool showAll;
+  final MedSortMode sortMode;
+  final bool showZeroDoses;
 
-  const DisplayMeds({super.key, required this.showAll});
+  const DisplayMeds({
+    super.key,
+    required this.showAll,
+    required this.sortMode,
+    required this.showZeroDoses,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +36,8 @@ class DisplayMeds extends ConsumerWidget {
       ),
       error: (error, stack) => Center(child: Text('${AppLocalizations.of(context)!.error}: $error')),
       data: (meds) {
-        final filteredMeds = showAll ? meds : meds.where((med) => med.totalDoses <= 14).toList();
+        final sortedMeds = sortMedications(meds, sortMode, showZeroDoses);
+        final filteredMeds = showAll ? sortedMeds : sortedMeds.where((med) => med.totalDoses <= 14).toList();
         
         return ListView(
           children: [

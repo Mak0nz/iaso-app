@@ -7,6 +7,7 @@ import 'package:iaso/src/widgets/app_text.dart';
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final title;
   final leading;
+  final leadingEvent;
   final actions;
   final actionsEvent;
 
@@ -14,6 +15,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     super.key, 
     required this.title,
     this.leading,
+    this.leadingEvent,
     this.actions,
     this.actionsEvent,
   });
@@ -32,9 +34,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
       automaticallyImplyLeading: false,
       centerTitle: true,
       title: AppText.bold(widget.title),
-      leading: Padding(
-        padding: const EdgeInsets.only(left: edgeInset),
-        child: widget.leading,
+      leading: GestureDetector(
+        onTap: widget.leadingEvent,
+        child: Padding(
+          padding: const EdgeInsets.only(left: edgeInset),
+          child: widget.leading,
+        ),
       ),
       actions: <Widget>[
         GestureDetector(

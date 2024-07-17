@@ -10,10 +10,16 @@ import 'package:iaso/src/routing/wrapper.dart';
 import 'package:iaso/src/utils/language/language.dart';
 import 'package:iaso/src/utils/language/language_repository.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
+
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError('SharedPreferences not initialized');
+});
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -54,6 +60,7 @@ Future<void> main() async {
   final language = await container.read(languageRepositoryProvider).getLanguage();
   runApp(ProviderScope(
     overrides: [
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       languageProvider.overrideWith((ref) => language),
     ],
     child: const MyApp()

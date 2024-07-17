@@ -101,5 +101,10 @@
     "november": "November",
     "december": "December",
     "stats_view": "Statistics view",
-    "stats_view_description": "Customize which statistics are displayed. Toggle options to show or hide specific measurements."
+    "stats_view_description": "Customize which statistics are displayed. Toggle options to show or hide specific measurements.",
+    "sort_name_az": "Name: A to Z",
+    "sort_name_za": "Name: Z to A",
+    "sort_doses_low_high": "Doses: Low to High",
+    "sort_doses_high_low": "Doses: High to Low",
+    "show_zero_doses": "Show medications with zero doses"
 }

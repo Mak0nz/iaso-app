@@ -101,5 +101,10 @@
     "november": "November",
     "december": "December",
     "stats_view": "Mérések nézet",
-    "stats_view_description": "Szabja személyre, hogy mely statisztikák jelenjenek meg a napi mérésekben."
+    "stats_view_description": "Szabja személyre, hogy mely statisztikák jelenjenek meg a napi mérésekben.",
+    "sort_name_az": "Név: A-tól Z-ig",
+    "sort_name_za": "Név: Z-től A-ig",
+    "sort_doses_low_high": "Adagok alacsonyról magasra",
+    "sort_doses_high_low": "Adagok magasról alacsonyra",
+    "show_zero_doses": "Mutassa a nulla adagú gyógyszereket"
 }

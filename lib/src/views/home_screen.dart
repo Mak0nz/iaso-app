@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/services/account/user_avatar.dart';
 import 'package:iaso/src/services/account/username_manager.dart';
+import 'package:iaso/src/services/meds/med_sort_manager.dart';
 import 'package:iaso/src/views/meds/meds_display.dart';
 import 'package:iaso/src/widgets/appbar.dart';
 
@@ -24,7 +25,7 @@ class HomeScreen extends ConsumerWidget {
       ),
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: edgeInset),
-        child: DisplayMeds(showAll: false),
+        child: DisplayMeds(showAll: false, sortMode: MedSortMode.dosesLowHigh, showZeroDoses: true,),
       ),
     );
   }
