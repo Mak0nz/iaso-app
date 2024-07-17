@@ -7,89 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:595855593593:android:7cab084be8ea5db22a44a8",
-        "android_client_info": {
-          "package_name": "com.benedekszesztai.heamed"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "595855593593-q5c04epe6b5262oa46q7qt60ma19fqna.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.benedekszesztai.heamed",
-            "certificate_hash": "db062a39a128526050b21e33310805b1051a3e53"
-          }
-        },
-        {
-          "client_id": "595855593593-abc93ists8srjart49c5sv3c7m9c96b1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAcNFLR-htfEbZ6CWW-5fLQNOh65vCL9aI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "595855593593-3ma5gjrg7cju4t4fkjollavi176kdal8.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "595855593593-elnn6h5jlk2ihqptn3lh734pj93kgt8b.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.heamed.RunnerTests"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:595855593593:android:7dac4ff93736f0292a44a8",
+        "mobilesdk_app_id": "1:595855593593:android:584e3e343dc0f9362a44a8",
         "android_client_info": {
           "package_name": "com.benedekszesztai.iaso"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "595855593593-abc93ists8srjart49c5sv3c7m9c96b1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAcNFLR-htfEbZ6CWW-5fLQNOh65vCL9aI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "595855593593-3ma5gjrg7cju4t4fkjollavi176kdal8.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "595855593593-elnn6h5jlk2ihqptn3lh734pj93kgt8b.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.heamed.RunnerTests"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:595855593593:android:ae6351ddcef946df2a44a8",
-        "android_client_info": {
-          "package_name": "com.szesztaibenedek.iaso"
         }
       },
       "oauth_client": [

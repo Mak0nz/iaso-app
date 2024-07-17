@@ -25,18 +25,20 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Determine if we're in a debug environment
+  bool isDebug = kDebugMode;
+
   await FirebaseAppCheck.instance.activate(
     // https://firebase.google.com/docs/app-check/flutter/default-providers#initialize
-    androidProvider: AndroidProvider.playIntegrity,
+    androidProvider: isDebug ? AndroidProvider.debug : AndroidProvider.playIntegrity,
   );
 
   initializeDateFormatting();
 
-  await Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: isDebug);
   await Workmanager().registerPeriodicTask(
     "calculate_med_quantity",
     "CalculateMedQuantity",
-    // initialDelay: Duration(seconds: 5),
     frequency: const Duration(hours: 12),
     inputData: <String, dynamic>{},
       constraints: Constraints(
@@ -53,7 +55,7 @@ Future<void> main() async {
         channelDescription: 'Get reminders when a medication is running out.',
       )
     ],
-    debug: false,
+    debug: isDebug,
   );
 
   final container = ProviderContainer();
