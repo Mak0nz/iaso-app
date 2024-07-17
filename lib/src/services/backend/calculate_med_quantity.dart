@@ -82,68 +82,69 @@ Future<void> _updateCurrentQuantities() async {
           bool isTodaySaturday() { return today.weekday == DateTime.saturday;}
           bool isTodaySunday() { return today.weekday == DateTime.sunday;}
 
-          updateQuantity() {
-            // Calculate the new quantity
-            final newQuantity = currentQuantity - takeQuantityPerDay;
-            // Ensure new quantity is not negative
-            final updatedQuantity = newQuantity > 0 ? newQuantity : 0;
+          if (takeQuantityPerDay != 0) {
+            updateQuantity() {
+              // Calculate the new quantity
+              final newQuantity = currentQuantity - takeQuantityPerDay;
+              // Ensure new quantity is not negative
+              final updatedQuantity = newQuantity > 0 ? newQuantity : 0;
 
-            // Calculate the estimated last days ignoring non-take days
-            final totalDoses = updatedQuantity ~/ takeQuantityPerDay;
-            // Ensure lastDays is not negative
-            final updatedTotalDoses = totalDoses > 0 ? totalDoses : 0;
-            // update date to be today
-            lastUpdatedDate = today;
+              // Calculate the estimated last days ignoring non-take days
+              final totalDoses = updatedQuantity ~/ takeQuantityPerDay;
+              // Ensure lastDays is not negative
+              final updatedTotalDoses = totalDoses > 0 ? totalDoses : 0;
+              // update date to be today
+              lastUpdatedDate = today;
 
-            // Return a Map containing the updated values
-            return {'currentQuantity': updatedQuantity, 'totalDoses': updatedTotalDoses, 'lastUpdatedDate': lastUpdatedDate};
-          }
-          
-          Map<String, dynamic>? updatedValues;
-
-          if (takeMonday && isTodayMonday()) {
-            updatedValues = updateQuantity();
-          } else if (takeTuesday && isTodayTuesday()) {
-            updatedValues = updateQuantity();
-          } else if (takeWednesday && isTodayWednesday()) {
-            updatedValues = updateQuantity();
-          } else if (takeThursday && isTodayThursday()) {
-            updatedValues = updateQuantity();
-          } else if (takeFriday && isTodayFriday()) {
-            updatedValues = updateQuantity();
-          } else if (takeSaturday && isTodaySaturday()) {
-            updatedValues = updateQuantity();
-          } else if (takeSunday && isTodaySunday()) {
-            updatedValues = updateQuantity();
-          }      
-
-          // Update the field in the database
-          if (updatedValues != null) {
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(_currentUserUid)
-                .collection('MedsForUser')
-                .doc(medication.id)
-                .update(updatedValues);
+              // Return a Map containing the updated values
+              return {'currentQuantity': updatedQuantity, 'totalDoses': updatedTotalDoses, 'lastUpdatedDate': lastUpdatedDate};
+            }
             
-            // send notification
-            if (totalDoses-1 <= 14) {
-              String medNotif = medication['name'].toString();
-              String notificationTitle = _getLocalizedMedicationRunningOut(medNotif, currentLanguage);
-              String totalDosesValue = (totalDoses-1).toString();
-              String notificationBody = _getRemainingMedication(totalDosesValue, currentLanguage);
+            Map<String, dynamic>? updatedValues;
 
-              AwesomeNotifications().createNotification(
-                content: NotificationContent(
-                  id: medication.id.hashCode,
-                  channelKey: 'med_updates',
-                  title: notificationTitle,
-                  body: notificationBody,
-                )
-              );
+            if (takeMonday && isTodayMonday()) {
+              updatedValues = updateQuantity();
+            } else if (takeTuesday && isTodayTuesday()) {
+              updatedValues = updateQuantity();
+            } else if (takeWednesday && isTodayWednesday()) {
+              updatedValues = updateQuantity();
+            } else if (takeThursday && isTodayThursday()) {
+              updatedValues = updateQuantity();
+            } else if (takeFriday && isTodayFriday()) {
+              updatedValues = updateQuantity();
+            } else if (takeSaturday && isTodaySaturday()) {
+              updatedValues = updateQuantity();
+            } else if (takeSunday && isTodaySunday()) {
+              updatedValues = updateQuantity();
+            }      
+
+            // Update the field in the database
+            if (updatedValues != null) {
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(_currentUserUid)
+                  .collection('MedsForUser')
+                  .doc(medication.id)
+                  .update(updatedValues);
+              
+              // send notification
+              if (totalDoses-1 <= 14) {
+                String medNotif = medication['name'].toString();
+                String notificationTitle = _getLocalizedMedicationRunningOut(medNotif, currentLanguage);
+                String totalDosesValue = (totalDoses-1).toString();
+                String notificationBody = _getRemainingMedication(totalDosesValue, currentLanguage);
+
+                AwesomeNotifications().createNotification(
+                  content: NotificationContent(
+                    id: medication.id.hashCode,
+                    channelKey: 'med_updates',
+                    title: notificationTitle,
+                    body: notificationBody,
+                  )
+                );
+              }
             }
           }
-
         }
 
       }
