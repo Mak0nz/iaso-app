@@ -53,7 +53,9 @@ Future<void> main() async {
   final container = ProviderContainer();
   final language = await container.read(languageRepositoryProvider).getLanguage();
   runApp(ProviderScope(
-    overrides: [languageProvider.overrideWith((ref) => language)],
+    overrides: [
+      languageProvider.overrideWith((ref) => language),
+    ],
     child: const MyApp()
   ));
 }

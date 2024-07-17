@@ -139,37 +139,35 @@ class _StatsFormState extends ConsumerState<StatsForm> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = ref.watch(statsViewSettingsProvider);
+    final settingsAsyncValue = ref.watch(statsViewSettingsProvider);
     
     return Form(
       key: _formKey,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(edgeInset, edgeInset, edgeInset, 35),
-        child: Column(
-          children: [
-            if (settings['weight'] ?? true)
-              _buildWeightField(),
-
-            if (settings['temperature'] ?? true)
-              _buildTemperatureField(),
-
-            if (settings['morningBP'] ?? true)
-              _buildMorningBPField(),
-
-            if (settings['nightBP'] ?? true)
-              _buildNightBPField(),
-
-            if (settings['bloodSugar'] ?? true)
-              _buildBSField(),
-
-            const SizedBox(height: 11,),
-
-            AnimatedButton(
-              onTap: _submitForm, 
-              text: AppLocalizations.of(context)!.save, 
-              progressEvent: _loading
-            ),
-          ],
+        child: settingsAsyncValue.when(
+          data: (settings) => Column(
+            children: [
+              if (settings['weight'] ?? true)
+                _buildWeightField(),
+              if (settings['temperature'] ?? true)
+                _buildTemperatureField(),
+              if (settings['morningBP'] ?? true)
+                _buildMorningBPField(),
+              if (settings['nightBP'] ?? true)
+                _buildNightBPField(),
+              if (settings['bloodSugar'] ?? true)
+                _buildBSField(),
+              const SizedBox(height: 11,),
+              AnimatedButton(
+                onTap: _submitForm, 
+                text: AppLocalizations.of(context)!.save, 
+                progressEvent: _loading
+              ),
+            ],
+          ),
+          loading: () => const CircularProgressIndicator(),
+          error: (error, stack) => Text("${AppLocalizations.of(context)!.error}: $error"),
         ),
       ),
     );
