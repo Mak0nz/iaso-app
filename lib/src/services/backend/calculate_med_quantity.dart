@@ -128,8 +128,9 @@ Future<void> _updateCurrentQuantities() async {
             
             // send notification
             if (totalDoses-1 <= 14) {
-              String notificationTitle = _getLocalizedMedicationRunningOut(medication['name'].toString(), currentLanguage);
-              String totalDosesValue = (totalDoses-1) as String;
+              String medNotif = medication['name'].toString();
+              String notificationTitle = _getLocalizedMedicationRunningOut(medNotif, currentLanguage);
+              String totalDosesValue = (totalDoses-1).toString();
               String notificationBody = _getRemainingMedication(totalDosesValue, currentLanguage);
 
               AwesomeNotifications().createNotification(
