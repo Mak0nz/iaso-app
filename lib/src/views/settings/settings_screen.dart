@@ -54,7 +54,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: CustomAppBar(
         title: AppLocalizations.of(context)!.settings,
       ),
+      extendBodyBehindAppBar: true,
       body: Body(children: [
+        const SizedBox(height: kToolbarHeight*1.4,),
         SettingHeader(
           title: AppLocalizations.of(context)!.account,
           icon: FontAwesomeIcons.userGear,

@@ -22,10 +22,12 @@ class StatsScreen extends ConsumerWidget {
         title: AppLocalizations.of(context)!.stats,
       ),
       floatingActionButton: StatsModal(selectedDate: selectedDate),
+      extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: edgeInset),
           child: Column(children: [
+            const SizedBox(height: kToolbarHeight*1.25,),
             TableCalendar(
               locale: AppLocalizations.of(context)!.localeName,
               headerStyle: const HeaderStyle(formatButtonVisible: false, titleCentered: true),

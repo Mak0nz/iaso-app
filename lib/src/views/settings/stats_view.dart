@@ -86,11 +86,6 @@ class StatsViewSettingsModal extends ConsumerWidget {
               WoltModalSheetPage(
                 topBarTitle: AppText.heading(AppLocalizations.of(context)!.stats_view),
                 isTopBarLayerAlwaysVisible: true,
-                trailingNavBarWidget: IconButton(
-                  padding: const EdgeInsets.only(right: 20),
-                  onPressed: Navigator.of(context).pop,
-                  icon: const Icon(FontAwesomeIcons.xmark),
-                ),
                 child: const ProviderScope(
                   child: Padding(
                     padding: EdgeInsets.all(edgeInset),

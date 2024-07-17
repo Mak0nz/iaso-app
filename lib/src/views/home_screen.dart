@@ -23,6 +23,7 @@ class HomeScreen extends ConsumerWidget {
         leading: InitialAvatar(username: username),
         title: "${AppLocalizations.of(context)!.hello} $username",
       ),
+      extendBodyBehindAppBar: true,
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: edgeInset),
         child: DisplayMeds(showAll: false, sortMode: MedSortMode.dosesLowHigh, showZeroDoses: true,),

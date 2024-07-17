@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/widgets/app_text.dart';
@@ -31,8 +33,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      flexibleSpace: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+          child: Container(color: Colors.transparent,),
+        ),
+      ),
       automaticallyImplyLeading: false,
       centerTitle: true,
+      elevation: 5,
       title: AppText.bold(widget.title),
       leading: GestureDetector(
         onTap: widget.leadingEvent,

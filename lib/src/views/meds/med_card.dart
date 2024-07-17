@@ -46,11 +46,6 @@ class MedCard extends StatelessWidget {
                   child: CreateEditMedModal(medication: medication),
                   topBarTitle: AppText.heading(AppLocalizations.of(context)!.edit_med),
                   isTopBarLayerAlwaysVisible: true,
-                  trailingNavBarWidget: IconButton(
-                    padding: const EdgeInsets.only(right: 20),
-                    onPressed: Navigator.of(context).pop, 
-                    icon: const Icon(FontAwesomeIcons.xmark)
-                  ),
                   enableDrag: false,
                 )
               ];

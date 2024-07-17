@@ -5,6 +5,9 @@ class AppTheme {
     useMaterial3: true,
     fontFamily: 'Poppins',
     brightness: Brightness.light,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.lightBlue.shade50.withAlpha(200),
+    ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: Colors.lightBlue.shade50.withAlpha(200),
       indicatorColor: Colors.blue.shade400,
@@ -23,6 +26,9 @@ class AppTheme {
     useMaterial3: true,
     fontFamily: 'Poppins',
     brightness: Brightness.dark,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.blueGrey.shade900.withAlpha(220),
+    ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: Colors.blueGrey.shade900.withAlpha(220),
       indicatorColor: Colors.blue.shade400,

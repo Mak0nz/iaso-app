@@ -41,11 +41,6 @@ class MedsScreen extends ConsumerWidget {
                   child: const CreateEditMedModal(),
                   topBarTitle: AppText.heading(AppLocalizations.of(context)!.create_med),
                   isTopBarLayerAlwaysVisible: true,
-                  trailingNavBarWidget: IconButton(
-                    padding: const EdgeInsets.only(right: 20),
-                    onPressed: Navigator.of(context).pop, 
-                    icon: const Icon(FontAwesomeIcons.xmark)
-                  ),
                   enableDrag: false,
                 )
               ];
@@ -54,6 +49,7 @@ class MedsScreen extends ConsumerWidget {
           child: const Icon(FontAwesomeIcons.plus),
         ),
       ),
+      extendBodyBehindAppBar: true,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: edgeInset),
         child: sortModeAsync.when(

@@ -52,11 +52,6 @@ class StatsModal extends ConsumerWidget {
                   child: StatsForm(selectedDate: selectedDate),
                   topBarTitle: AppText.heading("$month ${selected.day}"),
                   isTopBarLayerAlwaysVisible: true,
-                  trailingNavBarWidget: IconButton(
-                    padding: const EdgeInsets.only(right: 20),
-                    onPressed: Navigator.of(context).pop, 
-                    icon: const Icon(FontAwesomeIcons.xmark)
-                  ),
                   enableDrag: false,
                 )
               ];
