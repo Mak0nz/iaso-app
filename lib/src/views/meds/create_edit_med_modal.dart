@@ -96,7 +96,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  AppText.subHeading("${AppLocalizations.of(context)!.intake_which_days}:"), 
+                  AppText.subHeading("${AppLocalizations.of(context)!.intake_which_days}"), 
                   const Text('*', style: TextStyle(
                     color: Colors.red,
                     fontSize: 18,
