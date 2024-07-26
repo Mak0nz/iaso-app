@@ -348,7 +348,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
       );
 
       try {
-        await StatsFirestoreService().createStatsForUser(stats);
+        await StatsRepository().createStatsForUser(stats);
         ref.invalidate(statsProvider);
         Navigator.of(context).pop();
 

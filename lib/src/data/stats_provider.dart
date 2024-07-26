@@ -7,6 +7,6 @@ final selectedDateProvider = StateProvider<DateTime>((ref) => DateTime.now());
 
 final statsProvider = FutureProvider.autoDispose<Stats?>((ref) async {
   final selectedDate = ref.watch(selectedDateProvider);
-  final firestoreService = StatsFirestoreService();
+  final firestoreService = StatsRepository();
   return await firestoreService.fetchStats(selectedDate);
 });

@@ -76,6 +76,12 @@ lib/
 
 ## Testing
 
+Initially generate mock data using:
+
+```
+dart run build_runner build
+```
+
 To run the tests:
 
 ```
