@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/src/app_services/number_formatter.dart';
 import 'package:iaso/src/domain/medication.dart';
 import 'package:iaso/src/presentation/meds/create_edit_med_modal.dart';
 import 'package:iaso/src/presentation/widgets/app_text.dart';
@@ -35,7 +36,7 @@ class MedCard extends StatelessWidget {
       child: ListTile(
         leading: medication!.isInCloud ? const Icon(FontAwesomeIcons.cloud) : null,
         title: Text(medication!.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(AppLocalizations.of(context)!.total_doses(medication!.totalDoses)),
+        subtitle: Text(AppLocalizations.of(context)!.total_doses(NumberFormatter.formatDouble(medication!.totalDoses))),
         trailing: IconButton(
           icon: const Icon(FontAwesomeIcons.penToSquare),
           onPressed: () => WoltModalSheet.show(

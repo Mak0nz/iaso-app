@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/src/app_services/number_formatter.dart';
 import 'package:iaso/src/domain/stats.dart';
 import 'package:iaso/src/presentation/stats/blood_sugar_card.dart';
 import 'package:iaso/src/presentation/widgets/app_text.dart';
@@ -40,7 +41,7 @@ class StatsDisplay extends StatelessWidget {
               title: Row(
                 children: [
                   AppText.bold('${AppLocalizations.of(context)!.weight}: '),
-                  Text('${stats!.weight} kg'),
+                  Text('${NumberFormatter.formatDouble(stats!.weight ?? 0)} kg'),
                 ],
               ),
             ),
@@ -50,7 +51,7 @@ class StatsDisplay extends StatelessWidget {
               title: Row(
                 children: [
                   AppText.bold('${AppLocalizations.of(context)!.temperature}: '),
-                  Text('${stats!.temp} °C'),
+                  Text('${NumberFormatter.formatDouble(stats!.temp ?? 0)} °C'),
                 ],
               ),
             ),

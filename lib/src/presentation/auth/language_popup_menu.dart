@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:iaso/src/domain/models/language.dart';
+import 'package:iaso/src/domain/language.dart';
 import 'package:iaso/src/data/language_repository.dart';
 
 class LanguagePopupMenu extends ConsumerWidget{

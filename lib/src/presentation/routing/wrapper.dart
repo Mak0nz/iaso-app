@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/src/presentation/routing/navigation_menu.dart';
-import 'package:iaso/src/domain/models/language.dart';
+import 'package:iaso/src/domain/language.dart';
 import 'package:iaso/src/presentation/theme/theme.dart';
 import 'package:iaso/src/presentation/theme/theme_manager.dart';
 import 'package:iaso/src/presentation/auth/log_in.dart';

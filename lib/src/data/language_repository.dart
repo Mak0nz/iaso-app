@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iaso/src/domain/models/language.dart';
+import 'package:iaso/src/domain/language.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageRepository {

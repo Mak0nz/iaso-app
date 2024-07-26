@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:iaso/src/domain/models/username_manager.dart';
+import 'package:iaso/src/domain/username_manager.dart';
 import 'package:iaso/src/presentation/widgets/animated_button.dart';
 import 'package:iaso/src/presentation/widgets/app_text.dart';
 import 'package:iaso/src/presentation/widgets/form_container.dart';

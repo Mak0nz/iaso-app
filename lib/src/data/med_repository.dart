@@ -20,6 +20,11 @@ class MedRepository {
     }
     return Stream.value([]);
   }
+
+  Future<List<Medication>> getMedicationsList() async {
+    final medicationsStream = getMedications();
+    return await medicationsStream.first;
+  }
   
   Future<void> addMedication(Medication medication) async {
     final user = _auth.currentUser;

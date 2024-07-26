@@ -3,6 +3,8 @@ import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/src/app_services/dose_calculator.dart';
+import 'package:iaso/src/app_services/number_formatter.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/domain/medication.dart';
 import 'package:iaso/src/data/med_provider.dart';
@@ -41,8 +43,8 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     activeAgentController = TextEditingController(text: med?.activeAgent ?? '');
     useCaseController = TextEditingController(text: med?.useCase ?? '');
     sideEffectController = TextEditingController(text: med?.sideEffect ?? '');
-    takeQuantityPerDayController = TextEditingController(text: med?.takeQuantityPerDay.toString() ?? '');
-    currentQuantityController = TextEditingController(text: med?.currentQuantity.toString() ?? '');
+    takeQuantityPerDayController = TextEditingController(text: NumberFormatter.formatDouble(med?.takeQuantityPerDay ?? 0).toString());
+    currentQuantityController = TextEditingController(text: NumberFormatter.formatDouble(med?.currentQuantity ?? 0).toString());
     orderedByController = TextEditingController(text: med?.orderedBy ?? '');
     isInCloud = med?.isInCloud ?? false;
     takeDays = [
@@ -162,16 +164,14 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     );
   }
 
-  int calculateTotalDoses() {
-    final currentQuantity = int.tryParse(currentQuantityController.text) ?? 0;
-    final takeQuantityPerDay = int.tryParse(takeQuantityPerDayController.text) ?? 1;
-    if (takeQuantityPerDay == 0) {
-      return currentQuantity;
-    }
-    return (currentQuantity ~/ takeQuantityPerDay);
-  }
+  final _doseCalculator = DoseCalculator();
 
   Future saveMed() async {
+    final currentQuantity = double.tryParse(currentQuantityController.text) ?? 0;
+    final takeQuantityPerDay = double.tryParse(takeQuantityPerDayController.text) ?? 0;
+
+    final totalDoses = _doseCalculator.calculateTotalDoses(currentQuantity, takeQuantityPerDay);
+
     setState(() {
       _loading = true;
     });
@@ -182,7 +182,6 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
       activeAgent: activeAgentController.text.isNotEmpty ? activeAgentController.text : null,
       useCase: useCaseController.text.isNotEmpty ? useCaseController.text : null,
       sideEffect: sideEffectController.text.isNotEmpty ? sideEffectController.text : null,
-      takeQuantityPerDay: int.tryParse(takeQuantityPerDayController.text) ?? 0,
       takeMonday: takeDays[0],
       takeTuesday: takeDays[1],
       takeWednesday: takeDays[2],
@@ -190,10 +189,11 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
       takeFriday: takeDays[4],
       takeSaturday: takeDays[5],
       takeSunday: takeDays[6],
-      currentQuantity: int.tryParse(currentQuantityController.text) ?? 0,
       orderedBy: orderedByController.text.isNotEmpty ? orderedByController.text : null,
       isInCloud: isInCloud,
-      totalDoses: calculateTotalDoses(),
+      currentQuantity: currentQuantity,
+      takeQuantityPerDay: takeQuantityPerDay,
+      totalDoses: totalDoses,
       lastUpdatedDate: DateTime.now(),
     );
     

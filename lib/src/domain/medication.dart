@@ -6,7 +6,7 @@ class Medication {
   final String? activeAgent;
   final String? useCase;
   final String? sideEffect;
-  final int takeQuantityPerDay;
+  final double takeQuantityPerDay;
   final bool takeMonday;
   final bool takeTuesday;
   final bool takeWednesday;
@@ -14,10 +14,10 @@ class Medication {
   final bool takeFriday;
   final bool takeSaturday;
   final bool takeSunday;
-  final int currentQuantity;
+  final double currentQuantity;
   final String? orderedBy;
   final bool isInCloud;
-  final int totalDoses;
+  final double totalDoses;
   final DateTime lastUpdatedDate;
 
   Medication({
@@ -41,7 +41,49 @@ class Medication {
     required this.lastUpdatedDate,
   });
 
-  factory Medication.fromFirestore(DocumentSnapshot doc) {
+  Medication copyWith({
+    String? id,
+    String? name,
+    String? activeAgent,
+    String? useCase,
+    String? sideEffect,
+    double? takeQuantityPerDay,
+    bool? takeMonday,
+    bool? takeTuesday,
+    bool? takeWednesday,
+    bool? takeThursday,
+    bool? takeFriday,
+    bool? takeSaturday,
+    bool? takeSunday,
+    double? currentQuantity,
+    String? orderedBy,
+    bool? isInCloud,
+    double? totalDoses,
+    DateTime? lastUpdatedDate,
+  }) {
+    return Medication(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      activeAgent: activeAgent ?? this.activeAgent,
+      useCase: useCase ?? this.useCase,
+      sideEffect: sideEffect ?? this.sideEffect,
+      takeQuantityPerDay: takeQuantityPerDay ?? this.takeQuantityPerDay,
+      takeMonday: takeMonday ?? this.takeMonday,
+      takeTuesday: takeTuesday ?? this.takeTuesday,
+      takeWednesday: takeWednesday ?? this.takeWednesday,
+      takeThursday: takeThursday ?? this.takeThursday,
+      takeFriday: takeFriday ?? this.takeFriday,
+      takeSaturday: takeSaturday ?? this.takeSaturday,
+      takeSunday: takeSunday ?? this.takeSunday,
+      currentQuantity: currentQuantity ?? this.currentQuantity,
+      orderedBy: orderedBy ?? this.orderedBy,
+      isInCloud: isInCloud ?? this.isInCloud,
+      totalDoses: totalDoses ?? this.totalDoses,
+      lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
+    );
+  }
+
+ factory Medication.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
     return Medication(
       id: doc.id,
@@ -49,7 +91,7 @@ class Medication {
       activeAgent: data['activeAgent'],
       useCase: data['useCase'],
       sideEffect: data['sideEffect'],
-      takeQuantityPerDay: data['takeQuantityPerDay'] ?? 0,
+      takeQuantityPerDay: (data['takeQuantityPerDay'] ?? 0).toDouble(),
       takeMonday: data['takeMonday'] ?? false,
       takeTuesday: data['takeTuesday'] ?? false,
       takeWednesday: data['takeWednesday'] ?? false,
@@ -57,10 +99,10 @@ class Medication {
       takeFriday: data['takeFriday'] ?? false,
       takeSaturday: data['takeSaturday'] ?? false,
       takeSunday: data['takeSunday'] ?? false,
-      currentQuantity: data['currentQuantity'] ?? 0,
+      currentQuantity: (data['currentQuantity'] ?? 0).toDouble(),
       orderedBy: data['orderedBy'],
       isInCloud: data['isInCloud'] ?? false,
-      totalDoses: data['totalDoses'] ?? 0,
+      totalDoses: (data['totalDoses'] ?? 0).toDouble(),
       lastUpdatedDate: (data['lastUpdatedDate'] as Timestamp).toDate(),
     );
   }
