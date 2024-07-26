@@ -1,10 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/src/app_services/auth_service.dart';
 import 'package:iaso/src/constants/sizes.dart';
-import 'package:iaso/src/app_services/firebase_auth.dart';
 import 'package:iaso/src/presentation/views/auth/language_appbar.dart';
 import 'package:iaso/src/presentation/views/settings/reset_password.dart';
 import 'package:iaso/src/presentation/widgets/animated_button.dart';
@@ -13,17 +10,15 @@ import 'package:iaso/src/constants/images.dart';
 import 'package:iaso/src/constants/text_strings.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class LogInScreen extends StatefulWidget {
+class LogInScreen extends ConsumerStatefulWidget {
   const LogInScreen({super.key});
 
   @override
-  State<LogInScreen> createState() => _LogInScreenState();
+  ConsumerState<LogInScreen> createState() => _LogInScreenState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
+class _LogInScreenState extends ConsumerState<LogInScreen> {
   bool _loading = false;
-
-  final FirebaseAuthService _auth = FirebaseAuthService();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -154,38 +149,29 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  void _signIn() async {
+  Future<void> _signIn() async {
+    if (!mounted) return;
+    
     setState(() {
       _loading = true;
     });
 
     try {
-      await _auth.signInWithEmailAndPassword(
+      final authService = ref.read(authServiceProvider);
+      await authService.signIn(
         _emailController.text.trim(),
-        _passwordController.text.trim()
+        _passwordController.text.trim(),
+        context
       );
-
-      CherryToast.success(
-        title: Text(AppLocalizations.of(context)!.login_success),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
-
-      Navigator.pushNamedAndRemoveUntil(context, '/navigation_menu', (Route<dynamic> route) => false,);
-
-    } catch (e) {
-      CherryToast.error(
-        title: Text(e.toString()),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      // Navigation is handled by the Wrapper
+      //Navigator.pushNamedAndRemoveUntil(context, '/navigation_menu', (Route<dynamic> route) => false,);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
     }
-
-    setState(() {
-      _loading = false;
-    });
   }
 
 }

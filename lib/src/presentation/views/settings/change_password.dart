@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/src/constants/sizes.dart';
-import 'package:iaso/src/app_services/firebase_auth.dart';
 import 'package:iaso/src/presentation/widgets/animated_button.dart';
 import 'package:iaso/src/presentation/widgets/app_text.dart';
 import 'package:iaso/src/presentation/widgets/form_container.dart';
@@ -23,7 +22,6 @@ class ChangePasswordModal extends StatefulWidget {
 class _ChangePasswordModalState extends State<ChangePasswordModal> {
   bool _loading = false;
 
-  final FirebaseAuthService _auth = FirebaseAuthService();
   final currentUser = FirebaseAuth.instance.currentUser;
   final _email = FirebaseAuth.instance.currentUser?.email;
 

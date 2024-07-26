@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/src/app_services/auth_service.dart';
 import 'package:iaso/src/presentation/routing/navigation_menu.dart';
 import 'package:iaso/src/domain/language.dart';
 import 'package:iaso/src/utils/theme/theme.dart';
@@ -42,6 +42,7 @@ class AppWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(languageProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final authState = ref.watch(authStateProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -61,18 +62,16 @@ class AppWrapper extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(language.code),
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, AsyncSnapshot<User?> snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
+      home: authState.when(
+        data: (user) {
+          if (user != null) {
             return const NavigationMenu();
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+          } else {
             return const LogInScreen();
-        },   
+          }
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (_, __) => const Center(child: Text('Authentication error occurred')),
       ),
     );
   }

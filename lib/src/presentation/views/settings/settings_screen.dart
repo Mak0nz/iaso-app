@@ -3,10 +3,11 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/src/app_services/auth_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/constants/text_strings.dart';
@@ -183,9 +184,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     try {
       await UsernameManager().clearUsername();
-      await FirebaseAuth.instance.signOut();
-      Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false,); 
       
+      setState(() {
+      _loading = false;
+      });
+
+      await ref.read(authServiceProvider).signOut(context);
+
       CherryToast.success(
         title: Text(AppLocalizations.of(context)!.success),
         animationType: AnimationType.fromTop,
@@ -193,17 +198,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         inheritThemeColors: true,
       ).show(context);
     } catch (e) {
-      CherryToast.error(
-        title: Text(e.toString()),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      if (kDebugMode) {
+        print("sign out error: $e");
+      }
     }
     
-    setState(() {
-      _loading = false;
-    });
   }
 
 }

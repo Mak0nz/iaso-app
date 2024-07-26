@@ -1,31 +1,27 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/src/app_services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:iaso/src/constants/images.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/constants/text_strings.dart';
-import 'package:iaso/src/app_services/firebase_auth.dart';
 import 'package:iaso/src/presentation/views/auth/language_appbar.dart';
 import 'package:iaso/src/presentation/widgets/form_container.dart';
 import 'package:iaso/src/presentation/widgets/animated_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool _loading = false;
-
-  final FirebaseAuthService _auth = FirebaseAuthService();
+  bool _privacyPolicyAccepted = false;
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -95,7 +91,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 10,),
                 Row(
                   children: [
-                    Checkbox(value: true, onChanged: (value) {},),
+                    Checkbox(
+                      value: _privacyPolicyAccepted,
+                      onChanged: (value) {
+                        setState(() {
+                          _privacyPolicyAccepted = value ?? false;
+                        });
+                      },
+                    ),
                     Expanded(
                       child: TextButton(
                         onPressed: () async {
@@ -137,52 +140,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _signUp() async {
+  Future<void> _signUp() async {
+    if (!_privacyPolicyAccepted) {
+      CherryToast.error(
+        title: Text(AppLocalizations.of(context)!.accept_privacy_policy_error),
+        animationType: AnimationType.fromTop,
+        displayCloseButton: false,
+        inheritThemeColors: true,
+      ).show(context);
+      return;
+    }
+    
     setState(() {
       _loading = true;
     });
 
     try {
-      User? user = await _auth.signUpWithEmailAndPassword(
+      final authService = ref.read(authServiceProvider);
+      final user = await authService.signUp(
         _emailController.text.trim(),
         _passwordController.text.trim(),
+        context
       );
 
-      if (user!=null) {
-        FirebaseAuth.instance.currentUser?.updateDisplayName(_usernameController.text.trim());
-
-        CherryToast.success(
-          title: Text(AppLocalizations.of(context)!.login_success),
-          animationType: AnimationType.fromTop,
-          displayCloseButton: false,
-          inheritThemeColors: true,
-        ).show(context);
-
-        Navigator.pushNamedAndRemoveUntil(context, '/enable_notifications', (Route<dynamic> route) => false,);
-      } else {
-      CherryToast.error(
-        title: Text(AppLocalizations.of(context)!.error),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
-    }
-      
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
+      if (user != null) {
+        await user.updateDisplayName(_usernameController.text.trim());   
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamedAndRemoveUntil(context, '/enable_notifications', (Route<dynamic> route) => false);
       }
-      CherryToast.error(
-        title: Text(e.toString()),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
     }
-
-    setState(() {
-      _loading = false;
-    });
   }
 
 }
