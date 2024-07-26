@@ -2,43 +2,38 @@
 
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:iaso/src/constants/images.dart';
 import 'package:iaso/src/constants/sizes.dart';
-import 'package:iaso/src/constants/text_strings.dart';
 import 'package:iaso/src/app_services/firebase_auth.dart';
-import 'package:iaso/src/presentation/auth/language_appbar.dart';
-import 'package:iaso/src/presentation/widgets/form_container.dart';
+import 'package:iaso/src/presentation/views/auth/language_appbar.dart';
+import 'package:iaso/src/presentation/views/settings/reset_password.dart';
 import 'package:iaso/src/presentation/widgets/animated_button.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:iaso/src/presentation/widgets/form_container.dart';
+import 'package:iaso/src/constants/images.dart';
+import 'package:iaso/src/constants/text_strings.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class LogInScreen extends StatefulWidget {
+  const LogInScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<LogInScreen> createState() => _LogInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _LogInScreenState extends State<LogInScreen> {
   bool _loading = false;
 
   final FirebaseAuthService _auth = FirebaseAuthService();
 
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,16 +63,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   letterSpacing: 4,
                   fontFamily: 'LilitaOne',
                 ),),
-                const SizedBox(height: 15,),
-              // username field
-                FormContainer(
-                  controller: _usernameController,
-                  hintText: AppLocalizations.of(context)!.username,
-                  isPasswordField: false,
-                  autofillHints: const [AutofillHints.newUsername],
-                ),
-                const SizedBox(height: 10,),
-              // email field
+                const SizedBox(height: 25,),
+              // Email form
                 FormContainer(
                   controller: _emailController,
                   hintText: AppLocalizations.of(context)!.email,
@@ -85,48 +72,78 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   autofillHints: const [AutofillHints.email],
                 ),
                 const SizedBox(height: 10,),
-              // password field
+              // Password form
                 FormContainer(
                   controller: _passwordController,
                   hintText: AppLocalizations.of(context)!.password,
                   isPasswordField: true,
-                  autofillHints: const [AutofillHints.newPassword],
+                  autofillHints: const [AutofillHints.password],
                 ),
                 const SizedBox(height: 10,),
+                // Reset password
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ResetPasswordModal(),
+                  ],
+                ),
+                const SizedBox(height: 15,),
+              // Login button
+                AnimatedButton(
+                  onTap: _signIn,
+                  text: AppLocalizations.of(context)!.login,
+                  progressEvent: _loading,
+                ),
+
+                const SizedBox(height: 20),
+                /*
+              // or continue with
                 Row(
                   children: [
-                    Checkbox(value: true, onChanged: (value) {},),
                     Expanded(
-                      child: TextButton(
-                        onPressed: () async {
-                          launchUrl(
-                            Uri.parse(PRIVACY_POLICY_URL),
-                            mode: LaunchMode.inAppBrowserView,
-                          );
-                        }, 
-                        child: Text(AppLocalizations.of(context)!.read_privacy_policy),
-                      ),
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey.shade500,
+                      )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text('Vagy jelentkezzen be google-al',),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey.shade500,
+                      )
                     ),
                   ],
                 ),
-                const SizedBox(height: 10,),
-              // signup button
-                AnimatedButton(
-                  onTap: _signUp,
-                  text: AppLocalizations.of(context)!.sign_up,
-                  progressEvent: _loading,
+                SizedBox(height: 15,),
+              // login using google
+                InkWell(
+                  onTap: _signInWithGoogle,
+                  borderRadius: BorderRadius.circular(15),
+                  child: Ink(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.black12,
+                    ),
+                    child: Image.asset('assets/google.png', height: 40,),
+                  ),
                 ),
-                const SizedBox(height: 20),
-              // already have an account? login
+              */
+              // Don't have an account? Register
                 Row(mainAxisAlignment: MainAxisAlignment.center,
                   children : [
-                    Text(AppLocalizations.of(context)!.have_account),
+                    Text(AppLocalizations.of(context)!.noaccount),
                     const SizedBox(width: 5,),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, '/login');
+                        Navigator.pushReplacementNamed(context, '/signup');
                       },
-                      child: Text(AppLocalizations.of(context)!.login,style: TextStyle(color: Colors.blue.shade400, fontWeight: FontWeight.bold)),
+                      child: Text(AppLocalizations.of(context)!.register,style: TextStyle(color: Colors.blue.shade400, fontWeight: FontWeight.bold)),
                     ),
                   ]),
               ],
@@ -137,41 +154,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _signUp() async {
+  void _signIn() async {
     setState(() {
       _loading = true;
     });
 
     try {
-      User? user = await _auth.signUpWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
         _emailController.text.trim(),
-        _passwordController.text.trim(),
+        _passwordController.text.trim()
       );
 
-      if (user!=null) {
-        FirebaseAuth.instance.currentUser?.updateDisplayName(_usernameController.text.trim());
-
-        CherryToast.success(
-          title: Text(AppLocalizations.of(context)!.login_success),
-          animationType: AnimationType.fromTop,
-          displayCloseButton: false,
-          inheritThemeColors: true,
-        ).show(context);
-
-        Navigator.pushNamedAndRemoveUntil(context, '/enable_notifications', (Route<dynamic> route) => false,);
-      } else {
-      CherryToast.error(
-        title: Text(AppLocalizations.of(context)!.error),
+      CherryToast.success(
+        title: Text(AppLocalizations.of(context)!.login_success),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,
       ).show(context);
-    }
-      
+
+      Navigator.pushNamedAndRemoveUntil(context, '/navigation_menu', (Route<dynamic> route) => false,);
+
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
       CherryToast.error(
         title: Text(e.toString()),
         animationType: AnimationType.fromTop,

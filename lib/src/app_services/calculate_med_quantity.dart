@@ -1,4 +1,4 @@
-import 'package:iaso/src/app_services/dose_calculator.dart';
+import 'package:iaso/src/utils/dose_calculator.dart';
 import 'package:iaso/src/app_services/notification_service.dart';
 import 'package:iaso/src/data/med_repository.dart';
 import 'package:iaso/src/domain/medication.dart';

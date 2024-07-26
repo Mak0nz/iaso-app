@@ -4,12 +4,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/src/presentation/routing/navigation_menu.dart';
 import 'package:iaso/src/domain/language.dart';
-import 'package:iaso/src/presentation/theme/theme.dart';
-import 'package:iaso/src/presentation/theme/theme_manager.dart';
-import 'package:iaso/src/presentation/auth/log_in.dart';
-import 'package:iaso/src/presentation/auth/sign_up.dart';
-import 'package:iaso/src/presentation/home_screen.dart';
-import 'package:iaso/src/presentation/onboarding/enable_notifications.dart';
+import 'package:iaso/src/utils/theme/theme.dart';
+import 'package:iaso/src/utils/theme/theme_manager.dart';
+import 'package:iaso/src/presentation/views/auth/log_in.dart';
+import 'package:iaso/src/presentation/views/auth/sign_up.dart';
+import 'package:iaso/src/presentation/views/home_screen.dart';
+import 'package:iaso/src/presentation/views/onboarding/enable_notifications.dart';
 
 class Wrapper extends ConsumerWidget {
   const Wrapper({super.key});

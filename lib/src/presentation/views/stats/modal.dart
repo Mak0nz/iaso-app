@@ -10,7 +10,7 @@ import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/data/stats_repository.dart';
 import 'package:iaso/src/data/stats_provider.dart';
 import 'package:iaso/src/domain/stats.dart';
-import 'package:iaso/src/presentation/settings/stats_view.dart';
+import 'package:iaso/src/presentation/views/settings/stats_view.dart';
 import 'package:iaso/src/presentation/widgets/animated_button.dart';
 import 'package:iaso/src/presentation/widgets/app_text.dart';
 import 'package:iaso/src/presentation/widgets/input_text_form.dart';

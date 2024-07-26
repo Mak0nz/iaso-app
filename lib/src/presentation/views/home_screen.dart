@@ -7,7 +7,7 @@ import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/domain/user_avatar.dart';
 import 'package:iaso/src/domain/username_manager.dart';
 import 'package:iaso/src/app_services/med_sort_manager.dart';
-import 'package:iaso/src/presentation/meds/meds_display.dart';
+import 'package:iaso/src/presentation/views/meds/meds_display.dart';
 import 'package:iaso/src/presentation/widgets/appbar.dart';
 
 class HomeScreen extends ConsumerWidget {

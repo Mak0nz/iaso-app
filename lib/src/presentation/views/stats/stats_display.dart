@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:iaso/src/app_services/number_formatter.dart';
+import 'package:iaso/src/utils/number_formatter.dart';
 import 'package:iaso/src/domain/stats.dart';
-import 'package:iaso/src/presentation/stats/blood_sugar_card.dart';
+import 'package:iaso/src/presentation/views/stats/blood_sugar_card.dart';
 import 'package:iaso/src/presentation/widgets/app_text.dart';
 import 'package:iaso/src/presentation/widgets/card.dart';
 

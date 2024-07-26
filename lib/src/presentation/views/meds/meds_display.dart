@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/app_services/med_sort_manager.dart';
 import 'package:iaso/src/data/med_provider.dart';
-import 'package:iaso/src/presentation/meds/med_card.dart';
+import 'package:iaso/src/presentation/views/meds/med_card.dart';
 import 'package:iaso/src/presentation/widgets/app_text.dart';
 import 'package:iaso/src/presentation/widgets/card.dart';
 import 'package:skeletonizer/skeletonizer.dart';

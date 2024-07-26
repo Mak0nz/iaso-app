@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:animations/animations.dart';
-import 'package:iaso/src/presentation/home_screen.dart';
-import 'package:iaso/src/presentation/meds/meds_screen.dart';
-import 'package:iaso/src/presentation/settings/settings_screen.dart';
-import 'package:iaso/src/presentation/stats/stats_screen.dart';
+import 'package:iaso/src/presentation/views/home_screen.dart';
+import 'package:iaso/src/presentation/views/meds/meds_screen.dart';
+import 'package:iaso/src/presentation/views/settings/settings_screen.dart';
+import 'package:iaso/src/presentation/views/stats/stats_screen.dart';
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({super.key});

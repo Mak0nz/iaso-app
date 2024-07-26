@@ -1,5 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:iaso/src/app_services/number_formatter.dart';
+import 'package:iaso/src/utils/number_formatter.dart';
 import 'package:iaso/src/domain/language.dart';
 
 class NotificationService {
