@@ -25,6 +25,7 @@ class CreateEditMedModal extends ConsumerStatefulWidget {
 
 class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
   late TextEditingController nameController;
+  late TextEditingController nameReplacementController;
   late TextEditingController activeAgentController;
   late TextEditingController useCaseController;
   late TextEditingController sideEffectController;
@@ -43,6 +44,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     super.initState();
     final med = widget.medication;
     nameController = TextEditingController(text: med?.name ?? '');
+    nameReplacementController = TextEditingController(text: med?.nameReplacement ?? '');
     activeAgentController = TextEditingController(text: med?.activeAgent ?? '');
     useCaseController = TextEditingController(text: med?.useCase ?? '');
     sideEffectController = TextEditingController(text: med?.sideEffect ?? '');
@@ -74,6 +76,11 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
             controller: nameController, 
             labelText: AppLocalizations.of(context)!.med_name, 
             require: true,
+          ),
+
+          InputMedForm(
+            controller: nameReplacementController, 
+            labelText: AppLocalizations.of(context)!.med_replacement_name, 
           ),
           
           InputMedForm(
@@ -232,6 +239,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     final medication = Medication(
       id: widget.medication?.id,
       name: nameController.text,
+      nameReplacement: nameReplacementController.text.isNotEmpty ? nameReplacementController.text : null,
       activeAgent: activeAgentController.text.isNotEmpty ? activeAgentController.text : null,
       useCase: useCaseController.text.isNotEmpty ? useCaseController.text : null,
       sideEffect: sideEffectController.text.isNotEmpty ? sideEffectController.text : null,

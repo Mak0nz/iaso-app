@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Medication {
   final String? id;
   final String name;
+  final String? nameReplacement;
   final String? activeAgent;
   final String? useCase;
   final String? sideEffect;
@@ -24,6 +25,7 @@ class Medication {
   Medication({
     this.id,
     required this.name,
+    this.nameReplacement,
     this.activeAgent,
     this.useCase,
     this.sideEffect,
@@ -46,6 +48,7 @@ class Medication {
   Medication copyWith({
     String? id,
     String? name,
+    String? nameReplacement,
     String? activeAgent,
     String? useCase,
     String? sideEffect,
@@ -67,6 +70,7 @@ class Medication {
     return Medication(
       id: id ?? this.id,
       name: name ?? this.name,
+      nameReplacement: nameReplacement ?? this.nameReplacement,
       activeAgent: activeAgent ?? this.activeAgent,
       useCase: useCase ?? this.useCase,
       sideEffect: sideEffect ?? this.sideEffect,
@@ -92,6 +96,7 @@ class Medication {
     return Medication(
       id: doc.id,
       name: data['name'] ?? '',
+      nameReplacement: data['nameReplacement'],
       activeAgent: data['activeAgent'],
       useCase: data['useCase'],
       sideEffect: data['sideEffect'],
@@ -115,6 +120,7 @@ class Medication {
   Map<String, dynamic> toFirestore() {
     return {
       'name': name,
+      if (nameReplacement != null) 'nameReplacement': nameReplacement,
       if (activeAgent != null) 'activeAgent': activeAgent,
       if (useCase != null) 'useCase': useCase,
       if (sideEffect != null) 'sideEffect': sideEffect,

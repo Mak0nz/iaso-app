@@ -81,6 +81,7 @@
     "meds_running_out": "Fogyóban lévő Gyógyszerek",
     "meds_not_running_out": "Jelenleg nincs fogyóban levő gyógyszer",
     "med_name": "Gyógyszer Neve",
+    "med_replacement_name": "Helyettesítő gyógyszer neve",
     "active_agent": "Hatóanyag",
     "use_case": "Hatás",
     "side_effect": "Mellékhatás",

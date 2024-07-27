@@ -81,6 +81,7 @@
     "meds_running_out": "Medications running low",
     "meds_not_running_out": "Currently no meds are running low",
     "med_name": "Name",
+    "med_replacement_name": "Replacement name",
     "active_agent": "Active Agent",
     "use_case": "Use Case",
     "side_effect": "Side Effects",
