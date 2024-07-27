@@ -3,13 +3,13 @@ import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/src/presentation/widgets/app_text.dart';
 import 'package:iaso/src/utils/dose_calculator.dart';
 import 'package:iaso/src/utils/number_formatter.dart';
 import 'package:iaso/src/constants/sizes.dart';
 import 'package:iaso/src/domain/medication.dart';
 import 'package:iaso/src/data/med_provider.dart';
 import 'package:iaso/src/presentation/widgets/animated_button.dart';
-import 'package:iaso/src/presentation/widgets/app_text.dart';
 import 'package:iaso/src/presentation/widgets/input_med_form.dart';
 import 'package:iaso/src/presentation/widgets/outlined_button.dart';
 
@@ -33,6 +33,9 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
   late TextEditingController orderedByController;
   late bool isInCloud;
   late List<bool> takeDays;
+  late List<bool> originalTakeDays;
+  late bool isAlternatingSchedule;
+  late bool takeEveryDay;
   bool _loading = false;
 
   @override
@@ -56,6 +59,9 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
       med?.takeSaturday ?? false,
       med?.takeSunday ?? false,
     ];
+    originalTakeDays = List.from(takeDays);
+    isAlternatingSchedule = med?.isAlternatingSchedule ?? false;
+    takeEveryDay = takeDays.every((day) => day);
   }
 
   @override
@@ -91,38 +97,56 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
             textInputType: TextInputType.number, 
             require: true,
           ),
-          
+
           Padding(
             padding: const EdgeInsets.only(left: edgeInset, top: 6),
             child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  AppText.subHeading(AppLocalizations.of(context)!.intake_which_days), 
-                  const Text('*', style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),),
-                ],
-              )),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                AppText.subHeading(AppLocalizations.of(context)!.intake_which_days), 
+                const Text('*', style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),),
+              ],
+          ))),
+          
+          SwitchListTile(
+            title: Text(AppLocalizations.of(context)!.take_every_day),
+            value: takeEveryDay,
+            onChanged: (value) {
+              setState(() {
+                takeEveryDay = value;
+                if (takeEveryDay) {
+                  isAlternatingSchedule = false;
+                  takeDays = List.filled(7, true);
+                } else {
+                  takeDays = List.from(originalTakeDays);
+                }
+              });
+            },
           ),
-          ...List.generate(7, (index) {
-            final days = [
-              (AppLocalizations.of(context)!.monday), 
-              (AppLocalizations.of(context)!.tuesday), 
-              (AppLocalizations.of(context)!.wednesday), 
-              (AppLocalizations.of(context)!.thursday), 
-              (AppLocalizations.of(context)!.friday), 
-              (AppLocalizations.of(context)!.saturday), 
-              (AppLocalizations.of(context)!.sunday)
-            ];
-            return CheckboxListTile(
-              title: Text(days[index]),
-              value: takeDays[index],
-              onChanged: (value) => setState(() => takeDays[index] = value!),
-            );
-          }),
+
+          if (!takeEveryDay && !isAlternatingSchedule)
+            ..._buildDailySchedule(),
+
+          SwitchListTile(
+            title: Text(AppLocalizations.of(context)!.take_alternating_days),
+            value: isAlternatingSchedule,
+            onChanged: (value) {
+              setState(() {
+                isAlternatingSchedule = value;
+                if (isAlternatingSchedule) {
+                  takeEveryDay = false;
+                  takeDays = List.filled(7, false);
+                } else {
+                  takeDays = List.from(originalTakeDays);
+                }
+              });
+            },
+          ),
           
           InputMedForm(
             controller: currentQuantityController, 
@@ -164,17 +188,46 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     );
   }
 
-  final _doseCalculator = DoseCalculator();
+  List<Widget> _buildDailySchedule() {
+    final days = [
+      AppLocalizations.of(context)!.monday,
+      AppLocalizations.of(context)!.tuesday,
+      AppLocalizations.of(context)!.wednesday,
+      AppLocalizations.of(context)!.thursday,
+      AppLocalizations.of(context)!.friday,
+      AppLocalizations.of(context)!.saturday,
+      AppLocalizations.of(context)!.sunday,
+    ];
+    return [
+      ...List.generate(7, (index) {
+        return CheckboxListTile(
+          title: Text(days[index]),
+          value: takeDays[index],
+          onChanged: (value) {
+            setState(() {
+              takeDays[index] = value!;
+              takeEveryDay = takeDays.every((day) => day);
+            });
+          },
+        );
+      }),
+    ];
+  }
 
   Future saveMed() async {
-    final currentQuantity = double.tryParse(currentQuantityController.text) ?? 0;
-    final takeQuantityPerDay = double.tryParse(takeQuantityPerDayController.text) ?? 0;
-
-    final totalDoses = _doseCalculator.calculateTotalDoses(currentQuantity, takeQuantityPerDay);
-
     setState(() {
       _loading = true;
     });
+
+    final doseCalculator = DoseCalculator();
+    final currentQuantity = double.tryParse(currentQuantityController.text) ?? 0;
+    final takeQuantityPerDay = double.tryParse(takeQuantityPerDayController.text) ?? 0;
+
+    final totalDoses = doseCalculator.calculateTotalDoses(
+      currentQuantity,
+      takeQuantityPerDay,
+      isAlternatingSchedule
+    );
 
     final medication = Medication(
       id: widget.medication?.id,
@@ -189,6 +242,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
       takeFriday: takeDays[4],
       takeSaturday: takeDays[5],
       takeSunday: takeDays[6],
+      isAlternatingSchedule: isAlternatingSchedule,
       orderedBy: orderedByController.text.isNotEmpty ? orderedByController.text : null,
       isInCloud: isInCloud,
       currentQuantity: currentQuantity,

@@ -14,6 +14,7 @@ class Medication {
   final bool takeFriday;
   final bool takeSaturday;
   final bool takeSunday;
+  final bool isAlternatingSchedule;
   final double currentQuantity;
   final String? orderedBy;
   final bool isInCloud;
@@ -34,6 +35,7 @@ class Medication {
     required this.takeFriday,
     required this.takeSaturday,
     required this.takeSunday,
+    this.isAlternatingSchedule = false,
     required this.currentQuantity,
     this.orderedBy,
     required this.isInCloud,
@@ -55,6 +57,7 @@ class Medication {
     bool? takeFriday,
     bool? takeSaturday,
     bool? takeSunday,
+    bool? isAlternatingSchedule,
     double? currentQuantity,
     String? orderedBy,
     bool? isInCloud,
@@ -75,6 +78,7 @@ class Medication {
       takeFriday: takeFriday ?? this.takeFriday,
       takeSaturday: takeSaturday ?? this.takeSaturday,
       takeSunday: takeSunday ?? this.takeSunday,
+      isAlternatingSchedule: isAlternatingSchedule ?? this.isAlternatingSchedule,
       currentQuantity: currentQuantity ?? this.currentQuantity,
       orderedBy: orderedBy ?? this.orderedBy,
       isInCloud: isInCloud ?? this.isInCloud,
@@ -99,6 +103,7 @@ class Medication {
       takeFriday: data['takeFriday'] ?? false,
       takeSaturday: data['takeSaturday'] ?? false,
       takeSunday: data['takeSunday'] ?? false,
+      isAlternatingSchedule: data['isAlternatingSchedule'] ?? false,
       currentQuantity: (data['currentQuantity'] ?? 0).toDouble(),
       orderedBy: data['orderedBy'],
       isInCloud: data['isInCloud'] ?? false,
@@ -121,6 +126,7 @@ class Medication {
       'takeFriday': takeFriday,
       'takeSaturday': takeSaturday,
       'takeSunday': takeSunday,
+      'isAlternatingSchedule': isAlternatingSchedule,
       'currentQuantity': currentQuantity,
       if (orderedBy != null) 'orderedBy': orderedBy,
       'isInCloud': isInCloud,

@@ -47,9 +47,9 @@ void main() {
     });
 
     test('Calculating total doses', () {
-      expect(doseCalculator.calculateTotalDoses(30, 1), 30);
-      expect(doseCalculator.calculateTotalDoses(30, 0.5), 60);
-      expect(doseCalculator.calculateTotalDoses(30, 2), 15);
+      expect(doseCalculator.calculateTotalDoses(30, 1, false), 30);
+      expect(doseCalculator.calculateTotalDoses(30, 0.5, false), 60);
+      expect(doseCalculator.calculateTotalDoses(30, 2, false), 15);
     });
 
     test('Updating medication quantity', () async {

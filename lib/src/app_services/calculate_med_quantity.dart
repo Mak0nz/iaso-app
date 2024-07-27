@@ -23,7 +23,7 @@ Future<void> calculateMedQuantities() async {
         final newQuantity = medication.currentQuantity - medication.takeQuantityPerDay;
         final double updatedQuantity = newQuantity > 0 ? newQuantity : 0;
 
-        final updatedTotalDoses = doseCalculator.calculateTotalDoses(updatedQuantity, medication.takeQuantityPerDay);
+        final updatedTotalDoses = doseCalculator.calculateTotalDoses(updatedQuantity, medication.takeQuantityPerDay, medication.isAlternatingSchedule);
 
         final updatedMedication = medication.copyWith(
           currentQuantity: updatedQuantity,
@@ -50,15 +50,26 @@ bool _isSameDay(DateTime date1, DateTime date2) {
 }
 
 bool _shouldTakeMedicationToday(Medication medication, DateTime today) {
-  switch (today.weekday) {
-    case DateTime.monday: return medication.takeMonday;
-    case DateTime.tuesday: return medication.takeTuesday;
-    case DateTime.wednesday: return medication.takeWednesday;
-    case DateTime.thursday: return medication.takeThursday;
-    case DateTime.friday: return medication.takeFriday;
-    case DateTime.saturday: return medication.takeSaturday;
-    case DateTime.sunday: return medication.takeSunday;
-    default: return false;
+  if (medication.isAlternatingSchedule) {
+    // Calculate the number of days since the last update
+    int daysSinceLastUpdate = today.difference(medication.lastUpdatedDate).inDays;
+    // If it's been an odd number of days since the last update, it's time for another dose:
+    // Day 0 (last update day): No medication (daysSinceLastUpdate = 0)
+    // Day 1: Take medication (daysSinceLastUpdate = 1, which is odd)
+    // Day 2: No medication (daysSinceLastUpdate = 2, which is even)
+    // Day 3: Take medication (daysSinceLastUpdate = 3, which is odd) then its set to 0 repeating the logic
+    return daysSinceLastUpdate > 0 && daysSinceLastUpdate % 2 == 1;
+  } else {
+    switch (today.weekday) {
+      case DateTime.monday: return medication.takeMonday;
+      case DateTime.tuesday: return medication.takeTuesday;
+      case DateTime.wednesday: return medication.takeWednesday;
+      case DateTime.thursday: return medication.takeThursday;
+      case DateTime.friday: return medication.takeFriday;
+      case DateTime.saturday: return medication.takeSaturday;
+      case DateTime.sunday: return medication.takeSunday;
+      default: return false;
+    }
   }
 }
 
