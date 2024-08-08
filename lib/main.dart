@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/firebase_options.dart';
-import 'package:iaso/src/app_services/calculate_med_quantity.dart';
-import 'package:iaso/src/presentation/routing/wrapper.dart';
-import 'package:iaso/src/domain/language.dart';
-import 'package:iaso/src/data/language_repository.dart';
+import 'package:iaso/app_services/calculate_med_quantity.dart';
+import 'package:iaso/presentation/routing/wrapper.dart';
+import 'package:iaso/domain/language.dart';
+import 'package:iaso/data/language_repository.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
@@ -30,7 +30,8 @@ Future<void> main() async {
 
   await FirebaseAppCheck.instance.activate(
     // https://firebase.google.com/docs/app-check/flutter/default-providers#initialize
-    androidProvider: isDebug ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+    androidProvider:
+        isDebug ? AndroidProvider.debug : AndroidProvider.playIntegrity,
   );
 
   initializeDateFormatting();
@@ -41,17 +42,17 @@ Future<void> main() async {
     "CalculateMedQuantity",
     frequency: const Duration(hours: 12),
     inputData: <String, dynamic>{},
-      constraints: Constraints(
-        networkType: NetworkType.connected,
-        //requiresDeviceIdle: true,
-      ),
-    );
-    AwesomeNotifications().initialize(
+    constraints: Constraints(
+      networkType: NetworkType.connected,
+      //requiresDeviceIdle: true,
+    ),
+  );
+  AwesomeNotifications().initialize(
     null,
     [
       NotificationChannel(
         channelKey: 'med_updates',
-        channelName: 'Medication updates', 
+        channelName: 'Medication updates',
         channelDescription: 'Get reminders when a medication is running out.',
       )
     ],
@@ -59,14 +60,12 @@ Future<void> main() async {
   );
 
   final container = ProviderContainer();
-  final language = await container.read(languageRepositoryProvider).getLanguage();
-  runApp(ProviderScope(
-    overrides: [
-      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      languageProvider.overrideWith((ref) => language),
-    ],
-    child: const MyApp()
-  ));
+  final language =
+      await container.read(languageRepositoryProvider).getLanguage();
+  runApp(ProviderScope(overrides: [
+    sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    languageProvider.overrideWith((ref) => language),
+  ], child: const MyApp()));
 }
 
 @pragma('vm:entry-point')
@@ -85,19 +84,23 @@ void callbackDispatcher() {
       } catch (error) {
         if (kDebugMode) {
           print("Error during background task: $error");
-        } return Future.value(false);
+        }
+        return Future.value(false);
       }
-    } return Future.value(true); // Indicate successful task execution
+    }
+    return Future.value(true); // Indicate successful task execution
     // Handle other tasks if any
   });
 }
-
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref,) {
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     return const Wrapper();
   }
 }

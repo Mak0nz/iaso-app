@@ -5,8 +5,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:iaso/src/data/med_repository.dart' as _i2;
-import 'package:iaso/src/domain/medication.dart' as _i4;
+import 'package:iaso/data/med_repository.dart' as _i2;
+import 'package:iaso/domain/medication.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint

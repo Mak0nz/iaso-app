@@ -1,8 +1,8 @@
 // ignore_for_file: body_might_complete_normally_nullable
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iaso/src/data/stats_repository.dart';
-import 'package:iaso/src/domain/stats.dart';
+import 'package:iaso/data/stats_repository.dart';
+import 'package:iaso/domain/stats.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
@@ -27,8 +27,7 @@ void main() {
         dateField: DateTime.now(),
       );
 
-      when(mockRepository.createStatsForUser(stats))
-          .thenAnswer((_) async {});
+      when(mockRepository.createStatsForUser(stats)).thenAnswer((_) async {});
 
       await mockRepository.createStatsForUser(stats);
 
@@ -58,14 +57,12 @@ void main() {
     test('Fetching stats for a date with no data', () async {
       final date = DateTime(2023, 7, 2);
 
-      when(mockRepository.fetchStats(date))
-          .thenAnswer((_) async => null);
+      when(mockRepository.fetchStats(date)).thenAnswer((_) async => null);
 
       final result = await mockRepository.fetchStats(date);
 
       expect(result, isNull);
       verify(mockRepository.fetchStats(date)).called(1);
     });
-
   });
 }

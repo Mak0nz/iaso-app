@@ -20,16 +20,16 @@ The project follows a layered architecture for better organization and separatio
 ```
 lib/
 ├── l10n/
-├── src/
-│   ├── app_services/
-│   ├── constants/
-│   ├── data/
-│   ├── domain/
-│   ├── presentation/
-│   │   ├── views/
-│   │   ├── widgets/
-│   │   └── routing/
-│   ├── utils/
+├── app_services/
+├── constants/
+├── data/
+├── domain/
+├── presentation/
+│   ├── views/
+│   ├── widgets/
+│   └── routing/
+├── utils/
+test/
 ```
 
 - `app_services/`: Houses core application logic and services.
@@ -44,21 +44,25 @@ lib/
 1. Ensure you have Flutter installed on your machine. If not, follow the [official Flutter installation guide](https://flutter.dev/docs/get-started/install).
 
 2. Clone the repository:
+
    ```
    git clone https://github.com/Mak0nz/iaso-app.git
    ```
 
 3. Navigate to the project directory:
+
    ```
    cd iaso-app
    ```
 
 4. Install dependencies:
+
    ```
    flutter pub get
    ```
 
 5. Set up Firebase:
+
    - Create a new Firebase project in the [Firebase Console](https://console.firebase.google.com/).
    - Add an Android and/or iOS app to your Firebase project and follow the setup instructions.
    - Download the `google-services.json` (for Android) and/or `GoogleService-Info.plist` (for iOS) and place them in the appropriate directories in your project.

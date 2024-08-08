@@ -1,9 +1,9 @@
 // ignore_for_file: body_might_complete_normally_nullable
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iaso/src/data/med_repository.dart';
-import 'package:iaso/src/domain/medication.dart';
-import 'package:iaso/src/utils/dose_calculator.dart';
+import 'package:iaso/data/med_repository.dart';
+import 'package:iaso/domain/medication.dart';
+import 'package:iaso/utils/dose_calculator.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
@@ -38,8 +38,7 @@ void main() {
       );
 
       // Setup the mock to return a Future<void>
-      when(mockRepository.addMedication(medication))
-          .thenAnswer((_) async {});
+      when(mockRepository.addMedication(medication)).thenAnswer((_) async {});
 
       await mockRepository.addMedication(medication);
 
