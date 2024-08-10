@@ -96,10 +96,6 @@ flutter test
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
-
-This project is licensed under the Apache License - see the [LICENSE](https://github.com/Mak0nz/iaso-app/wiki#license) wiki page for details.
-
 ## Acknowledgments
 
 - [Flutter](https://flutter.dev/) for the cross-platform framework.
