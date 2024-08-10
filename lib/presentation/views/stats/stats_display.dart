@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/presentation/views/stats/urine_card.dart';
 import 'package:iaso/utils/number_formatter.dart';
 import 'package:iaso/domain/stats.dart';
 import 'package:iaso/presentation/views/stats/blood_sugar_card.dart';
@@ -55,6 +56,17 @@ class StatsDisplay extends StatelessWidget {
                   AppText.bold(
                       '${AppLocalizations.of(context)!.temperature}: '),
                   Text('${NumberFormatter.formatDouble(stats!.temp ?? 0)} °C'),
+                ],
+              ),
+            ),
+          if (stats!.nightTemp != null)
+            CustomCard(
+              title: Row(
+                children: [
+                  AppText.bold(
+                      '${AppLocalizations.of(context)!.night_temperature}: '),
+                  Text(
+                      '${NumberFormatter.formatDouble(stats!.nightTemp ?? 0)} °C'),
                 ],
               ),
             ),
@@ -124,6 +136,8 @@ class StatsDisplay extends StatelessWidget {
             ),
           if (stats!.bloodSugar != null && stats!.bloodSugar!.isNotEmpty)
             ExpandableBloodSugarCard(bloodSugar: stats!.bloodSugar!),
+          if (stats!.urine != null && stats!.urine!.isNotEmpty)
+            ExpandableUrineCard(urine: stats!.urine!),
         ],
       ),
     );

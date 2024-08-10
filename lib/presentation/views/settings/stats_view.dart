@@ -19,9 +19,11 @@ final initialSettingsProvider = FutureProvider<Map<String, bool>>((ref) async {
   return {
     'weight': prefs.getBool('show_weight') ?? true,
     'temperature': prefs.getBool('show_temperature') ?? true,
+    'nightTemperature': prefs.getBool('show_night_temperature') ?? true,
     'morningBP': prefs.getBool('show_morning_bp') ?? true,
     'nightBP': prefs.getBool('show_night_bp') ?? true,
     'bloodSugar': prefs.getBool('show_blood_sugar') ?? true,
+    'urine': prefs.getBool('show_urine') ?? true,
   };
 });
 
@@ -59,9 +61,11 @@ class StatsViewSettingsNotifier
       final prefKey = switch (key) {
         'weight' => 'show_weight',
         'temperature' => 'show_temperature',
+        'nightTemperature' => 'show_night_temperature',
         'morningBP' => 'show_morning_bp',
         'nightBP' => 'show_night_bp',
         'bloodSugar' => 'show_blood_sugar',
+        'urine' => 'show_urine',
         _ => throw Exception('Invalid key'),
       };
 
@@ -130,12 +134,16 @@ class StatsViewSettingsContent extends ConsumerWidget {
               AppLocalizations.of(context)!.weight, settings),
           _buildCheckboxListTile(context, ref, 'temperature',
               AppLocalizations.of(context)!.temperature, settings),
+          _buildCheckboxListTile(context, ref, 'nightTemperature',
+              AppLocalizations.of(context)!.night_temperature, settings),
           _buildCheckboxListTile(context, ref, 'morningBP',
               AppLocalizations.of(context)!.morning_blood_pressure, settings),
           _buildCheckboxListTile(context, ref, 'nightBP',
               AppLocalizations.of(context)!.night_blood_pressure, settings),
           _buildCheckboxListTile(context, ref, 'bloodSugar',
               AppLocalizations.of(context)!.blood_sugar, settings),
+          _buildCheckboxListTile(context, ref, 'urine',
+              AppLocalizations.of(context)!.urine, settings),
         ],
       ),
       loading: () => const CircularProgressIndicator(),

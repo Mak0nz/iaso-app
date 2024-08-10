@@ -78,6 +78,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   final _formKey = GlobalKey<FormState>();
   final _controllers = <String, TextEditingController>{};
   final List<TextEditingController> _bloodSugarControllers = [];
+  final List<TextEditingController> _urineControllers = [];
 
   @override
   void initState() {
@@ -93,6 +94,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
       'bpMorningPulse',
       'weight',
       'temp',
+      'nightTemp',
       'bpNightSYS',
       'bpNightDIA',
       'bpNightPulse'
@@ -100,6 +102,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
       _controllers[field] = TextEditingController();
     }
     _bloodSugarControllers.add(TextEditingController());
+    _urineControllers.add(TextEditingController());
   }
 
   void _loadExistingData() {
@@ -115,6 +118,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
               stats.bpMorningPulse?.toString() ?? '';
           _controllers['weight']?.text = stats.weight?.toString() ?? '';
           _controllers['temp']?.text = stats.temp?.toString() ?? '';
+          _controllers['nightTemp']?.text = stats.nightTemp?.toString() ?? '';
           _controllers['bpNightSYS']?.text = stats.bpNightSYS?.toString() ?? '';
           _controllers['bpNightDIA']?.text = stats.bpNightDIA?.toString() ?? '';
           _controllers['bpNightPulse']?.text =
@@ -130,6 +134,17 @@ class _StatsFormState extends ConsumerState<StatsForm> {
           }
         } else {
           _bloodSugarControllers.add(TextEditingController());
+        }
+
+        // Load urine values
+        _urineControllers.clear();
+        if (stats.urine != null && stats.urine!.isNotEmpty) {
+          for (var value in stats.urine!) {
+            _urineControllers
+                .add(TextEditingController(text: value.toString()));
+          }
+        } else {
+          _urineControllers.add(TextEditingController());
         }
       }
     });
@@ -159,9 +174,12 @@ class _StatsFormState extends ConsumerState<StatsForm> {
             children: [
               if (settings['weight'] ?? true) _buildWeightField(),
               if (settings['temperature'] ?? true) _buildTemperatureField(),
+              if (settings['nightTemperature'] ?? true)
+                _buildNightTemperatureField(),
               if (settings['morningBP'] ?? true) _buildMorningBPField(),
               if (settings['nightBP'] ?? true) _buildNightBPField(),
               if (settings['bloodSugar'] ?? true) _buildBSField(),
+              if (settings['urine'] ?? true) _buildUrineField(),
               const SizedBox(
                 height: 11,
               ),
@@ -216,6 +234,31 @@ class _StatsFormState extends ConsumerState<StatsForm> {
           InputTextForm(
             width: 80.0,
             controller: _controllers['temp'],
+            labelText: '00.0',
+          ),
+          const Text(
+            "°C",
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNightTemperatureField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          AppText.subHeading(
+              "${AppLocalizations.of(context)!.night_temperature}:"),
+          const SizedBox(
+            width: 4,
+          ),
+          InputTextForm(
+            width: 80.0,
+            controller: _controllers['nightTemp'],
             labelText: '00.0',
           ),
           const Text(
@@ -369,6 +412,50 @@ class _StatsFormState extends ConsumerState<StatsForm> {
     });
   }
 
+  Widget _buildUrineField() {
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 5),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child:
+                  AppText.subHeading("${AppLocalizations.of(context)!.urine}:"),
+            ),
+            ..._buildUrineFields(),
+          ],
+        ));
+  }
+
+  List<Widget> _buildUrineFields() {
+    return List.generate(_urineControllers.length, (index) {
+      return Row(
+        children: [
+          Expanded(
+            child: InputTextForm(
+              controller: _urineControllers[index],
+              labelText: 'mL',
+            ),
+          ),
+          IconButton(
+            icon: Icon(index == _urineControllers.length - 1
+                ? FontAwesomeIcons.plus
+                : FontAwesomeIcons.minus),
+            onPressed: () {
+              setState(() {
+                if (index == _urineControllers.length - 1) {
+                  _urineControllers.add(TextEditingController());
+                } else {
+                  _urineControllers.removeAt(index);
+                }
+              });
+            },
+          ),
+        ],
+      );
+    });
+  }
+
   void _submitForm() async {
     setState(() {
       _loading = true;
@@ -382,16 +469,25 @@ class _StatsFormState extends ConsumerState<StatsForm> {
               value!) // This line ensures we have non-nullable doubles
           .toList();
 
+      final urineValues = _urineControllers
+          .map((controller) => double.tryParse(controller.text))
+          .where((value) => value != null)
+          .map((value) =>
+              value!) // This line ensures we have non-nullable doubles
+          .toList();
+
       final stats = Stats(
         bpMorningSYS: int.tryParse(_controllers['bpMorningSYS']!.text),
         bpMorningDIA: int.tryParse(_controllers['bpMorningDIA']!.text),
         bpMorningPulse: int.tryParse(_controllers['bpMorningPulse']!.text),
         weight: double.tryParse(_controllers['weight']!.text),
         temp: double.tryParse(_controllers['temp']!.text),
+        nightTemp: double.tryParse(_controllers['nightTemp']!.text),
         bpNightSYS: int.tryParse(_controllers['bpNightSYS']!.text),
         bpNightDIA: int.tryParse(_controllers['bpNightDIA']!.text),
         bpNightPulse: int.tryParse(_controllers['bpNightPulse']!.text),
         bloodSugar: bloodSugarValues.isNotEmpty ? bloodSugarValues : null,
+        urine: urineValues.isNotEmpty ? urineValues : null,
         dateField: ref.read(selectedDateProvider),
       );
 
