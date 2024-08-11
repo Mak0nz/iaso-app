@@ -2,7 +2,7 @@ name: iaso
 description: "Track your vitals & meds! Manage your health easily."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -16,10 +16,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.2+4
+version: 1.0.3+5
 
 environment:
-  sdk: '>=3.3.4 <4.0.0'
+  sdk: ">=3.3.4 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -55,7 +54,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
-
 
 dev_dependencies:
   flutter_test:
@@ -99,29 +97,29 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-  - family: LilitaOne
-    fonts:
-      - asset: assets/fonts/LilitaOne.ttf
-  - family: Poppins
-    fonts:
-      - asset: assets/fonts/Poppins-100.ttf
-        weight: 100
-      - asset: assets/fonts/Poppins-200.ttf
-        weight: 200
-      - asset: assets/fonts/Poppins-300.ttf
-        weight: 300
-      - asset: assets/fonts/Poppins-400.ttf
-        weight: 400
-      - asset: assets/fonts/Poppins-500.ttf
-        weight: 500
-      - asset: assets/fonts/Poppins-600.ttf
-        weight: 600
-      - asset: assets/fonts/Poppins-700.ttf
-        weight: 700
-      - asset: assets/fonts/Poppins-800.ttf
-        weight: 800
-      - asset: assets/fonts/Poppins-900.ttf
-        weight: 900
+    - family: LilitaOne
+      fonts:
+        - asset: assets/fonts/LilitaOne.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-100.ttf
+          weight: 100
+        - asset: assets/fonts/Poppins-200.ttf
+          weight: 200
+        - asset: assets/fonts/Poppins-300.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins-400.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-500.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-600.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-700.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-800.ttf
+          weight: 800
+        - asset: assets/fonts/Poppins-900.ttf
+          weight: 900
   # fonts:
   #   - family: Schyler
   #     fonts:

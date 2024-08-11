@@ -183,7 +183,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         Navigator.pushNamedAndRemoveUntil(
             // ignore: use_build_context_synchronously
             context,
-            '/enable_notifications',
+            '/onboarding_screen',
             (Route<dynamic> route) => false);
       }
     } finally {

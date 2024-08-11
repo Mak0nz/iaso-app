@@ -4,12 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/app_services/auth_service.dart';
 import 'package:iaso/presentation/routing/navigation_menu.dart';
 import 'package:iaso/domain/language.dart';
+import 'package:iaso/presentation/views/onboarding/onboarding_screen.dart';
 import 'package:iaso/utils/theme/theme.dart';
 import 'package:iaso/utils/theme/theme_manager.dart';
 import 'package:iaso/presentation/views/auth/log_in.dart';
 import 'package:iaso/presentation/views/auth/sign_up.dart';
 import 'package:iaso/presentation/views/home_screen.dart';
-import 'package:iaso/presentation/views/onboarding/enable_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Wrapper extends ConsumerWidget {
   const Wrapper({super.key});
@@ -57,7 +58,7 @@ class AppWrapper extends ConsumerWidget {
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LogInScreen(),
         '/signup': (context) => const SignUpScreen(),
-        '/enable_notifications': (context) => const EnableNotifications(),
+        '/onboarding_screen': (context) => const OnboardingScreen(),
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -67,7 +68,19 @@ class AppWrapper extends ConsumerWidget {
           if (user != null) {
             return const NavigationMenu();
           } else {
-            return const LogInScreen();
+            return FutureBuilder<bool>(
+              future: _isFirstLaunch(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data == true) {
+                    return const SignUpScreen();
+                  } else {
+                    return const LogInScreen();
+                  }
+                }
+                return const CircularProgressIndicator();
+              },
+            );
           }
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -75,5 +88,14 @@ class AppWrapper extends ConsumerWidget {
             const Center(child: Text('Authentication error occurred')),
       ),
     );
+  }
+
+  Future<bool> _isFirstLaunch() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+    if (isFirstLaunch) {
+      await prefs.setBool('isFirstLaunch', false);
+    }
+    return isFirstLaunch;
   }
 }

@@ -4,11 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/app_services/med_sort_manager.dart';
 import 'package:iaso/data/med_provider.dart';
+import 'package:iaso/presentation/views/meds/create_edit_med_modal.dart';
 import 'package:iaso/presentation/views/meds/med_card.dart';
+import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/card.dart';
+import 'package:iaso/presentation/widgets/floating_arrow.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class DisplayMeds extends ConsumerWidget {
   final bool showAll;
@@ -42,6 +46,10 @@ class DisplayMeds extends ConsumerWidget {
             ? sortedMeds
             : sortedMeds.where((med) => med.totalDoses <= 14).toList();
 
+        if (meds.isEmpty) {
+          return _buildEmptyState(context);
+        }
+
         return ListView(
           children: [
             if (!showAll) ...[
@@ -66,6 +74,55 @@ class DisplayMeds extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    bool loading = false;
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            FontAwesomeIcons.pills,
+            size: 60,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            AppLocalizations.of(context)!.no_medications_added,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            AppLocalizations.of(context)!.add_medication_guide,
+            style: const TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          const FloatingArrow(),
+          const SizedBox(height: 20),
+          AnimatedButton(
+            onTap: () => WoltModalSheet.show(
+              context: context,
+              pageListBuilder: (context) {
+                return [
+                  WoltModalSheetPage(
+                    child: const CreateEditMedModal(),
+                    topBarTitle: AppText.heading(
+                        AppLocalizations.of(context)!.create_med),
+                    isTopBarLayerAlwaysVisible: true,
+                    enableDrag: false,
+                  )
+                ];
+              },
+            ),
+            text: AppLocalizations.of(context)!.add_medication,
+            progressEvent: loading,
+          ),
+        ],
+      ),
     );
   }
 }
