@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/app_services/auth_service.dart';
 import 'package:iaso/presentation/routing/navigation_menu.dart';
 import 'package:iaso/domain/language.dart';
+import 'package:iaso/presentation/views/onboarding/onboarding_screen.dart';
 import 'package:iaso/utils/theme/theme.dart';
 import 'package:iaso/utils/theme/theme_manager.dart';
 import 'package:iaso/presentation/views/auth/log_in.dart';
 import 'package:iaso/presentation/views/auth/sign_up.dart';
 import 'package:iaso/presentation/views/home_screen.dart';
-import 'package:iaso/presentation/views/onboarding/enable_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Wrapper extends ConsumerWidget {
@@ -58,7 +58,7 @@ class AppWrapper extends ConsumerWidget {
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LogInScreen(),
         '/signup': (context) => const SignUpScreen(),
-        '/enable_notifications': (context) => const EnableNotifications(),
+        '/onboarding_screen': (context) => const OnboardingScreen(),
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
