@@ -9,13 +9,13 @@ class AppTheme {
       backgroundColor: Colors.lightBlue.shade50.withAlpha(200),
     ),
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: Colors.lightBlue.shade50.withAlpha(200),
-      indicatorColor: Colors.blue.shade400,
-      elevation: 3,
-      height: 50,
-      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-      indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5))
-    ),
+        backgroundColor: Colors.lightBlue.shade50.withAlpha(200),
+        indicatorColor: Colors.blue.shade400,
+        elevation: 3,
+        height: 50,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        indicatorShape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5))),
     colorScheme: ColorScheme.light(
       primary: Colors.blue.shade400,
       surface: Colors.lightBlue.shade50,
@@ -30,23 +30,29 @@ class AppTheme {
       backgroundColor: Colors.blueGrey.shade900.withAlpha(220),
     ),
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: Colors.blueGrey.shade900.withAlpha(220),
-      indicatorColor: Colors.blue.shade400,
-      iconTheme: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
-          return IconThemeData(color: Colors.blueGrey.shade900.withAlpha(220));
-        }
-        return const IconThemeData(color: Colors.white); // Default color for unselected icons
-      }),
-      elevation: 3,
-      height: 50,
-      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-      indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5))
-    ),
+        backgroundColor: Colors.blueGrey.shade900.withAlpha(220),
+        indicatorColor: Colors.blue.shade400,
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return IconThemeData(
+                color: Colors.blueGrey.shade900.withAlpha(220));
+          }
+          return const IconThemeData(
+              color: Colors.white); // Default color for unselected icons
+        }),
+        elevation: 3,
+        height: 50,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        indicatorShape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5))),
     colorScheme: ColorScheme.dark(
       primary: Colors.blue.shade400,
-      surface: Colors.blueGrey.shade900,
-      background: const Color(0xFF1D2326),
+      surfaceContainer: Colors.blueGrey.shade900,
+      surfaceContainerLowest: Colors.blueGrey.shade900,
+      surfaceContainerLow: Colors.blueGrey.shade900,
+      surfaceContainerHigh: Colors.blueGrey.shade900,
+      surfaceContainerHighest: Colors.blueGrey.shade900,
+      surface: const Color(0xFF1D2326),
     ),
-  ); 
+  );
 }
