@@ -1,4 +1,5 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "editor.wordBasedSuggestions": "matchingDocuments"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "editor.wordBasedSuggestions": "matchingDocuments",
+  "java.compile.nullAnalysis.mode": "automatic"
 }
