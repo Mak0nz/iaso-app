@@ -16,6 +16,7 @@ class StatsDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (stats == null) {
       return Column(
         children: [
@@ -27,7 +28,7 @@ class StatsDisplay extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                AppText.bold(AppLocalizations.of(context)!.no_data_text),
+                AppText.bold(l10n.no_data_text),
               ],
             ),
           ),
@@ -43,7 +44,7 @@ class StatsDisplay extends StatelessWidget {
             CustomCard(
               title: Row(
                 children: [
-                  AppText.bold('${AppLocalizations.of(context)!.weight}: '),
+                  AppText.bold('${l10n.weight}: '),
                   Text(
                       '${NumberFormatter.formatDouble(stats!.weight ?? 0)} kg'),
                 ],
@@ -53,8 +54,7 @@ class StatsDisplay extends StatelessWidget {
             CustomCard(
               title: Row(
                 children: [
-                  AppText.bold(
-                      '${AppLocalizations.of(context)!.temperature}: '),
+                  AppText.bold('${l10n.temperature}: '),
                   Text('${NumberFormatter.formatDouble(stats!.temp ?? 0)} °C'),
                 ],
               ),
@@ -63,8 +63,7 @@ class StatsDisplay extends StatelessWidget {
             CustomCard(
               title: Row(
                 children: [
-                  AppText.bold(
-                      '${AppLocalizations.of(context)!.night_temperature}: '),
+                  AppText.bold('${l10n.night_temperature}: '),
                   Text(
                       '${NumberFormatter.formatDouble(stats!.nightTemp ?? 0)} °C'),
                 ],
@@ -78,8 +77,7 @@ class StatsDisplay extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: AppText.bold(
-                        '${AppLocalizations.of(context)!.morning_blood_pressure}:'),
+                    child: AppText.bold('${l10n.morning_blood_pressure}:'),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -110,8 +108,7 @@ class StatsDisplay extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: AppText.bold(
-                        '${AppLocalizations.of(context)!.night_blood_pressure}:'),
+                    child: AppText.bold('${l10n.night_blood_pressure}:'),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

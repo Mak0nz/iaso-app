@@ -28,6 +28,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: Container(
@@ -56,17 +57,16 @@ class _NavigationMenuState extends State<NavigationMenu> {
               },
               destinations: [
                 NavigationDestination(
-                    icon: const Icon(FontAwesomeIcons.house),
-                    label: AppLocalizations.of(context)!.home),
+                    icon: const Icon(FontAwesomeIcons.house), label: l10n.home),
                 NavigationDestination(
                     icon: const Icon(FontAwesomeIcons.heartCirclePlus),
-                    label: AppLocalizations.of(context)!.stats),
+                    label: l10n.stats),
                 NavigationDestination(
                     icon: const Icon(FontAwesomeIcons.capsules),
-                    label: AppLocalizations.of(context)!.meds),
+                    label: l10n.meds),
                 NavigationDestination(
                     icon: const Icon(FontAwesomeIcons.gear),
-                    label: AppLocalizations.of(context)!.settings),
+                    label: l10n.settings),
               ],
             ),
           ),

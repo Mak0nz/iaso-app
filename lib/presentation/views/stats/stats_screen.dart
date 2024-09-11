@@ -14,12 +14,13 @@ class StatsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final selectedDate = ref.watch(selectedDateProvider);
     final statsAsync = ref.watch(statsProvider);
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: AppLocalizations.of(context)!.stats,
+        title: l10n.stats,
       ),
       floatingActionButton: StatsModal(selectedDate: selectedDate),
       extendBodyBehindAppBar: true,
@@ -32,7 +33,7 @@ class StatsScreen extends ConsumerWidget {
                 height: kToolbarHeight * 1.25,
               ),
               TableCalendar(
-                locale: AppLocalizations.of(context)!.localeName,
+                locale: l10n.localeName,
                 headerStyle: const HeaderStyle(
                     formatButtonVisible: false, titleCentered: true),
                 availableGestures: AvailableGestures.all,
@@ -60,8 +61,7 @@ class StatsScreen extends ConsumerWidget {
                   enabled: true,
                   child: StatsDisplay(stats: null),
                 ),
-                error: (error, _) =>
-                    Text('${AppLocalizations.of(context)!.error} \n $error'),
+                error: (error, _) => Text('${l10n.error} \n $error'),
               ),
             ],
           ),

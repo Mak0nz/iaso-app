@@ -12,6 +12,7 @@ class AddMedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     bool loading = false;
 
     return Padding(
@@ -26,12 +27,12 @@ class AddMedScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            AppLocalizations.of(context)!.add_medication,
+            l10n.add_medication,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           Text(
-            AppLocalizations.of(context)!.add_medication_guide,
+            l10n.add_medication_guide,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
@@ -45,15 +46,14 @@ class AddMedScreen extends StatelessWidget {
                 return [
                   WoltModalSheetPage(
                     child: const CreateEditMedModal(),
-                    topBarTitle: AppText.heading(
-                        AppLocalizations.of(context)!.create_med),
+                    topBarTitle: AppText.heading(l10n.create_med),
                     isTopBarLayerAlwaysVisible: true,
                     enableDrag: false,
                   )
                 ];
               },
             ),
-            text: AppLocalizations.of(context)!.add_medication,
+            text: l10n.add_medication,
             progressEvent: loading,
           ),
         ],

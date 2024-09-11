@@ -24,6 +24,7 @@ class CreateEditMedModal extends ConsumerStatefulWidget {
 }
 
 class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
+  late final l10n = AppLocalizations.of(context)!;
   late TextEditingController nameController;
   late TextEditingController nameReplacementController;
   late TextEditingController activeAgentController;
@@ -79,26 +80,23 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
         children: [
           InputMedForm(
             controller: nameController,
-            labelText: AppLocalizations.of(context)!.med_name,
+            labelText: l10n.med_name,
             require: true,
           ),
           InputMedForm(
             controller: nameReplacementController,
-            labelText: AppLocalizations.of(context)!.med_replacement_name,
+            labelText: l10n.med_replacement_name,
           ),
           InputMedForm(
             controller: activeAgentController,
-            labelText: AppLocalizations.of(context)!.active_agent,
+            labelText: l10n.active_agent,
           ),
+          InputMedForm(controller: useCaseController, labelText: l10n.use_case),
           InputMedForm(
-              controller: useCaseController,
-              labelText: AppLocalizations.of(context)!.use_case),
-          InputMedForm(
-              controller: sideEffectController,
-              labelText: AppLocalizations.of(context)!.side_effect),
+              controller: sideEffectController, labelText: l10n.side_effect),
           InputMedForm(
             controller: takeQuantityPerDayController,
-            labelText: AppLocalizations.of(context)!.daily_quantity,
+            labelText: l10n.daily_quantity,
             textInputType: TextInputType.number,
             require: true,
           ),
@@ -108,8 +106,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      AppText.subHeading(
-                          AppLocalizations.of(context)!.intake_which_days),
+                      AppText.subHeading(l10n.intake_which_days),
                       const Text(
                         '*',
                         style: TextStyle(
@@ -121,7 +118,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
                     ],
                   ))),
           SwitchListTile(
-            title: Text(AppLocalizations.of(context)!.take_every_day),
+            title: Text(l10n.take_every_day),
             value: takeEveryDay,
             onChanged: (value) {
               setState(() {
@@ -137,7 +134,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
           ),
           if (!takeEveryDay && !isAlternatingSchedule) ..._buildDailySchedule(),
           SwitchListTile(
-            title: Text(AppLocalizations.of(context)!.take_alternating_days),
+            title: Text(l10n.take_alternating_days),
             value: isAlternatingSchedule,
             onChanged: (value) {
               setState(() {
@@ -153,24 +150,22 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
           ),
           InputMedForm(
             controller: currentQuantityController,
-            labelText: AppLocalizations.of(context)!.current_quantity,
+            labelText: l10n.current_quantity,
             textInputType: TextInputType.number,
             require: true,
           ),
           InputMedForm(
             controller: orderedByController,
-            labelText: AppLocalizations.of(context)!.ordered_by,
+            labelText: l10n.ordered_by,
           ),
           CheckboxListTile(
-            title: Text(AppLocalizations.of(context)!.is_in_cloud),
+            title: Text(l10n.is_in_cloud),
             value: isInCloud,
             onChanged: (value) => setState(() => isInCloud = value!),
           ),
           AnimatedButton(
             onTap: saveMed,
-            text: widget.medication == null
-                ? (AppLocalizations.of(context)!.create)
-                : (AppLocalizations.of(context)!.update),
+            text: widget.medication == null ? (l10n.create) : (l10n.update),
             progressEvent: _loading,
           ),
           if (widget.medication != null)
@@ -178,7 +173,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
               padding: const EdgeInsets.only(top: 23),
               child: CustomOutlinedButton(
                 onTap: deleteMed,
-                text: AppLocalizations.of(context)!.delete,
+                text: l10n.delete,
                 progressEvent: _loading,
                 outlineColor: Colors.red,
               ),
@@ -190,13 +185,13 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
 
   List<Widget> _buildDailySchedule() {
     final days = [
-      AppLocalizations.of(context)!.monday,
-      AppLocalizations.of(context)!.tuesday,
-      AppLocalizations.of(context)!.wednesday,
-      AppLocalizations.of(context)!.thursday,
-      AppLocalizations.of(context)!.friday,
-      AppLocalizations.of(context)!.saturday,
-      AppLocalizations.of(context)!.sunday,
+      l10n.monday,
+      l10n.tuesday,
+      l10n.wednesday,
+      l10n.thursday,
+      l10n.friday,
+      l10n.saturday,
+      l10n.sunday,
     ];
     return [
       ...List.generate(7, (index) {
@@ -262,7 +257,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     if (widget.medication == null) {
       ref.read(medRepositoryProvider).addMedication(medication);
       CherryToast.success(
-        title: Text(AppLocalizations.of(context)!.saved),
+        title: Text(l10n.saved),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,
@@ -270,7 +265,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     } else {
       ref.read(medRepositoryProvider).updateMedication(medication);
       CherryToast.success(
-        title: Text(AppLocalizations.of(context)!.saved),
+        title: Text(l10n.saved),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,
@@ -292,12 +287,12 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.delete_med),
-        content: Text(AppLocalizations.of(context)!.delete_med_description),
+        title: Text(l10n.delete_med),
+        content: Text(l10n.delete_med_description),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(AppLocalizations.of(context)!.cancel),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -306,7 +301,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
                   .deleteMedication(widget.medication!.id!);
 
               CherryToast.success(
-                title: Text(AppLocalizations.of(context)!.success_delete),
+                title: Text(l10n.success_delete),
                 animationType: AnimationType.fromTop,
                 displayCloseButton: false,
                 inheritThemeColors: true,
@@ -316,7 +311,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
               Navigator.of(context).pop(); // Close modal
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(AppLocalizations.of(context)!.delete),
+            child: Text(l10n.delete),
           ),
         ],
       ),

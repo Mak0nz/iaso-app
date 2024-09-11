@@ -14,6 +14,8 @@ class MedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (medication == null) {
       return const Card(
         child: ListTile(
@@ -40,7 +42,7 @@ class MedCard extends StatelessWidget {
             medication!.isInCloud ? const Icon(FontAwesomeIcons.cloud) : null,
         title: Text(medication!.name,
             style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(AppLocalizations.of(context)!
+        subtitle: Text(l10n
             .total_doses(NumberFormatter.formatDouble(medication!.totalDoses))),
         trailing: IconButton(
           icon: const Icon(FontAwesomeIcons.penToSquare),
@@ -50,8 +52,7 @@ class MedCard extends StatelessWidget {
               return [
                 WoltModalSheetPage(
                   child: CreateEditMedModal(medication: medication),
-                  topBarTitle:
-                      AppText.heading(AppLocalizations.of(context)!.edit_med),
+                  topBarTitle: AppText.heading(l10n.edit_med),
                   isTopBarLayerAlwaysVisible: true,
                   enableDrag: false,
                 )

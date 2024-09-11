@@ -13,6 +13,7 @@ class SettingChangeLanguage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final language = ref.watch(languageProvider);
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, left: 6),
@@ -20,7 +21,7 @@ class SettingChangeLanguage extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            AppLocalizations.of(context)!.change_language,
+            l10n.change_language,
             style: const TextStyle(
               fontSize: 20,
             ),

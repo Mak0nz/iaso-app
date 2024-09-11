@@ -33,48 +33,50 @@ class AuthService {
 
   Future<User?> signIn(
       String email, String password, BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       final user = await _authRepository.signIn(email, password);
       if (user != null) {
-        // await _showSuccessToast(context, AppLocalizations.of(context)!.login_success);
+        // await _showSuccessToast(context, l10n.login_success);
       }
       return user;
     } on FirebaseAuthException catch (e) {
       await _showErrorToast(context, _handleAuthError(e.code, context));
       return null;
     } catch (e) {
-      await _showErrorToast(
-          context, AppLocalizations.of(context)!.unexpected_error);
+      await _showErrorToast(context, l10n.unexpected_error);
       return null;
     }
   }
 
   Future<User?> signUp(
       String email, String password, BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       final user = await _authRepository.signUp(email, password);
       if (user != null) {
-        await _showSuccessToast(
-            context, AppLocalizations.of(context)!.signup_success);
+        await _showSuccessToast(context, l10n.signup_success);
       }
       return user;
     } on FirebaseAuthException catch (e) {
       await _showErrorToast(context, _handleAuthError(e.code, context));
       return null;
     } catch (e) {
-      await _showErrorToast(
-          context, AppLocalizations.of(context)!.unexpected_error);
+      await _showErrorToast(context, l10n.unexpected_error);
       return null;
     }
   }
 
   Future<void> signOut(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       await _authRepository.signOut();
-      //await _showSuccessToast(context, AppLocalizations.of(context)!.logout_success);
+      //await _showSuccessToast(context, l10n.logout_success);
     } catch (e) {
-      await _showErrorToast(
-          context, AppLocalizations.of(context)!.logout_error);
+      await _showErrorToast(context, l10n.logout_error);
     }
   }
 

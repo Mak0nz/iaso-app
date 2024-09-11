@@ -42,6 +42,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         WoltModalSheet.show(
@@ -54,8 +55,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 65),
                     child: Column(
                       children: [
-                        AppText.heading(
-                            AppLocalizations.of(context)!.change_username),
+                        AppText.heading(l10n.change_username),
                         const SizedBox(
                           height: 25,
                         ),
@@ -69,7 +69,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
                         ),
                         AnimatedButton(
                           onTap: saveUsername,
-                          text: AppLocalizations.of(context)!.save,
+                          text: l10n.save,
                           progressEvent: _loading,
                         ),
                       ],
@@ -84,6 +84,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
   }
 
   Future saveUsername() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
     });
@@ -94,7 +95,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
           .updateUsername(_usernameController.text);
 
       CherryToast.success(
-        title: Text(AppLocalizations.of(context)!.saved),
+        title: Text(l10n.saved),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,

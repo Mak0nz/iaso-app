@@ -23,15 +23,17 @@ class _DeleteAccountState extends State<DeleteAccount> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return CustomOutlinedButton(
       onTap: () => showConfirmationDialog(),
-      text: AppLocalizations.of(context)!.delete_account,
+      text: l10n.delete_account,
       progressEvent: _loading,
       outlineColor: Colors.red.shade400,
     );
   }
 
   void showConfirmationDialog() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -47,22 +49,21 @@ class _DeleteAccountState extends State<DeleteAccount> {
                 ),
               ),
               Expanded(
-                child: Text(AppLocalizations.of(context)!
-                    .confirm_account_delete_heading),
+                child: Text(l10n.confirm_account_delete_heading),
               ),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppText.subHeading(AppLocalizations.of(context)!.non_cancellable),
-              Text(AppLocalizations.of(context)!.delete_account_description),
+              AppText.subHeading(l10n.non_cancellable),
+              Text(l10n.delete_account_description),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -70,7 +71,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
                 deleteAccount();
               },
               child: Text(
-                AppLocalizations.of(context)!.delete,
+                l10n.delete,
                 style: const TextStyle(color: Colors.red),
               ),
             ),
@@ -81,6 +82,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
   }
 
   Future deleteAccount() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
     });
@@ -94,7 +96,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
       await docRef.delete();
 
       CherryToast.success(
-        title: Text(AppLocalizations.of(context)!.success_delete),
+        title: Text(l10n.success_delete),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,

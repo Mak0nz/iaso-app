@@ -15,12 +15,13 @@ class MedsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final sortModeAsync = ref.watch(medSortModeProvider);
     final showZeroDosesAsync = ref.watch(showZeroDosesProvider);
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: AppLocalizations.of(context)!.meds,
+        title: l10n.meds,
         leading: sortModeAsync.when(
           data: (sortMode) => Icon(sortMode.icon),
           loading: () => const CircularProgressIndicator(),
@@ -39,8 +40,7 @@ class MedsScreen extends ConsumerWidget {
               return [
                 WoltModalSheetPage(
                   child: const CreateEditMedModal(),
-                  topBarTitle:
-                      AppText.heading(AppLocalizations.of(context)!.create_med),
+                  topBarTitle: AppText.heading(l10n.create_med),
                   isTopBarLayerAlwaysVisible: true,
                   enableDrag: false,
                 )
