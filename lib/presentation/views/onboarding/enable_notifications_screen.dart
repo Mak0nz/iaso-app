@@ -37,6 +37,7 @@ class _EnableNotificationsScreenState extends State<EnableNotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +48,7 @@ class _EnableNotificationsScreenState extends State<EnableNotificationsScreen> {
           ),
           const SizedBox(height: 20),
           Text(
-            AppLocalizations.of(context)!.enable_notifications,
+            l10n.enable_notifications,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -55,7 +56,7 @@ class _EnableNotificationsScreenState extends State<EnableNotificationsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
-              AppLocalizations.of(context)!.med_notification_description,
+              l10n.med_notification_description,
               style: const TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
@@ -64,8 +65,8 @@ class _EnableNotificationsScreenState extends State<EnableNotificationsScreen> {
           ElevatedButton(
             onPressed: _notificationsEnabled ? null : _enableNotifications,
             child: Text(_notificationsEnabled
-                ? AppLocalizations.of(context)!.enabled
-                : AppLocalizations.of(context)!.enable_notifications),
+                ? l10n.enabled
+                : l10n.enable_notifications),
           ),
         ],
       ),

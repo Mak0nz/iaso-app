@@ -86,6 +86,7 @@ class StatsViewSettingsModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         WoltModalSheet.show(
@@ -93,8 +94,7 @@ class StatsViewSettingsModal extends ConsumerWidget {
           pageListBuilder: (BuildContext context) {
             return [
               WoltModalSheetPage(
-                topBarTitle:
-                    AppText.heading(AppLocalizations.of(context)!.stats_view),
+                topBarTitle: AppText.heading(l10n.stats_view),
                 isTopBarLayerAlwaysVisible: true,
                 child: const ProviderScope(
                   child: Padding(
@@ -117,6 +117,7 @@ class StatsViewSettingsContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final settingsAsyncValue = ref.watch(statsViewSettingsProvider);
 
     return settingsAsyncValue.when(
@@ -125,25 +126,23 @@ class StatsViewSettingsContent extends ConsumerWidget {
         children: [
           const SizedBox(height: 10),
           Text(
-            AppLocalizations.of(context)!.stats_view_description,
+            l10n.stats_view_description,
             style: const TextStyle(fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 15),
-          _buildCheckboxListTile(context, ref, 'weight',
-              AppLocalizations.of(context)!.weight, settings),
-          _buildCheckboxListTile(context, ref, 'temperature',
-              AppLocalizations.of(context)!.temperature, settings),
+          _buildCheckboxListTile(context, ref, 'weight', l10n.weight, settings),
+          _buildCheckboxListTile(
+              context, ref, 'temperature', l10n.temperature, settings),
           _buildCheckboxListTile(context, ref, 'nightTemperature',
-              AppLocalizations.of(context)!.night_temperature, settings),
-          _buildCheckboxListTile(context, ref, 'morningBP',
-              AppLocalizations.of(context)!.morning_blood_pressure, settings),
-          _buildCheckboxListTile(context, ref, 'nightBP',
-              AppLocalizations.of(context)!.night_blood_pressure, settings),
-          _buildCheckboxListTile(context, ref, 'bloodSugar',
-              AppLocalizations.of(context)!.blood_sugar, settings),
-          _buildCheckboxListTile(context, ref, 'urine',
-              AppLocalizations.of(context)!.urine, settings),
+              l10n.night_temperature, settings),
+          _buildCheckboxListTile(
+              context, ref, 'morningBP', l10n.morning_blood_pressure, settings),
+          _buildCheckboxListTile(
+              context, ref, 'nightBP', l10n.night_blood_pressure, settings),
+          _buildCheckboxListTile(
+              context, ref, 'bloodSugar', l10n.blood_sugar, settings),
+          _buildCheckboxListTile(context, ref, 'urine', l10n.urine, settings),
         ],
       ),
       loading: () => const CircularProgressIndicator(),

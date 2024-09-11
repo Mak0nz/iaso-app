@@ -28,6 +28,7 @@ class DisplayMeds extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final medsAsyncValue = ref.watch(medsProvider);
 
     return medsAsyncValue.when(
@@ -38,8 +39,7 @@ class DisplayMeds extends ConsumerWidget {
           itemBuilder: (context, index) => const MedCard(medication: null),
         ),
       ),
-      error: (error, stack) =>
-          Center(child: Text('${AppLocalizations.of(context)!.error}: $error')),
+      error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
       data: (meds) {
         final sortedMeds = sortMedications(meds, sortMode, showZeroDoses);
         final filteredMeds = showAll
@@ -55,16 +55,14 @@ class DisplayMeds extends ConsumerWidget {
             if (!showAll) ...[
               Padding(
                 padding: const EdgeInsets.only(left: edgeInset, top: edgeInset),
-                child: AppText.subHeading(
-                    "${AppLocalizations.of(context)!.meds_running_out}:"),
+                child: AppText.subHeading("${l10n.meds_running_out}:"),
               ),
               const SizedBox(height: 10),
             ],
             if (!showAll && filteredMeds.isEmpty)
               CustomCard(
                   leading: const Icon(FontAwesomeIcons.pills),
-                  title: AppText.subHeading(
-                      AppLocalizations.of(context)!.meds_not_running_out))
+                  title: AppText.subHeading(l10n.meds_not_running_out))
             else if (showAll)
               const SizedBox(height: edgeInset),
             ...filteredMeds.map((med) => MedCard(medication: med)),
@@ -78,6 +76,7 @@ class DisplayMeds extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     bool loading = false;
 
     return Center(
@@ -90,13 +89,13 @@ class DisplayMeds extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            AppLocalizations.of(context)!.no_medications_added,
+            l10n.no_medications_added,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Text(
-            AppLocalizations.of(context)!.add_medication_guide,
+            l10n.add_medication_guide,
             style: const TextStyle(fontSize: 16),
             textAlign: TextAlign.center,
           ),
@@ -110,15 +109,14 @@ class DisplayMeds extends ConsumerWidget {
                 return [
                   WoltModalSheetPage(
                     child: const CreateEditMedModal(),
-                    topBarTitle: AppText.heading(
-                        AppLocalizations.of(context)!.create_med),
+                    topBarTitle: AppText.heading(l10n.create_med),
                     isTopBarLayerAlwaysVisible: true,
                     enableDrag: false,
                   )
                 ];
               },
             ),
-            text: AppLocalizations.of(context)!.add_medication,
+            text: l10n.add_medication,
             progressEvent: loading,
           ),
         ],

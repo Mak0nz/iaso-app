@@ -30,6 +30,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
   }
 
   Future resetPassword() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
     });
@@ -41,7 +42,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
       Navigator.pop(context);
 
       CherryToast.success(
-        title: Text(AppLocalizations.of(context)!.reset_password_success),
+        title: Text(l10n.reset_password_success),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,
@@ -62,6 +63,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         WoltModalSheet.show(
@@ -74,14 +76,12 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
                         const EdgeInsets.fromLTRB(edgeInset, 0, edgeInset, 65),
                     child: Column(
                       children: [
-                        AppText.heading(
-                            AppLocalizations.of(context)!.forgot_password),
+                        AppText.heading(l10n.forgot_password),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          AppLocalizations.of(context)!
-                              .forgot_password_description,
+                          l10n.forgot_password_description,
                           style: const TextStyle(fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -90,7 +90,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
                         ),
                         FormContainer(
                           controller: _emailController,
-                          hintText: AppLocalizations.of(context)!.email,
+                          hintText: l10n.email,
                           isPasswordField: false,
                         ),
                         const SizedBox(
@@ -100,7 +100,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
                             onTap: () {
                               resetPassword();
                             },
-                            text: AppLocalizations.of(context)!.reset_password,
+                            text: l10n.reset_password,
                             progressEvent: _loading),
                       ],
                     ),
@@ -109,7 +109,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
               ];
             });
       },
-      child: Text(AppLocalizations.of(context)!.forgot_password,
+      child: Text(l10n.forgot_password,
           style: TextStyle(
               color: Colors.blue.shade400, fontWeight: FontWeight.bold)),
     );

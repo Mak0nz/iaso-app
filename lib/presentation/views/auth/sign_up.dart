@@ -37,6 +37,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: const LanguageAppBar(),
       body: Center(
@@ -72,7 +73,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // username field
                 FormContainer(
                   controller: _usernameController,
-                  hintText: AppLocalizations.of(context)!.username,
+                  hintText: l10n.username,
                   isPasswordField: false,
                   autofillHints: const [AutofillHints.newUsername],
                 ),
@@ -82,7 +83,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // email field
                 FormContainer(
                   controller: _emailController,
-                  hintText: AppLocalizations.of(context)!.email,
+                  hintText: l10n.email,
                   isPasswordField: false,
                   autofillHints: const [AutofillHints.email],
                 ),
@@ -92,7 +93,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // password field
                 FormContainer(
                   controller: _passwordController,
-                  hintText: AppLocalizations.of(context)!.password,
+                  hintText: l10n.password,
                   isPasswordField: true,
                   autofillHints: const [AutofillHints.newPassword],
                 ),
@@ -117,8 +118,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             mode: LaunchMode.inAppBrowserView,
                           );
                         },
-                        child: Text(
-                            AppLocalizations.of(context)!.read_privacy_policy),
+                        child: Text(l10n.read_privacy_policy),
                       ),
                     ),
                   ],
@@ -129,13 +129,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // signup button
                 AnimatedButton(
                   onTap: _signUp,
-                  text: AppLocalizations.of(context)!.sign_up,
+                  text: l10n.sign_up,
                   progressEvent: _loading,
                 ),
                 const SizedBox(height: 20),
                 // already have an account? login
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(AppLocalizations.of(context)!.have_account),
+                  Text(l10n.have_account),
                   const SizedBox(
                     width: 5,
                   ),
@@ -143,7 +143,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     onTap: () {
                       Navigator.pushReplacementNamed(context, '/login');
                     },
-                    child: Text(AppLocalizations.of(context)!.login,
+                    child: Text(l10n.login,
                         style: TextStyle(
                             color: Colors.blue.shade400,
                             fontWeight: FontWeight.bold)),
@@ -158,9 +158,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   Future<void> _signUp() async {
+    final l10n = AppLocalizations.of(context)!;
+
     if (!_privacyPolicyAccepted) {
       CherryToast.error(
-        title: Text(AppLocalizations.of(context)!.accept_privacy_policy_error),
+        title: Text(l10n.accept_privacy_policy_error),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,

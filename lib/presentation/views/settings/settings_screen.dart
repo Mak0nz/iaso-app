@@ -48,12 +48,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     UsernameManager().getUsername();
     final username = ref.watch(usernameProvider) ?? 'User';
 
     return Scaffold(
         appBar: CustomAppBar(
-          title: AppLocalizations.of(context)!.settings,
+          title: l10n.settings,
         ),
         extendBodyBehindAppBar: true,
         body: Body(children: [
@@ -61,7 +62,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             height: kToolbarHeight * 1.4,
           ),
           SettingHeader(
-            title: AppLocalizations.of(context)!.account,
+            title: l10n.account,
             icon: FontAwesomeIcons.userGear,
           ),
 
@@ -97,7 +98,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           SettingOption(
-            title: AppLocalizations.of(context)!.change_password,
+            title: l10n.change_password,
             trailing: const ChangePasswordModal(),
           ),
 
@@ -105,15 +106,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             height: 15,
           ),
           SettingHeader(
-              title: AppLocalizations.of(context)!.other_settings,
-              icon: FontAwesomeIcons.gears),
+              title: l10n.other_settings, icon: FontAwesomeIcons.gears),
 
           const SettingChangeLanguage(),
 
           const SettingChangeTheme(),
 
           SettingOption(
-            title: AppLocalizations.of(context)!.notifications,
+            title: l10n.notifications,
             trailing: GestureDetector(
               onTap: () => {
                 AwesomeNotifications().requestPermissionToSendNotifications(),
@@ -131,12 +131,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           SettingOption(
-            title: AppLocalizations.of(context)!.stats_view,
+            title: l10n.stats_view,
             trailing: const StatsViewSettingsModal(),
           ),
 
           SettingOption(
-            title: AppLocalizations.of(context)!.privacy_policy,
+            title: l10n.privacy_policy,
             trailing: GestureDetector(
               onTap: () async {
                 launchUrl(
@@ -154,7 +154,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           CustomOutlinedButton(
             onTap: _logout,
-            text: AppLocalizations.of(context)!.logout,
+            text: l10n.logout,
             progressEvent: _loading,
             outlineColor: Theme.of(context).brightness == Brightness.light
                 ? Colors.grey.shade900 // Light theme color
@@ -172,15 +172,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   void _isNotificationsEnabled() {
+    final l10n = AppLocalizations.of(context)!;
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         setState(() {
-          notifStateText = AppLocalizations.of(context)!.enable;
+          notifStateText = l10n.enable;
           notifTextColor = Colors.blue.shade400;
         });
       } else {
         setState(() {
-          notifStateText = AppLocalizations.of(context)!.enabled;
+          notifStateText = l10n.enabled;
           notifTextColor = Theme.of(context).brightness == Brightness.light
               ? Colors.green.shade700 // Light theme color
               : Colors.green;
@@ -190,6 +191,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   void _logout() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
     });
@@ -204,7 +206,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       await ref.read(authServiceProvider).signOut(context);
 
       CherryToast.success(
-        title: Text(AppLocalizations.of(context)!.success),
+        title: Text(l10n.success),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,

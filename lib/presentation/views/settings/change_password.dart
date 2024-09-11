@@ -29,6 +29,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
   TextEditingController _newPasswordController = TextEditingController();
 
   changePassword() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
     });
@@ -44,7 +45,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
       });
 
       CherryToast.success(
-        title: Text(AppLocalizations.of(context)!.change_password_success),
+        title: Text(l10n.change_password_success),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,
@@ -73,6 +74,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         WoltModalSheet.show(
@@ -85,14 +87,13 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                         const EdgeInsets.fromLTRB(edgeInset, 0, edgeInset, 65),
                     child: Column(
                       children: [
-                        AppText.heading(
-                            "${AppLocalizations.of(context)!.change_password}:"),
+                        AppText.heading("${l10n.change_password}:"),
                         const SizedBox(
                           height: 25,
                         ),
                         FormContainer(
                           controller: _oldPasswordController,
-                          hintText: AppLocalizations.of(context)!.old_password,
+                          hintText: l10n.old_password,
                           isPasswordField: true,
                         ),
                         const SizedBox(
@@ -100,7 +101,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                         ),
                         FormContainer(
                           controller: _newPasswordController,
-                          hintText: AppLocalizations.of(context)!.new_password,
+                          hintText: l10n.new_password,
                           isPasswordField: true,
                         ),
                         const SizedBox(
@@ -110,7 +111,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                             onTap: () {
                               changePassword();
                             },
-                            text: AppLocalizations.of(context)!.change_password,
+                            text: l10n.change_password,
                             progressEvent: _loading),
                       ],
                     ),

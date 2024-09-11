@@ -32,6 +32,8 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: const LanguageAppBar(),
       body: Center(
@@ -67,7 +69,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                 // Email form
                 FormContainer(
                   controller: _emailController,
-                  hintText: AppLocalizations.of(context)!.email,
+                  hintText: l10n.email,
                   isPasswordField: false,
                   autofillHints: const [AutofillHints.email],
                 ),
@@ -77,7 +79,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                 // Password form
                 FormContainer(
                   controller: _passwordController,
-                  hintText: AppLocalizations.of(context)!.password,
+                  hintText: l10n.password,
                   isPasswordField: true,
                   autofillHints: const [AutofillHints.password],
                 ),
@@ -97,7 +99,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                 // Login button
                 AnimatedButton(
                   onTap: _signIn,
-                  text: AppLocalizations.of(context)!.login,
+                  text: l10n.login,
                   progressEvent: _loading,
                 ),
 
@@ -142,7 +144,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
               */
                 // Don't have an account? Register
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(AppLocalizations.of(context)!.noaccount),
+                  Text(l10n.noaccount),
                   const SizedBox(
                     width: 5,
                   ),
@@ -150,7 +152,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                     onTap: () {
                       Navigator.pushReplacementNamed(context, '/signup');
                     },
-                    child: Text(AppLocalizations.of(context)!.register,
+                    child: Text(l10n.register,
                         style: TextStyle(
                             color: Colors.blue.shade400,
                             fontWeight: FontWeight.bold)),

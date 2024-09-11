@@ -23,20 +23,22 @@ class StatsModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
     final selected = selectedDate;
     List months = [
-      (AppLocalizations.of(context)!.january),
-      (AppLocalizations.of(context)!.february),
-      (AppLocalizations.of(context)!.march),
-      (AppLocalizations.of(context)!.april),
-      (AppLocalizations.of(context)!.may),
-      (AppLocalizations.of(context)!.june),
-      (AppLocalizations.of(context)!.july),
-      (AppLocalizations.of(context)!.august),
-      (AppLocalizations.of(context)!.september),
-      (AppLocalizations.of(context)!.october),
-      (AppLocalizations.of(context)!.november),
-      (AppLocalizations.of(context)!.december)
+      (l10n.january),
+      (l10n.february),
+      (l10n.march),
+      (l10n.april),
+      (l10n.may),
+      (l10n.june),
+      (l10n.july),
+      (l10n.august),
+      (l10n.september),
+      (l10n.october),
+      (l10n.november),
+      (l10n.december)
     ];
     final month = months[selected.month - 1];
 
@@ -163,6 +165,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final settingsAsyncValue = ref.watch(statsViewSettingsProvider);
 
     return Form(
@@ -184,26 +187,24 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                 height: 11,
               ),
               AnimatedButton(
-                  onTap: _submitForm,
-                  text: AppLocalizations.of(context)!.save,
-                  progressEvent: _loading),
+                  onTap: _submitForm, text: l10n.save, progressEvent: _loading),
             ],
           ),
           loading: () => const CircularProgressIndicator(),
-          error: (error, stack) =>
-              Text("${AppLocalizations.of(context)!.error}: $error"),
+          error: (error, stack) => Text("${l10n.error}: $error"),
         ),
       ),
     );
   }
 
   Widget _buildWeightField() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          AppText.subHeading("${AppLocalizations.of(context)!.weight}:"),
+          AppText.subHeading("${l10n.weight}:"),
           const SizedBox(
             width: 4,
           ),
@@ -222,12 +223,13 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildTemperatureField() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          AppText.subHeading("${AppLocalizations.of(context)!.temperature}:"),
+          AppText.subHeading("${l10n.temperature}:"),
           const SizedBox(
             width: 4,
           ),
@@ -246,13 +248,13 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildNightTemperatureField() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          AppText.subHeading(
-              "${AppLocalizations.of(context)!.night_temperature}:"),
+          AppText.subHeading("${l10n.night_temperature}:"),
           const SizedBox(
             width: 4,
           ),
@@ -271,14 +273,14 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildMorningBPField() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: AppText.subHeading(
-                  "${AppLocalizations.of(context)!.morning_blood_pressure}:"),
+              child: AppText.subHeading("${l10n.morning_blood_pressure}:"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -307,7 +309,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                 InputTextForm(
                   width: 80.0,
                   controller: _controllers['bpMorningPulse'],
-                  labelText: AppLocalizations.of(context)!.pulse,
+                  labelText: l10n.pulse,
                 ),
                 const Text(
                   "bpm",
@@ -320,14 +322,14 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildNightBPField() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: AppText.subHeading(
-                  "${AppLocalizations.of(context)!.night_blood_pressure}:"),
+              child: AppText.subHeading("${l10n.night_blood_pressure}:"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -356,7 +358,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                 InputTextForm(
                   width: 80.0,
                   controller: _controllers['bpNightPulse'],
-                  labelText: AppLocalizations.of(context)!.pulse,
+                  labelText: l10n.pulse,
                 ),
                 const Text(
                   "bpm",
@@ -369,14 +371,14 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildBSField() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: AppText.subHeading(
-                  "${AppLocalizations.of(context)!.blood_sugar}:"),
+              child: AppText.subHeading("${l10n.blood_sugar}:"),
             ),
             ..._buildBloodSugarFields(),
           ],
@@ -413,14 +415,14 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildUrineField() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child:
-                  AppText.subHeading("${AppLocalizations.of(context)!.urine}:"),
+              child: AppText.subHeading("${l10n.urine}:"),
             ),
             ..._buildUrineFields(),
           ],
@@ -457,6 +459,8 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   void _submitForm() async {
+    final l10n = AppLocalizations.of(context)!;
+
     setState(() {
       _loading = true;
     });
@@ -497,14 +501,14 @@ class _StatsFormState extends ConsumerState<StatsForm> {
         Navigator.of(context).pop();
 
         CherryToast.success(
-          title: Text(AppLocalizations.of(context)!.saved),
+          title: Text(l10n.saved),
           animationType: AnimationType.fromTop,
           displayCloseButton: false,
           inheritThemeColors: true,
         ).show(context);
       } catch (e) {
         CherryToast.error(
-          title: Text("${AppLocalizations.of(context)!.error_saving}: \n $e"),
+          title: Text("${l10n.error_saving}: \n $e"),
           animationType: AnimationType.fromTop,
           displayCloseButton: false,
           inheritThemeColors: true,

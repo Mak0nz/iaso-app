@@ -15,13 +15,14 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     UsernameManager().getUsername();
     final username = ref.watch(usernameProvider) ?? 'User';
 
     return Scaffold(
       appBar: CustomAppBar(
         leading: InitialAvatar(username: username),
-        title: "${AppLocalizations.of(context)!.hello} $username",
+        title: "${l10n.hello} $username",
       ),
       extendBodyBehindAppBar: true,
       body: const Padding(

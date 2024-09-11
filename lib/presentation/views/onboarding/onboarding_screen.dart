@@ -28,6 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Stack(
         children: [
@@ -66,7 +67,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               duration: const Duration(milliseconds: 300),
               child: TextButton(
                 onPressed: _currentPage == 0 ? _showSkipDialog : null,
-                child: Text(AppLocalizations.of(context)!.skip),
+                child: Text(l10n.skip),
               ),
             ),
             FloatingActionButton(
@@ -124,6 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _showSkipDialog() {
+    final l10n = AppLocalizations.of(context)!;
     showModal(
       context: context,
       configuration: const FadeScaleTransitionConfiguration(
@@ -132,12 +134,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.skip_onboarding),
-          content: Text(AppLocalizations.of(context)!.skip_onboarding_message),
+          title: Text(l10n.skip_onboarding),
+          content: Text(l10n.skip_onboarding_message),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(AppLocalizations.of(context)!.cancel),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -145,7 +147,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 _finishOnboarding();
               },
               child: Text(
-                AppLocalizations.of(context)!.skip,
+                l10n.skip,
                 style: const TextStyle(color: Colors.red),
               ),
             ),

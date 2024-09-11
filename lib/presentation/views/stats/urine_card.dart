@@ -22,6 +22,7 @@ class _ExpandableUrineCardState extends State<ExpandableUrineCard> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return CustomCard(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +36,7 @@ class _ExpandableUrineCardState extends State<ExpandableUrineCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppText.bold('${AppLocalizations.of(context)!.urine}:'),
+                AppText.bold('${l10n.urine}:'),
                 Row(
                   children: [
                     Text('${_average.toStringAsFixed(1)} mL'),

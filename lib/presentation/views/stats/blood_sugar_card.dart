@@ -23,6 +23,7 @@ class _ExpandableBloodSugarCardState extends State<ExpandableBloodSugarCard> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return CustomCard(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +37,7 @@ class _ExpandableBloodSugarCardState extends State<ExpandableBloodSugarCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppText.bold('${AppLocalizations.of(context)!.blood_sugar}:'),
+                AppText.bold('${l10n.blood_sugar}:'),
                 Row(
                   children: [
                     Text('${_average.toStringAsFixed(1)} mg/dL'),
