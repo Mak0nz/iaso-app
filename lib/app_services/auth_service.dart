@@ -1,12 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/data/auth_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iaso/utils/toast.dart';
 
 final authRepositoryProvider =
     Provider<AuthRepository>((ref) => AuthRepository());
@@ -81,21 +80,11 @@ class AuthService {
   }
 
   _showSuccessToast(BuildContext context, String message) {
-    CherryToast.success(
-      title: Text(message),
-      animationType: AnimationType.fromTop,
-      displayCloseButton: false,
-      inheritThemeColors: true,
-    ).show(context);
+    ToastUtil.success(context, message);
   }
 
   _showErrorToast(BuildContext context, String message) {
-    CherryToast.error(
-      title: Text(message),
-      animationType: AnimationType.fromTop,
-      displayCloseButton: false,
-      inheritThemeColors: true,
-    ).show(context);
+    ToastUtil.error(context, message);
   }
 
   String _handleAuthError(String code, BuildContext context) {

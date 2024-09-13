@@ -1,5 +1,3 @@
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +10,7 @@ import 'package:iaso/data/med_provider.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/input_med_form.dart';
 import 'package:iaso/presentation/widgets/outlined_button.dart';
+import 'package:iaso/utils/toast.dart';
 
 class CreateEditMedModal extends ConsumerStatefulWidget {
   final Medication? medication;
@@ -256,20 +255,10 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
 
     if (widget.medication == null) {
       ref.read(medRepositoryProvider).addMedication(medication);
-      CherryToast.success(
-        title: Text(l10n.saved),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.success(context, l10n.saved);
     } else {
       ref.read(medRepositoryProvider).updateMedication(medication);
-      CherryToast.success(
-        title: Text(l10n.saved),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.success(context, l10n.saved);
     }
 
     Navigator.of(context).pop();
@@ -300,12 +289,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
                   .read(medRepositoryProvider)
                   .deleteMedication(widget.medication!.id!);
 
-              CherryToast.success(
-                title: Text(l10n.success_delete),
-                animationType: AnimationType.fromTop,
-                displayCloseButton: false,
-                inheritThemeColors: true,
-              ).show(context);
+              ToastUtil.success(context, l10n.success_delete);
 
               Navigator.of(context).pop(); // Close dialog
               Navigator.of(context).pop(); // Close modal

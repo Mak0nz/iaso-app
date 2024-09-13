@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/domain/username_manager.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/outlined_button.dart';
+import 'package:iaso/utils/toast.dart';
 
 class DeleteAccount extends StatefulWidget {
   const DeleteAccount({super.key});
@@ -95,12 +94,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
       await UsernameManager().clearUsername();
       await docRef.delete();
 
-      CherryToast.success(
-        title: Text(l10n.success_delete),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.success(context, l10n.success_delete);
 
       Navigator.pushNamedAndRemoveUntil(
         context,
@@ -108,14 +102,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
         (Route<dynamic> route) => false,
       );
     } catch (error) {
-      CherryToast.error(
-        title: Text(
-          error.toString(),
-        ),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.error(context, error.toString());
     }
 
     setState(() {

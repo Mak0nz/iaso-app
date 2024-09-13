@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_final_fields, unused_field, use_build_context_synchronously
 
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,6 +8,7 @@ import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
+import 'package:iaso/utils/toast.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class ChangePasswordModal extends StatefulWidget {
@@ -44,20 +43,10 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
         currentUser!.updatePassword(_newPasswordController.toString());
       });
 
-      CherryToast.success(
-        title: Text(l10n.change_password_success),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.success(context, l10n.change_password_success);
       Navigator.pop(context);
     } catch (e) {
-      CherryToast.error(
-        title: Text(e.toString()),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.error(context, e.toString());
     }
 
     setState(() {

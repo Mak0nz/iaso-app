@@ -1,8 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,6 +22,7 @@ import 'package:iaso/presentation/widgets/body.dart';
 import 'package:iaso/presentation/widgets/outlined_button.dart';
 import 'package:iaso/presentation/widgets/settings/header.dart';
 import 'package:iaso/presentation/widgets/settings/option.dart';
+import 'package:iaso/utils/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -204,13 +203,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       });
 
       await ref.read(authServiceProvider).signOut(context);
-
-      CherryToast.success(
-        title: Text(l10n.success),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.success(context, l10n.success);
     } catch (e) {
       if (kDebugMode) {
         print("sign out error: $e");

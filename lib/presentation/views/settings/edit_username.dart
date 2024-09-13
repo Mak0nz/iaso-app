@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +8,7 @@ import 'package:iaso/domain/username_manager.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
+import 'package:iaso/utils/toast.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class EditUsernameModal extends ConsumerStatefulWidget {
@@ -94,20 +93,10 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
           .read(usernameProvider.notifier)
           .updateUsername(_usernameController.text);
 
-      CherryToast.success(
-        title: Text(l10n.saved),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.success(context, l10n.saved);
       Navigator.pop(context);
     } catch (e) {
-      CherryToast.error(
-        title: Text(e.toString()),
-        animationType: AnimationType.fromTop,
-        displayCloseButton: false,
-        inheritThemeColors: true,
-      ).show(context);
+      ToastUtil.error(context, e.toString());
     }
 
     setState(() {
