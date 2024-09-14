@@ -134,5 +134,10 @@
     "sort_name_za": "Name: Z to A",
     "sort_doses_low_high": "Doses: Low to High",
     "sort_doses_high_low": "Doses: High to Low",
-    "show_zero_doses": "Show medications with zero doses"
+    "show_zero_doses": "Show medications with zero doses",
+    "battery_optimization_title": "Improve App Reliability",
+    "battery_optimization_disabled": "Battery optimization is disabled for this app. Your medication tracking and notifications should work reliably.",
+    "battery_optimization_description": "To ensure Iaso works correctly, please disable battery optimization for the app.",
+    "optimization_disabled": "Optimization Disabled",
+    "disable_optimization": "Disable Battery Optimization"
 }

@@ -134,5 +134,10 @@
     "sort_name_za": "Név: Z-től A-ig",
     "sort_doses_low_high": "Adagok alacsonyról magasra",
     "sort_doses_high_low": "Adagok magasról alacsonyra",
-    "show_zero_doses": "Mutassa a nulla adagú gyógyszereket"
+    "show_zero_doses": "Mutassa a nulla adagú gyógyszereket",
+    "battery_optimization_title": "Az alkalmazás működésének javítása",
+    "battery_optimization_disabled": "Az akkumulátor-optimalizálás ki van kapcsolva.",
+    "battery_optimization_description": "Annak érdekében, hogy az Iaso megfelelően működjön, kérjük, kapcsolja ki az akkumulátor-optimalizálást.",
+    "optimization_disabled": "Optimalizálás kikapcsolva",
+    "disable_optimization": "Akkumulátor-optimalizálás kikapcsolása"
 }

@@ -47,13 +47,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     UsernameManager().getUsername();
     final username = ref.watch(usernameProvider) ?? 'User';
 
     return Scaffold(
         appBar: CustomAppBar(
-          title: l10n.settings,
+          title: AppLocalizations.of(context)!.settings,
         ),
         extendBodyBehindAppBar: true,
         body: Body(children: [
@@ -61,7 +60,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             height: kToolbarHeight * 1.4,
           ),
           SettingHeader(
-            title: l10n.account,
+            title: AppLocalizations.of(context)!.account,
             icon: FontAwesomeIcons.userGear,
           ),
 
@@ -97,7 +96,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           SettingOption(
-            title: l10n.change_password,
+            title: AppLocalizations.of(context)!.change_password,
             trailing: const ChangePasswordModal(),
           ),
 
@@ -105,14 +104,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             height: 15,
           ),
           SettingHeader(
-              title: l10n.other_settings, icon: FontAwesomeIcons.gears),
+              title: AppLocalizations.of(context)!.other_settings,
+              icon: FontAwesomeIcons.gears),
 
           const SettingChangeLanguage(),
 
           const SettingChangeTheme(),
 
           SettingOption(
-            title: l10n.notifications,
+            title: AppLocalizations.of(context)!.notifications,
             trailing: GestureDetector(
               onTap: () => {
                 AwesomeNotifications().requestPermissionToSendNotifications(),
@@ -130,12 +130,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           SettingOption(
-            title: l10n.stats_view,
+            title: AppLocalizations.of(context)!.stats_view,
             trailing: const StatsViewSettingsModal(),
           ),
 
           SettingOption(
-            title: l10n.privacy_policy,
+            title: AppLocalizations.of(context)!.privacy_policy,
             trailing: GestureDetector(
               onTap: () async {
                 launchUrl(
@@ -153,7 +153,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           CustomOutlinedButton(
             onTap: _logout,
-            text: l10n.logout,
+            text: AppLocalizations.of(context)!.logout,
             progressEvent: _loading,
             outlineColor: Theme.of(context).brightness == Brightness.light
                 ? Colors.grey.shade900 // Light theme color
@@ -171,16 +171,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   void _isNotificationsEnabled() {
-    final l10n = AppLocalizations.of(context)!;
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         setState(() {
-          notifStateText = l10n.enable;
+          notifStateText = AppLocalizations.of(context)!.enable;
           notifTextColor = Colors.blue.shade400;
         });
       } else {
         setState(() {
-          notifStateText = l10n.enabled;
+          notifStateText = AppLocalizations.of(context)!.enabled;
           notifTextColor = Theme.of(context).brightness == Brightness.light
               ? Colors.green.shade700 // Light theme color
               : Colors.green;
@@ -190,7 +189,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   void _logout() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
     });
@@ -203,7 +201,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       });
 
       await ref.read(authServiceProvider).signOut(context);
-      ToastUtil.success(context, l10n.success);
+
+      ToastUtil.success(context, AppLocalizations.of(context)!.success);
     } catch (e) {
       if (kDebugMode) {
         print("sign out error: $e");
