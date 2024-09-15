@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/data/stats_provider.dart';
+import 'package:iaso/domain/stats.dart';
 import 'package:iaso/presentation/views/stats/modal.dart';
 import 'package:iaso/presentation/views/stats/stats_display.dart';
 import 'package:iaso/presentation/widgets/appbar.dart';
@@ -24,49 +25,93 @@ class StatsScreen extends ConsumerWidget {
       ),
       floatingActionButton: StatsModal(selectedDate: selectedDate),
       extendBodyBehindAppBar: true,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: edgeInset),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: kToolbarHeight * 1.25,
-              ),
-              TableCalendar(
-                locale: l10n.localeName,
-                headerStyle: const HeaderStyle(
-                    formatButtonVisible: false, titleCentered: true),
-                availableGestures: AvailableGestures.all,
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                focusedDay: selectedDate,
-                firstDay: DateTime(2024),
-                lastDay: DateTime.now(),
-                selectedDayPredicate: (day) => isSameDay(day, selectedDate),
-                onDaySelected: (selectedDay, focusedDay) {
-                  ref.read(selectedDateProvider.notifier).state = selectedDay;
-                },
-                calendarStyle: CalendarStyle(
-                  todayDecoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.blue.shade300),
-                  selectedDecoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.blue.shade400),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 600) {
+            // Landscape layout
+            return Row(
+              children: [
+                SizedBox(
+                  width: 400,
+                  child: _buildScrollableContent(
+                    child: _buildCalendar(l10n, selectedDate, ref),
+                  ),
                 ),
-              ),
-              statsAsync.when(
-                data: (stats) => Skeletonizer(
-                  enabled: false,
-                  child: StatsDisplay(stats: stats),
+                Expanded(
+                  child: _buildScrollableContent(
+                    child: _buildStatsDisplay(l10n, statsAsync),
+                  ),
                 ),
-                loading: () => const Skeletonizer(
-                  enabled: true,
-                  child: StatsDisplay(stats: null),
-                ),
-                error: (error, _) => Text('${l10n.error} \n $error'),
+              ],
+            );
+          } else {
+            // Portrait layout
+            return _buildScrollableContent(
+              child: Column(
+                children: [
+                  _buildCalendar(l10n, selectedDate, ref),
+                  _buildStatsDisplay(l10n, statsAsync),
+                ],
               ),
-            ],
-          ),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildScrollableContent({required Widget child}) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+            edgeInset, kToolbarHeight + 24, edgeInset, 0),
+        child: child,
+      ),
+    );
+  }
+
+  Widget _buildCalendar(
+      AppLocalizations l10n, DateTime selectedDate, WidgetRef ref) {
+    return TableCalendar(
+      locale: l10n.localeName,
+      headerStyle: const HeaderStyle(
+        formatButtonVisible: false,
+        titleCentered: true,
+      ),
+      availableGestures: AvailableGestures.all,
+      startingDayOfWeek: StartingDayOfWeek.monday,
+      focusedDay: selectedDate,
+      firstDay: DateTime(2024),
+      lastDay: DateTime.now(),
+      selectedDayPredicate: (day) => isSameDay(day, selectedDate),
+      onDaySelected: (selectedDay, focusedDay) {
+        ref.read(selectedDateProvider.notifier).state = selectedDay;
+      },
+      calendarStyle: CalendarStyle(
+        todayDecoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue.shade300,
+        ),
+        selectedDecoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue.shade400,
         ),
       ),
+    );
+  }
+
+  Widget _buildStatsDisplay(
+      AppLocalizations l10n, AsyncValue<Stats?> statsAsync) {
+    return statsAsync.when(
+      data: (stats) => Skeletonizer(
+        enabled: false,
+        child: StatsDisplay(stats: stats),
+      ),
+      loading: () => const Skeletonizer(
+        enabled: true,
+        child: StatsDisplay(stats: null),
+      ),
+      error: (error, _) => Text('${l10n.error} \n $error'),
     );
   }
 }
