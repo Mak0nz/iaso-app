@@ -43,5 +43,5 @@ app.*.map.json
 /android/app/release
 
 # Private keys
+*.env
 lib/firebase_options.dart
-firebase.json

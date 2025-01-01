@@ -1,70 +1,72 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iaso/data/auth_repository.dart';
+import 'package:iaso/data/repositories/auth_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iaso/domain/language.dart';
 import 'package:iaso/utils/toast.dart';
 
-final authRepositoryProvider =
-    Provider<AuthRepository>((ref) => AuthRepository());
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final language = ref.watch(languageProvider);
+  return AuthRepository(language: language);
+});
 
 final authServiceProvider = Provider<AuthService>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return AuthService(authRepository);
 });
 
-final authStateProvider = StreamProvider<User?>((ref) {
-  return FirebaseAuth.instance.authStateChanges().asyncMap((user) async {
-    if (user != null) {
-      // Delay the emission of the authenticated state
-      await Future.delayed(const Duration(seconds: 0));
-    }
-    return user;
-  });
+final authStateProvider = StreamProvider<bool>((ref) async* {
+  final authRepository = ref.watch(authRepositoryProvider);
+
+  // Initial state
+  try {
+    await authRepository.initializeAuth();
+    yield true;
+  } catch (_) {
+    yield false;
+  }
+
+  // Create a stream for auth state changes
+  await for (final isAuthenticated in _authStateChanges.stream) {
+    yield isAuthenticated;
+  }
 });
+
+// Stream controller for auth state changes
+final _authStateChanges = StreamController<bool>.broadcast();
+
+void updateAuthState(bool isAuthenticated) {
+  _authStateChanges.add(isAuthenticated);
+}
 
 class AuthService {
   final AuthRepository _authRepository;
 
   AuthService(this._authRepository);
 
-  Future<User?> signIn(
+  Future<void> signIn(
       String email, String password, BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
-
     try {
-      final user = await _authRepository.signIn(email, password);
-      if (user != null) {
-        // await _showSuccessToast(context, l10n.login_success);
-      }
-      return user;
-    } on FirebaseAuthException catch (e) {
-      await _showErrorToast(context, _handleAuthError(e.code, context));
-      return null;
+      await _authRepository.signIn(email, password);
+      // await _showSuccessToast(context, l10n.login_success);
     } catch (e) {
-      await _showErrorToast(context, l10n.unexpected_error);
-      return null;
+      await _showErrorToast(context, e.toString());
     }
   }
 
-  Future<User?> signUp(
-      String email, String password, BuildContext context) async {
+  Future<void> signUp(
+      String email, String password, String name, BuildContext context) async {
     final l10n = AppLocalizations.of(context)!;
 
     try {
-      final user = await _authRepository.signUp(email, password);
-      if (user != null) {
-        await _showSuccessToast(context, l10n.signup_success);
-      }
-      return user;
-    } on FirebaseAuthException catch (e) {
-      await _showErrorToast(context, _handleAuthError(e.code, context));
-      return null;
+      await _authRepository.signUp(email, password, name);
+      await _showSuccessToast(context, l10n.signup_success);
     } catch (e) {
-      await _showErrorToast(context, l10n.unexpected_error);
-      return null;
+      await _showErrorToast(context, e.toString());
     }
   }
 
@@ -85,27 +87,5 @@ class AuthService {
 
   _showErrorToast(BuildContext context, String message) {
     ToastUtil.error(context, message);
-  }
-
-  String _handleAuthError(String code, BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (code) {
-      case 'user-not-found':
-        return l10n.user_not_found;
-      case 'wrong-password':
-        return l10n.wrong_password;
-      case 'invalid-email':
-        return l10n.invalid_email;
-      case 'user-disabled':
-        return l10n.user_disabled;
-      case 'email-already-in-use':
-        return l10n.email_already_in_use;
-      case 'operation-not-allowed':
-        return l10n.operation_not_allowed;
-      case 'weak-password':
-        return l10n.weak_password;
-      default:
-        return l10n.auth_error;
-    }
   }
 }

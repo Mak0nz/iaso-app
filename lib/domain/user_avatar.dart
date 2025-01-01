@@ -23,7 +23,7 @@ class InitialAvatar extends StatelessWidget {
       child: Text(
         _getInitial(),
         style: TextStyle(
-          color:  textColor,
+          color: textColor,
           fontWeight: FontWeight.bold,
           fontFamily: 'LilitaOne',
           fontSize: radius * 1.4,
@@ -37,17 +37,18 @@ class InitialAvatar extends StatelessWidget {
   }
 
   Color _getRandomColor() {
-    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+        .withValues(alpha: 1);
   }
 
   Color _getContrastingTextColor(Color backgroundColor) {
     // Calculate the perceived brightness of the background color
-    double brightness = (backgroundColor.red * 299 +
-                         backgroundColor.green * 587 +
-                         backgroundColor.blue * 114) / 1000;
+    double brightness = (backgroundColor.r * 299 +
+            backgroundColor.g * 587 +
+            backgroundColor.b * 114) /
+        1000;
 
     // Use black text on light backgrounds and white text on dark backgrounds
     return brightness > 128 ? Colors.black : Colors.white;
   }
-
 }
