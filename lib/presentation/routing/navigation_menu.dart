@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:animations/animations.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/home_screen.dart';
 import 'package:iaso/presentation/views/meds/meds_screen.dart';
 import 'package:iaso/presentation/views/settings/settings_screen.dart';
@@ -28,7 +28,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: Container(
@@ -57,16 +57,17 @@ class _NavigationMenuState extends State<NavigationMenu> {
               },
               destinations: [
                 NavigationDestination(
-                    icon: const Icon(FontAwesomeIcons.house), label: l10n.home),
+                    icon: const Icon(FontAwesomeIcons.house),
+                    label: l10n.translate('home')),
                 NavigationDestination(
                     icon: const Icon(FontAwesomeIcons.heartCirclePlus),
-                    label: l10n.stats),
+                    label: l10n.translate('stats')),
                 NavigationDestination(
                     icon: const Icon(FontAwesomeIcons.capsules),
-                    label: l10n.meds),
+                    label: l10n.translate('meds')),
                 NavigationDestination(
                     icon: const Icon(FontAwesomeIcons.gear),
-                    label: l10n.settings),
+                    label: l10n.translate('settings')),
               ],
             ),
           ),

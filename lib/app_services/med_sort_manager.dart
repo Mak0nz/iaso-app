@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/main.dart';
 import 'package:iaso/domain/medication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum MedSortMode {
@@ -17,12 +17,12 @@ enum MedSortMode {
   final IconData icon;
 
   String getName(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return switch (this) {
-      MedSortMode.nameAZ => l10n.sort_name_az,
-      MedSortMode.nameZA => l10n.sort_name_za,
-      MedSortMode.dosesLowHigh => l10n.sort_doses_low_high,
-      MedSortMode.dosesHighLow => l10n.sort_doses_high_low,
+      MedSortMode.nameAZ => l10n.translate('sort_name_az'),
+      MedSortMode.nameZA => l10n.translate('sort_name_za'),
+      MedSortMode.dosesLowHigh => l10n.translate('sort_doses_low_high'),
+      MedSortMode.dosesHighLow => l10n.translate('sort_doses_high_low'),
     };
   }
 }

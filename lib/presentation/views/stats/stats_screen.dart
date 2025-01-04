@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/constants/sizes.dart';
-import 'package:iaso/data/stats_provider.dart';
+import 'package:iaso/data/provider/stats_provider.dart';
 import 'package:iaso/domain/stats.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/stats/modal.dart';
 import 'package:iaso/presentation/views/stats/stats_display.dart';
 import 'package:iaso/presentation/widgets/appbar.dart';
@@ -15,13 +15,13 @@ class StatsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final selectedDate = ref.watch(selectedDateProvider);
     final statsAsync = ref.watch(statsProvider);
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: l10n.stats,
+        title: l10n.translate('stats'),
       ),
       floatingActionButton: StatsModal(selectedDate: selectedDate),
       extendBodyBehindAppBar: true,
@@ -111,7 +111,7 @@ class StatsScreen extends ConsumerWidget {
         enabled: true,
         child: StatsDisplay(stats: null),
       ),
-      error: (error, _) => Text('${l10n.error} \n $error'),
+      error: (error, _) => Text('${l10n.translate('error')} \n $error'),
     );
   }
 }

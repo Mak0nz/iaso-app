@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/app_services/med_sort_manager.dart';
-import 'package:iaso/data/med_provider.dart';
+import 'package:iaso/data/provider/med_provider.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/meds/create_edit_med_modal.dart';
 import 'package:iaso/presentation/views/meds/med_card.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
@@ -28,7 +28,7 @@ class DisplayMeds extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final medsAsyncValue = ref.watch(medsProvider);
 
     return medsAsyncValue.when(
@@ -39,7 +39,8 @@ class DisplayMeds extends ConsumerWidget {
           itemBuilder: (context, index) => const MedCard(medication: null),
         ),
       ),
-      error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
+      error: (error, stack) =>
+          Center(child: Text('${l10n.translate('error')}: $error')),
       data: (meds) {
         final sortedMeds = sortMedications(meds, sortMode, showZeroDoses);
         final filteredMeds = showAll
@@ -55,14 +56,16 @@ class DisplayMeds extends ConsumerWidget {
             if (!showAll) ...[
               Padding(
                 padding: const EdgeInsets.only(left: edgeInset, top: edgeInset),
-                child: AppText.subHeading("${l10n.meds_running_out}:"),
+                child: AppText.subHeading(
+                    "${l10n.translate('meds_running_out')}:"),
               ),
               const SizedBox(height: 10),
             ],
             if (!showAll && filteredMeds.isEmpty)
               CustomCard(
                   leading: const Icon(FontAwesomeIcons.pills),
-                  title: AppText.subHeading(l10n.meds_not_running_out))
+                  title: AppText.subHeading(
+                      l10n.translate('meds_not_running_out')))
             else if (showAll)
               const SizedBox(height: edgeInset),
             ...filteredMeds.map((med) => MedCard(medication: med)),
@@ -76,7 +79,7 @@ class DisplayMeds extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     bool loading = false;
 
     return Center(
@@ -89,13 +92,13 @@ class DisplayMeds extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            l10n.no_medications_added,
+            l10n.translate('no_medications_added'),
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Text(
-            l10n.add_medication_guide,
+            l10n.translate('add_medication_guide'),
             style: const TextStyle(fontSize: 16),
             textAlign: TextAlign.center,
           ),
@@ -109,14 +112,14 @@ class DisplayMeds extends ConsumerWidget {
                 return [
                   WoltModalSheetPage(
                     child: const CreateEditMedModal(),
-                    topBarTitle: AppText.heading(l10n.create_med),
+                    topBarTitle: AppText.heading(l10n.translate('create_med')),
                     isTopBarLayerAlwaysVisible: true,
                     enableDrag: false,
                   )
                 ];
               },
             ),
-            text: l10n.add_medication,
+            text: l10n.translate('add_medication'),
             progressEvent: loading,
           ),
         ],

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/utils/dose_calculator.dart';
 import 'package:iaso/utils/number_formatter.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/domain/medication.dart';
-import 'package:iaso/data/med_provider.dart';
+import 'package:iaso/data/provider/med_provider.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/input_med_form.dart';
 import 'package:iaso/presentation/widgets/outlined_button.dart';
@@ -23,7 +23,7 @@ class CreateEditMedModal extends ConsumerStatefulWidget {
 }
 
 class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
-  late final l10n = AppLocalizations.of(context)!;
+  late final l10n = AppLocalizations.of(context);
   late TextEditingController nameController;
   late TextEditingController nameReplacementController;
   late TextEditingController activeAgentController;
@@ -79,23 +79,26 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
         children: [
           InputMedForm(
             controller: nameController,
-            labelText: l10n.med_name,
+            labelText: l10n.translate('med_name'),
             require: true,
           ),
           InputMedForm(
             controller: nameReplacementController,
-            labelText: l10n.med_replacement_name,
+            labelText: l10n.translate('med_replacement_name'),
           ),
           InputMedForm(
             controller: activeAgentController,
-            labelText: l10n.active_agent,
+            labelText: l10n.translate('active_agent'),
           ),
-          InputMedForm(controller: useCaseController, labelText: l10n.use_case),
           InputMedForm(
-              controller: sideEffectController, labelText: l10n.side_effect),
+              controller: useCaseController,
+              labelText: l10n.translate('use_case')),
+          InputMedForm(
+              controller: sideEffectController,
+              labelText: l10n.translate('side_effect')),
           InputMedForm(
             controller: takeQuantityPerDayController,
-            labelText: l10n.daily_quantity,
+            labelText: l10n.translate('daily_quantity'),
             textInputType: TextInputType.number,
             require: true,
           ),
@@ -105,7 +108,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      AppText.subHeading(l10n.intake_which_days),
+                      AppText.subHeading(l10n.translate('intake_which_days')),
                       const Text(
                         '*',
                         style: TextStyle(
@@ -117,7 +120,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
                     ],
                   ))),
           SwitchListTile(
-            title: Text(l10n.take_every_day),
+            title: Text(l10n.translate('take_every_day')),
             value: takeEveryDay,
             onChanged: (value) {
               setState(() {
@@ -133,7 +136,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
           ),
           if (!takeEveryDay && !isAlternatingSchedule) ..._buildDailySchedule(),
           SwitchListTile(
-            title: Text(l10n.take_alternating_days),
+            title: Text(l10n.translate('take_alternating_days')),
             value: isAlternatingSchedule,
             onChanged: (value) {
               setState(() {
@@ -149,22 +152,24 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
           ),
           InputMedForm(
             controller: currentQuantityController,
-            labelText: l10n.current_quantity,
+            labelText: l10n.translate('current_quantity'),
             textInputType: TextInputType.number,
             require: true,
           ),
           InputMedForm(
             controller: orderedByController,
-            labelText: l10n.ordered_by,
+            labelText: l10n.translate('ordered_by'),
           ),
           CheckboxListTile(
-            title: Text(l10n.is_in_cloud),
+            title: Text(l10n.translate('is_in_cloud')),
             value: isInCloud,
             onChanged: (value) => setState(() => isInCloud = value!),
           ),
           AnimatedButton(
             onTap: saveMed,
-            text: widget.medication == null ? (l10n.create) : (l10n.update),
+            text: widget.medication == null
+                ? (l10n.translate('create'))
+                : (l10n.translate('update')),
             progressEvent: _loading,
           ),
           if (widget.medication != null)
@@ -172,7 +177,7 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
               padding: const EdgeInsets.only(top: 23),
               child: CustomOutlinedButton(
                 onTap: deleteMed,
-                text: l10n.delete,
+                text: l10n.translate('delete'),
                 progressEvent: _loading,
                 outlineColor: Colors.red,
               ),
@@ -184,13 +189,13 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
 
   List<Widget> _buildDailySchedule() {
     final days = [
-      l10n.monday,
-      l10n.tuesday,
-      l10n.wednesday,
-      l10n.thursday,
-      l10n.friday,
-      l10n.saturday,
-      l10n.sunday,
+      l10n.translate('monday'),
+      l10n.translate('tuesday'),
+      l10n.translate('wednesday'),
+      l10n.translate('thursday'),
+      l10n.translate('friday'),
+      l10n.translate('saturday'),
+      l10n.translate('sunday'),
     ];
     return [
       ...List.generate(7, (index) {
@@ -255,10 +260,10 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
 
     if (widget.medication == null) {
       ref.read(medRepositoryProvider).addMedication(medication);
-      ToastUtil.success(context, l10n.saved);
+      ToastUtil.success(context, l10n.translate('saved'));
     } else {
       ref.read(medRepositoryProvider).updateMedication(medication);
-      ToastUtil.success(context, l10n.saved);
+      ToastUtil.success(context, l10n.translate('saved'));
     }
 
     Navigator.of(context).pop();
@@ -276,12 +281,12 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.delete_med),
-        content: Text(l10n.delete_med_description),
+        title: Text(l10n.translate('delete_med')),
+        content: Text(l10n.translate('delete_med_description')),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.cancel),
+            child: Text(l10n.translate('cancel')),
           ),
           TextButton(
             onPressed: () {
@@ -289,13 +294,13 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
                   .read(medRepositoryProvider)
                   .deleteMedication(widget.medication!.id!);
 
-              ToastUtil.success(context, l10n.success_delete);
+              ToastUtil.success(context, l10n.translate('success_delete'));
 
               Navigator.of(context).pop(); // Close dialog
               Navigator.of(context).pop(); // Close modal
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(l10n.delete),
+            child: Text(l10n.translate('delete')),
           ),
         ],
       ),

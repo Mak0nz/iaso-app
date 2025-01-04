@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/app_services/auth_service.dart';
 import 'package:iaso/constants/sizes.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/auth/language_appbar.dart';
 import 'package:iaso/presentation/views/settings/reset_password.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
 import 'package:iaso/constants/images.dart';
 import 'package:iaso/constants/text_strings.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {
   const LogInScreen({super.key});
@@ -32,7 +32,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: const LanguageAppBar(),
@@ -69,7 +69,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                 // Email form
                 FormContainer(
                   controller: _emailController,
-                  hintText: l10n.email,
+                  hintText: l10n.translate('email'),
                   isPasswordField: false,
                   autofillHints: const [AutofillHints.email],
                 ),
@@ -79,7 +79,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                 // Password form
                 FormContainer(
                   controller: _passwordController,
-                  hintText: l10n.password,
+                  hintText: l10n.translate('password'),
                   isPasswordField: true,
                   autofillHints: const [AutofillHints.password],
                 ),
@@ -99,7 +99,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                 // Login button
                 AnimatedButton(
                   onTap: _signIn,
-                  text: l10n.login,
+                  text: l10n.translate('login'),
                   progressEvent: _loading,
                 ),
 
@@ -144,7 +144,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
               */
                 // Don't have an account? Register
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(l10n.noaccount),
+                  Text(l10n.translate('noaccount')),
                   const SizedBox(
                     width: 5,
                   ),
@@ -152,7 +152,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                     onTap: () {
                       Navigator.pushReplacementNamed(context, '/signup');
                     },
-                    child: Text(l10n.register,
+                    child: Text(l10n.translate('register'),
                         style: TextStyle(
                             color: Colors.blue.shade400,
                             fontWeight: FontWeight.bold)),

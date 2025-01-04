@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/constants/sizes.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/meds/create_edit_med_modal.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
@@ -12,7 +12,7 @@ class AddMedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     bool loading = false;
 
     return Padding(
@@ -27,12 +27,12 @@ class AddMedScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            l10n.add_medication,
+            l10n.translate('add_medication'),
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           Text(
-            l10n.add_medication_guide,
+            l10n.translate('add_medication_guide'),
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
@@ -46,14 +46,14 @@ class AddMedScreen extends StatelessWidget {
                 return [
                   WoltModalSheetPage(
                     child: const CreateEditMedModal(),
-                    topBarTitle: AppText.heading(l10n.create_med),
+                    topBarTitle: AppText.heading(l10n.translate('create_med')),
                     isTopBarLayerAlwaysVisible: true,
                     enableDrag: false,
                   )
                 ];
               },
             ),
-            text: l10n.add_medication,
+            text: l10n.translate('add_medication'),
             progressEvent: loading,
           ),
         ],

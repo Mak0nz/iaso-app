@@ -1,0 +1,15 @@
+const huError = {
+  'unexpected_error': 'Váratlan hiba történt',
+  'user_not_found': 'Nem található felhasználó ezzel az e-mail címmel',
+  'wrong_password': 'Helytelen jelszó',
+  'invalid_email': 'Érvénytelen e-mail cím formátum',
+  'user_disabled': 'Ez a felhasználói fiók le van tiltva',
+  'email_already_in_use': 'Ez az e-mail cím már használatban van',
+  'operation_not_allowed': 'Ez a művelet nem engedélyezett',
+  'weak_password': 'A megadott jelszó túl gyenge',
+  'auth_error': 'Hiba történt a hitelesítés során',
+  'logout_error': 'Hiba történt a kijelentkezés során',
+  'channel_error': 'Minden mező szükséges.',
+  'invalid_credential': 'Rossz email cím vagy jelszó.',
+  'error_saving': 'Hiba mentésnél',
+};

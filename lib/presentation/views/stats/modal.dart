@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/constants/sizes.dart';
-import 'package:iaso/data/stats_repository.dart';
-import 'package:iaso/data/stats_provider.dart';
+import 'package:iaso/data/repositories/stats_repository.dart';
+import 'package:iaso/data/provider/stats_provider.dart';
 import 'package:iaso/domain/stats.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/settings/stats_view.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
@@ -22,22 +22,22 @@ class StatsModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     final selected = selectedDate;
     List months = [
-      (l10n.january),
-      (l10n.february),
-      (l10n.march),
-      (l10n.april),
-      (l10n.may),
-      (l10n.june),
-      (l10n.july),
-      (l10n.august),
-      (l10n.september),
-      (l10n.october),
-      (l10n.november),
-      (l10n.december)
+      (l10n.translate('january')),
+      (l10n.translate('february')),
+      (l10n.translate('march')),
+      (l10n.translate('april')),
+      (l10n.translate('may')),
+      (l10n.translate('june')),
+      (l10n.translate('july')),
+      (l10n.translate('august')),
+      (l10n.translate('september')),
+      (l10n.translate('october')),
+      (l10n.translate('november')),
+      (l10n.translate('december'))
     ];
     final month = months[selected.month - 1];
 
@@ -164,7 +164,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final settingsAsyncValue = ref.watch(statsViewSettingsProvider);
 
     return Form(
@@ -186,24 +186,26 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                 height: 11,
               ),
               AnimatedButton(
-                  onTap: _submitForm, text: l10n.save, progressEvent: _loading),
+                  onTap: _submitForm,
+                  text: l10n.translate('save'),
+                  progressEvent: _loading),
             ],
           ),
           loading: () => const CircularProgressIndicator(),
-          error: (error, stack) => Text("${l10n.error}: $error"),
+          error: (error, stack) => Text("${l10n.translate('error')}: $error"),
         ),
       ),
     );
   }
 
   Widget _buildWeightField() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          AppText.subHeading("${l10n.weight}:"),
+          AppText.subHeading("${l10n.translate('weight')}:"),
           const SizedBox(
             width: 4,
           ),
@@ -222,13 +224,13 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildTemperatureField() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          AppText.subHeading("${l10n.temperature}:"),
+          AppText.subHeading("${l10n.translate('temperature')}:"),
           const SizedBox(
             width: 4,
           ),
@@ -247,13 +249,13 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildNightTemperatureField() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          AppText.subHeading("${l10n.night_temperature}:"),
+          AppText.subHeading("${l10n.translate('night_temperature')}:"),
           const SizedBox(
             width: 4,
           ),
@@ -272,14 +274,15 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildMorningBPField() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: AppText.subHeading("${l10n.morning_blood_pressure}:"),
+              child: AppText.subHeading(
+                  "${l10n.translate('morning_blood_pressure')}:"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -308,7 +311,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                 InputTextForm(
                   width: 80.0,
                   controller: _controllers['bpMorningPulse'],
-                  labelText: l10n.pulse,
+                  labelText: l10n.translate('pulse'),
                 ),
                 const Text(
                   "bpm",
@@ -321,14 +324,15 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildNightBPField() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: AppText.subHeading("${l10n.night_blood_pressure}:"),
+              child: AppText.subHeading(
+                  "${l10n.translate('night_blood_pressure')}:"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -357,7 +361,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                 InputTextForm(
                   width: 80.0,
                   controller: _controllers['bpNightPulse'],
-                  labelText: l10n.pulse,
+                  labelText: l10n.translate('pulse'),
                 ),
                 const Text(
                   "bpm",
@@ -370,14 +374,14 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildBSField() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: AppText.subHeading("${l10n.blood_sugar}:"),
+              child: AppText.subHeading("${l10n.translate('blood_sugar')}:"),
             ),
             ..._buildBloodSugarFields(),
           ],
@@ -414,14 +418,14 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   Widget _buildUrineField() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: AppText.subHeading("${l10n.urine}:"),
+              child: AppText.subHeading("${l10n.translate('urine')}:"),
             ),
             ..._buildUrineFields(),
           ],
@@ -458,7 +462,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
   }
 
   void _submitForm() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     setState(() {
       _loading = true;
@@ -499,9 +503,9 @@ class _StatsFormState extends ConsumerState<StatsForm> {
         ref.invalidate(statsProvider);
         Navigator.of(context).pop();
 
-        ToastUtil.success(context, l10n.saved);
+        ToastUtil.success(context, l10n.translate('saved'));
       } catch (e) {
-        ToastUtil.error(context, "${l10n.error_saving}: \n $e");
+        ToastUtil.error(context, "${l10n.translate('error_saving')}: \n $e");
       }
     }
 

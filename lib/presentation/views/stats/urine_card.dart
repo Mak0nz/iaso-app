@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/card.dart';
 
@@ -22,7 +22,7 @@ class _ExpandableUrineCardState extends State<ExpandableUrineCard> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return CustomCard(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class _ExpandableUrineCardState extends State<ExpandableUrineCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppText.bold('${l10n.urine}:'),
+                AppText.bold('${l10n.translate('urine')}:'),
                 Row(
                   children: [
                     Text('${_average.toStringAsFixed(1)} mL'),

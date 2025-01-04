@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/card.dart';
 
@@ -23,7 +23,7 @@ class _ExpandableBloodSugarCardState extends State<ExpandableBloodSugarCard> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return CustomCard(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +37,7 @@ class _ExpandableBloodSugarCardState extends State<ExpandableBloodSugarCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppText.bold('${l10n.blood_sugar}:'),
+                AppText.bold('${l10n.translate('blood_sugar')}:'),
                 Row(
                   children: [
                     Text('${_average.toStringAsFixed(1)} mg/dL'),

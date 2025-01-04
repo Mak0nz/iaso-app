@@ -3,14 +3,15 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/app_services/auth_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/constants/text_strings.dart';
+import 'package:iaso/data/repositories/language_repository.dart';
 import 'package:iaso/domain/user_avatar.dart';
 import 'package:iaso/domain/username_manager.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/settings/change_language.dart';
 import 'package:iaso/presentation/views/settings/change_password.dart';
 import 'package:iaso/presentation/views/settings/change_theme.dart';
@@ -34,7 +35,7 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   late String notifStateText = _stateText;
-  String get _stateText => AppLocalizations.of(context)!.enable;
+  String get _stateText => AppLocalizations.of(context).translate('enable');
   var notifTextColor = Colors.blue.shade400;
 
   bool _loading = false;
@@ -52,7 +53,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return Scaffold(
         appBar: CustomAppBar(
-          title: AppLocalizations.of(context)!.settings,
+          title: AppLocalizations.of(context).translate('settings'),
         ),
         extendBodyBehindAppBar: true,
         body: Body(children: [
@@ -60,7 +61,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             height: kToolbarHeight * 1.4,
           ),
           SettingHeader(
-            title: AppLocalizations.of(context)!.account,
+            title: AppLocalizations.of(context).translate('account'),
             icon: FontAwesomeIcons.userGear,
           ),
 
@@ -96,7 +97,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           SettingOption(
-            title: AppLocalizations.of(context)!.change_password,
+            title: AppLocalizations.of(context).translate('change_password'),
             trailing: const ChangePasswordModal(),
           ),
 
@@ -104,7 +105,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             height: 15,
           ),
           SettingHeader(
-              title: AppLocalizations.of(context)!.other_settings,
+              title: AppLocalizations.of(context).translate('other_settings'),
               icon: FontAwesomeIcons.gears),
 
           const SettingChangeLanguage(),
@@ -112,7 +113,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SettingChangeTheme(),
 
           SettingOption(
-            title: AppLocalizations.of(context)!.notifications,
+            title: AppLocalizations.of(context).translate('notifications'),
             trailing: GestureDetector(
               onTap: () => {
                 AwesomeNotifications().requestPermissionToSendNotifications(),
@@ -130,16 +131,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           SettingOption(
-            title: AppLocalizations.of(context)!.stats_view,
+            title: AppLocalizations.of(context).translate('stats_view'),
             trailing: const StatsViewSettingsModal(),
           ),
 
           SettingOption(
-            title: AppLocalizations.of(context)!.privacy_policy,
+            title: AppLocalizations.of(context).translate('privacy_policy'),
             trailing: GestureDetector(
               onTap: () async {
-                launchUrl(
-                  Uri.parse(PRIVACY_POLICY_URL),
+                final language = ref.read(languageProvider);
+                final privacyUrl = '$BASE_URL$language/privacy';
+                await launchUrl(
+                  Uri.parse(privacyUrl),
                   mode: LaunchMode.inAppBrowserView,
                 );
               },
@@ -153,7 +156,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           CustomOutlinedButton(
             onTap: _logout,
-            text: AppLocalizations.of(context)!.logout,
+            text: AppLocalizations.of(context).translate('logout'),
             progressEvent: _loading,
             outlineColor: Theme.of(context).brightness == Brightness.light
                 ? Colors.grey.shade900 // Light theme color
@@ -174,12 +177,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         setState(() {
-          notifStateText = AppLocalizations.of(context)!.enable;
+          notifStateText = AppLocalizations.of(context).translate('enable');
           notifTextColor = Colors.blue.shade400;
         });
       } else {
         setState(() {
-          notifStateText = AppLocalizations.of(context)!.enabled;
+          notifStateText = AppLocalizations.of(context).translate('enabled');
           notifTextColor = Theme.of(context).brightness == Brightness.light
               ? Colors.green.shade700 // Light theme color
               : Colors.green;
@@ -202,7 +205,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
       await ref.read(authServiceProvider).signOut(context);
 
-      ToastUtil.success(context, AppLocalizations.of(context)!.success);
+      ToastUtil.success(
+          context, AppLocalizations.of(context).translate('success'));
     } catch (e) {
       if (kDebugMode) {
         print("sign out error: $e");

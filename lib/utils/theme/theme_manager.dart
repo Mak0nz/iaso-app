@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:iaso/data/language_repository.dart';
+import 'package:iaso/data/repositories/language_repository.dart';
+import 'package:iaso/l10n/l10n.dart';
 
 enum AppThemeMode {
   system(icon: FontAwesomeIcons.palette),
@@ -17,11 +17,11 @@ enum AppThemeMode {
   final IconData icon;
 
   String getName(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return switch (this) {
-      AppThemeMode.system => l10n.system_theme,
-      AppThemeMode.light => l10n.light_theme,
-      AppThemeMode.dark => l10n.dark_theme,
+      AppThemeMode.system => l10n.translate('system_theme'),
+      AppThemeMode.light => l10n.translate('light_theme'),
+      AppThemeMode.dark => l10n.translate('dark_theme'),
     };
   }
 }

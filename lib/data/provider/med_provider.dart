@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/domain/medication.dart';
-import 'package:iaso/data/med_repository.dart';
+import 'package:iaso/data/repositories/med_repository.dart';
 
 final medRepositoryProvider = Provider((ref) => MedRepository());
 

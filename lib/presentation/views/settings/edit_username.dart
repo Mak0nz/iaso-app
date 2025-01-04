@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/domain/username_manager.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
@@ -41,7 +41,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return GestureDetector(
       onTap: () {
         WoltModalSheet.show(
@@ -54,7 +54,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 65),
                     child: Column(
                       children: [
-                        AppText.heading(l10n.change_username),
+                        AppText.heading(l10n.translate('change_username')),
                         const SizedBox(
                           height: 25,
                         ),
@@ -68,7 +68,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
                         ),
                         AnimatedButton(
                           onTap: saveUsername,
-                          text: l10n.save,
+                          text: l10n.translate('save'),
                           progressEvent: _loading,
                         ),
                       ],
@@ -83,7 +83,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
   }
 
   Future saveUsername() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     setState(() {
       _loading = true;
     });
@@ -93,7 +93,7 @@ class _EditUsernameModalState extends ConsumerState<EditUsernameModal> {
           .read(usernameProvider.notifier)
           .updateUsername(_usernameController.text);
 
-      ToastUtil.success(context, l10n.saved);
+      ToastUtil.success(context, l10n.translate('saved'));
       Navigator.pop(context);
     } catch (e) {
       ToastUtil.error(context, e.toString());

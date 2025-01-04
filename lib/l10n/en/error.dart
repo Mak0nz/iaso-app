@@ -1,0 +1,15 @@
+const enError = {
+  'unexpected_error': 'An unexpected error occurred',
+  'user_not_found': 'No user found for that email',
+  'wrong_password': 'Wrong password provided',
+  'invalid_email': 'The email address is badly formatted',
+  'user_disabled': 'This user has been disabled',
+  'email_already_in_use': 'The email address is already in use',
+  'operation_not_allowed': 'This operation is not allowed',
+  'weak_password': 'The password provided is too weak',
+  'auth_error': 'An error occurred during authentication',
+  'logout_error': 'Error logging out',
+  'channel_error': 'All fields are required.',
+  'invalid_credential': 'Wrong email address or password.',
+  'error_saving': 'Error Saving',
+};

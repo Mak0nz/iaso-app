@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iaso/data/stats_repository.dart';
+import 'package:iaso/data/repositories/stats_repository.dart';
 import 'package:iaso/domain/stats.dart';
 
 final selectedDateProvider = StateProvider<DateTime>((ref) => DateTime.now());

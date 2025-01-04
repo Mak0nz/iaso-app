@@ -1,10 +1,7 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:iaso/domain/language.dart';
-import 'package:iaso/data/language_repository.dart';
+import 'package:iaso/data/repositories/language_repository.dart';
+import 'package:iaso/l10n/l10n.dart';
 
 class SettingChangeLanguage extends ConsumerWidget {
   const SettingChangeLanguage({
@@ -13,47 +10,41 @@ class SettingChangeLanguage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final language = ref.watch(languageProvider);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, left: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            l10n.change_language,
+            l10n.translate('change_language'),
             style: const TextStyle(
               fontSize: 20,
             ),
           ),
-          PopupMenuButton<Language>(
+          PopupMenuButton<String>(
             onSelected: (value) =>
                 ref.read(languageRepositoryProvider).setLanguage(value),
             itemBuilder: (context) => [
-              for (var value in Language.values)
+              for (var code in L10n.supportedLanguages.keys)
                 PopupMenuItem(
-                    value: value,
+                    value: code,
                     child: Row(
                       children: [
-                        Text(value.flag),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Text(value.name),
+                        Text(L10n.getFlag(code)),
+                        const SizedBox(width: 8),
+                        Text(L10n.getName(code)),
                       ],
                     ))
             ],
             child: Row(
               children: [
-                Text(
-                  language.flag,
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
+                Text(L10n.getFlag(language)),
                 const SizedBox(width: 8),
                 Text(
-                  language.name,
+                  L10n.getName(language),
                   style: const TextStyle(
                     fontSize: 18,
                   ),

@@ -1,0 +1,30 @@
+const huAuth = {
+  'email': 'email',
+  'password': 'jelszó',
+  'username': 'felhasználónév',
+  'login': 'Bejelentkezés',
+  'logout': 'Kijelentkezés',
+  'register': 'Regisztrálj',
+  'sign_up': 'Feliratkozás',
+  'noaccount': 'Nincs fiókod?',
+  'forgot_password': 'Elfelejtette a jelszavát?',
+  'forgot_password_description':
+      'Adja meg email címét, és küldünk egy jelszó visszaállítási linket.',
+  'reset_password': 'Jelszó visszaállítása',
+  'reset_password_success':
+      'Jelszó visszaállítási link elküldve! Ellenőrizze az emailjét.',
+  'have_account': 'Már van fiókod?',
+  'login_success': 'Sikeres bejelentkezés',
+  'login_failed': 'Sikertelen bejelentkezés',
+  'signup_success': 'Sikeres regisztráció',
+  'logout_success': 'Sikeres kijelentkezés',
+  'change_username': 'Felhasználónév módosítása:',
+  'change_password': 'Jelszó módosítása',
+  'change_password_success': 'Jelszó sikeresen módosítva',
+  'old_password': 'Régi jelszó',
+  'new_password': 'Új jelszó',
+  'delete_account': 'Fiók Törlése',
+  'confirm_account_delete_heading': 'Biztosan törölni szeretné fiókját?',
+  'delete_account_description':
+      'Ezzel véglegesen törli fiókját és annak adatait, beleértve a napi statisztikákat és a gyógyszertárat.',
+};

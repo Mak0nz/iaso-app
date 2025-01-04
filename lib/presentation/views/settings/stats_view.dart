@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
@@ -86,7 +86,7 @@ class StatsViewSettingsModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return GestureDetector(
       onTap: () {
         WoltModalSheet.show(
@@ -94,7 +94,7 @@ class StatsViewSettingsModal extends ConsumerWidget {
           pageListBuilder: (BuildContext context) {
             return [
               WoltModalSheetPage(
-                topBarTitle: AppText.heading(l10n.stats_view),
+                topBarTitle: AppText.heading(l10n.translate('stats_view')),
                 isTopBarLayerAlwaysVisible: true,
                 child: const ProviderScope(
                   child: Padding(
@@ -117,7 +117,7 @@ class StatsViewSettingsContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final settingsAsyncValue = ref.watch(statsViewSettingsProvider);
 
     return settingsAsyncValue.when(
@@ -126,23 +126,25 @@ class StatsViewSettingsContent extends ConsumerWidget {
         children: [
           const SizedBox(height: 10),
           Text(
-            l10n.stats_view_description,
+            l10n.translate('stats_view_description'),
             style: const TextStyle(fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 15),
-          _buildCheckboxListTile(context, ref, 'weight', l10n.weight, settings),
           _buildCheckboxListTile(
-              context, ref, 'temperature', l10n.temperature, settings),
+              context, ref, 'weight', l10n.translate('weight'), settings),
+          _buildCheckboxListTile(context, ref, 'temperature',
+              l10n.translate('temperature'), settings),
           _buildCheckboxListTile(context, ref, 'nightTemperature',
-              l10n.night_temperature, settings),
+              l10n.translate('night_temperature'), settings),
+          _buildCheckboxListTile(context, ref, 'morningBP',
+              l10n.translate('morning_blood_pressure'), settings),
+          _buildCheckboxListTile(context, ref, 'nightBP',
+              l10n.translate('night_blood_pressure'), settings),
+          _buildCheckboxListTile(context, ref, 'bloodSugar',
+              l10n.translate('blood_sugar'), settings),
           _buildCheckboxListTile(
-              context, ref, 'morningBP', l10n.morning_blood_pressure, settings),
-          _buildCheckboxListTile(
-              context, ref, 'nightBP', l10n.night_blood_pressure, settings),
-          _buildCheckboxListTile(
-              context, ref, 'bloodSugar', l10n.blood_sugar, settings),
-          _buildCheckboxListTile(context, ref, 'urine', l10n.urine, settings),
+              context, ref, 'urine', l10n.translate('urine'), settings),
         ],
       ),
       loading: () => const CircularProgressIndicator(),

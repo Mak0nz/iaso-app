@@ -3,10 +3,11 @@ import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/app_services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:iaso/constants/images.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/constants/text_strings.dart';
+import 'package:iaso/data/repositories/language_repository.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/auth/language_appbar.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
@@ -37,7 +38,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: const LanguageAppBar(),
       body: Center(
@@ -73,7 +74,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // username field
                 FormContainer(
                   controller: _usernameController,
-                  hintText: l10n.username,
+                  hintText: l10n.translate('username'),
                   isPasswordField: false,
                   autofillHints: const [AutofillHints.newUsername],
                 ),
@@ -83,7 +84,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // email field
                 FormContainer(
                   controller: _emailController,
-                  hintText: l10n.email,
+                  hintText: l10n.translate('email'),
                   isPasswordField: false,
                   autofillHints: const [AutofillHints.email],
                 ),
@@ -93,7 +94,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // password field
                 FormContainer(
                   controller: _passwordController,
-                  hintText: l10n.password,
+                  hintText: l10n.translate('password'),
                   isPasswordField: true,
                   autofillHints: const [AutofillHints.newPassword],
                 ),
@@ -113,12 +114,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     Expanded(
                       child: TextButton(
                         onPressed: () async {
-                          launchUrl(
-                            Uri.parse(PRIVACY_POLICY_URL),
+                          final language = ref.read(languageProvider);
+                          final privacyUrl = '$BASE_URL$language/privacy';
+                          await launchUrl(
+                            Uri.parse(privacyUrl),
                             mode: LaunchMode.inAppBrowserView,
                           );
                         },
-                        child: Text(l10n.read_privacy_policy),
+                        child: Text(l10n.translate('read_privacy_policy')),
                       ),
                     ),
                   ],
@@ -129,13 +132,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // signup button
                 AnimatedButton(
                   onTap: _signUp,
-                  text: l10n.sign_up,
+                  text: l10n.translate('sign_up'),
                   progressEvent: _loading,
                 ),
                 const SizedBox(height: 20),
                 // already have an account? login
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(l10n.have_account),
+                  Text(l10n.translate('have_account')),
                   const SizedBox(
                     width: 5,
                   ),
@@ -143,7 +146,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     onTap: () {
                       Navigator.pushReplacementNamed(context, '/login');
                     },
-                    child: Text(l10n.login,
+                    child: Text(l10n.translate('login'),
                         style: TextStyle(
                             color: Colors.blue.shade400,
                             fontWeight: FontWeight.bold)),
@@ -158,11 +161,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   Future<void> _signUp() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     if (!_privacyPolicyAccepted) {
       CherryToast.error(
-        title: Text(l10n.accept_privacy_policy_error),
+        title: Text(l10n.translate('accept_privacy_policy_error')),
         animationType: AnimationType.fromTop,
         displayCloseButton: false,
         inheritThemeColors: true,

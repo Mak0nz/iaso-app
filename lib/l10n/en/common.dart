@@ -1,0 +1,18 @@
+const enCommon = {
+  'language': 'Language',
+  'hello': 'Hello',
+  'success': 'Success',
+  'error': 'An error occurred',
+  'save': 'Save',
+  'saved': 'Saved',
+  'cancel': 'Cancel',
+  'delete': 'Delete',
+  'success_delete': 'Successfully deleted',
+  'enable': 'Enable',
+  'enabled': 'Enabled',
+  'skip': 'Skip',
+  'finish': 'Finish',
+  'update': 'Update',
+  'create': 'Create',
+  'non_cancellable': 'This task can NOT be undone.',
+};

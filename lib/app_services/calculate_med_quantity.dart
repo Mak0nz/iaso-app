@@ -1,8 +1,7 @@
 import 'package:iaso/utils/dose_calculator.dart';
 import 'package:iaso/app_services/notification_service.dart';
-import 'package:iaso/data/med_repository.dart';
+import 'package:iaso/data/repositories/med_repository.dart';
 import 'package:iaso/domain/medication.dart';
-import 'package:iaso/domain/language.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> calculateMedQuantities() async {
@@ -89,11 +88,7 @@ bool _shouldTakeMedicationToday(Medication medication, DateTime today) {
   }
 }
 
-Future<Language> _getLanguageFromPreferences() async {
+Future<String> _getLanguageFromPreferences() async {
   final prefs = await SharedPreferences.getInstance();
-  final languageCode = prefs.getString('language_code') ?? 'en';
-  return Language.values.firstWhere(
-    (lang) => lang.code == languageCode,
-    orElse: () => Language.english,
-  );
+  return prefs.getString('language_code') ?? 'en';
 }

@@ -1,14 +1,13 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iaso/utils/number_formatter.dart';
-import 'package:iaso/domain/language.dart';
 
 class NotificationService {
   Future<void> sendLowMedicationNotification(
-      String medicationName, double totalDoses, Language language) async {
+      String medicationName, double totalDoses, String languageCode) async {
     String notificationTitle =
-        _getLocalizedMedicationRunningOut(medicationName, language);
+        _getLocalizedMedicationRunningOut(medicationName, languageCode);
     String notificationBody = _getRemainingMedication(
-        NumberFormatter.formatDouble(totalDoses).toString(), language);
+        NumberFormatter.formatDouble(totalDoses).toString(), languageCode);
 
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -20,23 +19,23 @@ class NotificationService {
   }
 
   String _getLocalizedMedicationRunningOut(
-      String medicationName, Language language) {
-    Map<Language, String> translations = {
-      Language.english: '{medication} is running out!',
-      Language.hungarian: '{medication} fogyóban van!',
+      String medicationName, String languageCode) {
+    final translations = {
+      'en': '{medication} is running out!',
+      'hu': '{medication} fogyóban van!',
     };
 
-    String template = translations[language] ?? translations[Language.english]!;
+    String template = translations[languageCode] ?? translations['en']!;
     return template.replaceAll('{medication}', medicationName);
   }
 
-  String _getRemainingMedication(String remaining, Language language) {
-    Map<Language, String> translations = {
-      Language.english: 'There\'s only {remaining} days worth left.',
-      Language.hungarian: 'Már csak {remaining} napnyi van.',
+  String _getRemainingMedication(String remaining, String languageCode) {
+    final translations = {
+      'en': 'There\'s only {remaining} days worth left.',
+      'hu': 'Már csak {remaining} napnyi van.',
     };
 
-    String template = translations[language] ?? translations[Language.english]!;
+    String template = translations[languageCode] ?? translations['en']!;
     return template.replaceAll('{remaining}', remaining);
   }
 }

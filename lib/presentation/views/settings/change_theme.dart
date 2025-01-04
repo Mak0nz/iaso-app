@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/utils/theme/theme_manager.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingChangeTheme extends ConsumerWidget {
   const SettingChangeTheme({super.key});
@@ -9,7 +9,7 @@ class SettingChangeTheme extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, left: 6),
@@ -17,7 +17,7 @@ class SettingChangeTheme extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            l10n.change_theme,
+            l10n.translate('change_theme'),
             style: const TextStyle(
               fontSize: 20,
             ),

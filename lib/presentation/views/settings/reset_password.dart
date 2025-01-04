@@ -2,8 +2,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:iaso/constants/sizes.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
@@ -29,7 +29,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
   }
 
   Future resetPassword() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     setState(() {
       _loading = true;
     });
@@ -40,7 +40,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
 
       Navigator.pop(context);
 
-      ToastUtil.success(context, l10n.reset_password_success);
+      ToastUtil.success(context, l10n.translate('reset_password_success'));
     } on FirebaseAuthException catch (error) {
       ToastUtil.error(context, error.message.toString());
     }
@@ -52,7 +52,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return GestureDetector(
       onTap: () {
         WoltModalSheet.show(
@@ -65,12 +65,12 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
                         const EdgeInsets.fromLTRB(edgeInset, 0, edgeInset, 65),
                     child: Column(
                       children: [
-                        AppText.heading(l10n.forgot_password),
+                        AppText.heading(l10n.translate('forgot_password')),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          l10n.forgot_password_description,
+                          l10n.translate('forgot_password_description'),
                           style: const TextStyle(fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -79,7 +79,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
                         ),
                         FormContainer(
                           controller: _emailController,
-                          hintText: l10n.email,
+                          hintText: l10n.translate('email'),
                           isPasswordField: false,
                         ),
                         const SizedBox(
@@ -89,7 +89,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
                             onTap: () {
                               resetPassword();
                             },
-                            text: l10n.reset_password,
+                            text: l10n.translate('reset_password'),
                             progressEvent: _loading),
                       ],
                     ),
@@ -98,7 +98,7 @@ class _ResetPasswordModalState extends State<ResetPasswordModal> {
               ];
             });
       },
-      child: Text(l10n.forgot_password,
+      child: Text(l10n.translate('forgot_password'),
           style: TextStyle(
               color: Colors.blue.shade400, fontWeight: FontWeight.bold)),
     );

@@ -3,9 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/domain/username_manager.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/outlined_button.dart';
 import 'package:iaso/utils/toast.dart';
@@ -22,17 +22,17 @@ class _DeleteAccountState extends State<DeleteAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return CustomOutlinedButton(
       onTap: () => showConfirmationDialog(),
-      text: l10n.delete_account,
+      text: l10n.translate('delete_account'),
       progressEvent: _loading,
       outlineColor: Colors.red.shade400,
     );
   }
 
   void showConfirmationDialog() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -48,21 +48,21 @@ class _DeleteAccountState extends State<DeleteAccount> {
                 ),
               ),
               Expanded(
-                child: Text(l10n.confirm_account_delete_heading),
+                child: Text(l10n.translate('confirm_account_delete_heading')),
               ),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppText.subHeading(l10n.non_cancellable),
-              Text(l10n.delete_account_description),
+              AppText.subHeading(l10n.translate('non_cancellable')),
+              Text(l10n.translate('delete_account_description')),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.cancel),
+              child: Text(l10n.translate('cancel')),
             ),
             TextButton(
               onPressed: () {
@@ -70,7 +70,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
                 deleteAccount();
               },
               child: Text(
-                l10n.delete,
+                l10n.translate('delete'),
                 style: const TextStyle(color: Colors.red),
               ),
             ),
@@ -81,7 +81,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
   }
 
   Future deleteAccount() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     setState(() {
       _loading = true;
     });
@@ -94,7 +94,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
       await UsernameManager().clearUsername();
       await docRef.delete();
 
-      ToastUtil.success(context, l10n.success_delete);
+      ToastUtil.success(context, l10n.translate('success_delete'));
 
       Navigator.pushNamedAndRemoveUntil(
         context,

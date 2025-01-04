@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/app_services/med_sort_manager.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/meds/create_edit_med_modal.dart';
 import 'package:iaso/presentation/views/meds/meds_display.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
@@ -15,13 +15,13 @@ class MedsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final sortModeAsync = ref.watch(medSortModeProvider);
     final showZeroDosesAsync = ref.watch(showZeroDosesProvider);
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: l10n.meds,
+        title: l10n.translate('meds'),
         leading: sortModeAsync.when(
           data: (sortMode) => Icon(sortMode.icon),
           loading: () => const CircularProgressIndicator(),
@@ -40,7 +40,7 @@ class MedsScreen extends ConsumerWidget {
               return [
                 WoltModalSheetPage(
                   child: const CreateEditMedModal(),
-                  topBarTitle: AppText.heading(l10n.create_med),
+                  topBarTitle: AppText.heading(l10n.translate('create_med')),
                   isTopBarLayerAlwaysVisible: true,
                   enableDrag: false,
                 )
@@ -71,7 +71,7 @@ class MedsScreen extends ConsumerWidget {
   }
 
   void _showSortMenu(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final sortModeAsync = ref.read(medSortModeProvider);
     final showZeroDosesAsync = ref.read(showZeroDosesProvider);
 
@@ -99,7 +99,7 @@ class MedsScreen extends ConsumerWidget {
                       Icon(show ? Icons.visibility : Icons.visibility_off),
                 ) ??
                 const SizedBox(),
-            title: Text(l10n.show_zero_doses),
+            title: Text(l10n.translate('show_zero_doses')),
             trailing: Switch(
               value:
                   showZeroDosesAsync.whenOrNull(data: (show) => show) ?? false,

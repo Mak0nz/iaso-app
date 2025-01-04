@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/stats/urine_card.dart';
 import 'package:iaso/utils/number_formatter.dart';
 import 'package:iaso/domain/stats.dart';
@@ -16,7 +16,7 @@ class StatsDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     if (stats == null) {
       return Column(
         children: [
@@ -28,7 +28,7 @@ class StatsDisplay extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                AppText.bold(l10n.no_data_text),
+                AppText.bold(l10n.translate('no_data_text')),
               ],
             ),
           ),
@@ -44,7 +44,7 @@ class StatsDisplay extends StatelessWidget {
             CustomCard(
               title: Row(
                 children: [
-                  AppText.bold('${l10n.weight}: '),
+                  AppText.bold('${l10n.translate('weight')}: '),
                   Text(
                       '${NumberFormatter.formatDouble(stats!.weight ?? 0)} kg'),
                 ],
@@ -54,7 +54,7 @@ class StatsDisplay extends StatelessWidget {
             CustomCard(
               title: Row(
                 children: [
-                  AppText.bold('${l10n.temperature}: '),
+                  AppText.bold('${l10n.translate('temperature')}: '),
                   Text('${NumberFormatter.formatDouble(stats!.temp ?? 0)} °C'),
                 ],
               ),
@@ -63,7 +63,7 @@ class StatsDisplay extends StatelessWidget {
             CustomCard(
               title: Row(
                 children: [
-                  AppText.bold('${l10n.night_temperature}: '),
+                  AppText.bold('${l10n.translate('night_temperature')}: '),
                   Text(
                       '${NumberFormatter.formatDouble(stats!.nightTemp ?? 0)} °C'),
                 ],
@@ -77,7 +77,8 @@ class StatsDisplay extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: AppText.bold('${l10n.morning_blood_pressure}:'),
+                    child: AppText.bold(
+                        '${l10n.translate('morning_blood_pressure')}:'),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -108,7 +109,8 @@ class StatsDisplay extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: AppText.bold('${l10n.night_blood_pressure}:'),
+                    child: AppText.bold(
+                        '${l10n.translate('night_blood_pressure')}:'),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

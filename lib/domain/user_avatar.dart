@@ -37,8 +37,7 @@ class InitialAvatar extends StatelessWidget {
   }
 
   Color _getRandomColor() {
-    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-        .withValues(alpha: 1);
+    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withAlpha(1);
   }
 
   Color _getContrastingTextColor(Color backgroundColor) {

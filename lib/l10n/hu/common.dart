@@ -1,0 +1,18 @@
+const huCommon = {
+  'language': 'Nyelv',
+  'hello': 'Helló',
+  'success': 'Siker',
+  'error': 'Hiba történt',
+  'save': 'Mentés',
+  'saved': 'Elmentve',
+  'cancel': 'Mégsem',
+  'delete': 'Törlés',
+  'success_delete': 'Sikeresen törölve',
+  'enable': 'Engedélyezés',
+  'enabled': 'Engedélyezve',
+  'skip': 'Kihagyás',
+  'finish': 'Befejezés',
+  'update': 'Fríssítés',
+  'create': 'Létrehozás',
+  'non_cancellable': 'Ez a művelet NEM visszavonható.',
+};

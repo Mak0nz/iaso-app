@@ -2,9 +2,9 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/constants/sizes.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
@@ -28,7 +28,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
   TextEditingController _newPasswordController = TextEditingController();
 
   changePassword() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     setState(() {
       _loading = true;
     });
@@ -43,7 +43,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
         currentUser!.updatePassword(_newPasswordController.toString());
       });
 
-      ToastUtil.success(context, l10n.change_password_success);
+      ToastUtil.success(context, l10n.translate('change_password_success'));
       Navigator.pop(context);
     } catch (e) {
       ToastUtil.error(context, e.toString());
@@ -63,7 +63,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return GestureDetector(
       onTap: () {
         WoltModalSheet.show(
@@ -76,13 +76,14 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                         const EdgeInsets.fromLTRB(edgeInset, 0, edgeInset, 65),
                     child: Column(
                       children: [
-                        AppText.heading("${l10n.change_password}:"),
+                        AppText.heading(
+                            "${l10n.translate('change_password')}:"),
                         const SizedBox(
                           height: 25,
                         ),
                         FormContainer(
                           controller: _oldPasswordController,
-                          hintText: l10n.old_password,
+                          hintText: l10n.translate('old_password'),
                           isPasswordField: true,
                         ),
                         const SizedBox(
@@ -90,7 +91,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                         ),
                         FormContainer(
                           controller: _newPasswordController,
-                          hintText: l10n.new_password,
+                          hintText: l10n.translate('new_password'),
                           isPasswordField: true,
                         ),
                         const SizedBox(
@@ -100,7 +101,7 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                             onTap: () {
                               changePassword();
                             },
-                            text: l10n.change_password,
+                            text: l10n.translate('change_password'),
                             progressEvent: _loading),
                       ],
                     ),

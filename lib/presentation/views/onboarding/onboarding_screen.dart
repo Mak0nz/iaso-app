@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:animations/animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/onboarding/welcome_screen.dart';
 import 'package:iaso/presentation/views/onboarding/enable_notifications_screen.dart';
 import 'package:iaso/presentation/views/onboarding/stats_view_screen.dart';
@@ -28,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -67,7 +67,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               duration: const Duration(milliseconds: 300),
               child: TextButton(
                 onPressed: _currentPage == 0 ? _showSkipDialog : null,
-                child: Text(l10n.skip),
+                child: Text(l10n.translate('skip')),
               ),
             ),
             FloatingActionButton(
@@ -125,7 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _showSkipDialog() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     showModal(
       context: context,
       configuration: const FadeScaleTransitionConfiguration(
@@ -134,12 +134,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(l10n.skip_onboarding),
-          content: Text(l10n.skip_onboarding_message),
+          title: Text(l10n.translate('skip_onboarding')),
+          content: Text(l10n.translate('skip_onboarding_message')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.cancel),
+              child: Text(l10n.translate('cancel')),
             ),
             TextButton(
               onPressed: () {
@@ -147,7 +147,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 _finishOnboarding();
               },
               child: Text(
-                l10n.skip,
+                l10n.translate('skip'),
                 style: const TextStyle(color: Colors.red),
               ),
             ),

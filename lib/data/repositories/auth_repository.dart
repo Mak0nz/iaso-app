@@ -1,20 +1,19 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iaso/data/api/api_client.dart';
 import 'package:iaso/data/api/api_endpoints.dart';
-import 'package:iaso/domain/language.dart';
 
 class AuthRepository {
   final ApiClient _apiClient;
   final FlutterSecureStorage _secureStorage;
-  final Language _language;
+  final String _languageCode;
 
   AuthRepository({
     ApiClient? apiClient,
     FlutterSecureStorage? secureStorage,
-    required Language language,
+    required String languageCode,
   })  : _apiClient = apiClient ?? ApiClient(baseUrl: ApiEndpoints.baseUrl),
         _secureStorage = secureStorage ?? const FlutterSecureStorage(),
-        _language = language;
+        _languageCode = languageCode;
 
   Future<void> signUp(String email, String password, String username) async {
     final response = await _apiClient.post(
@@ -25,7 +24,7 @@ class AuthRepository {
         'password_confirmation': password,
         'username': username,
       },
-      _language,
+      _languageCode,
     );
 
     final token = response['token'] as String;
@@ -40,7 +39,7 @@ class AuthRepository {
         'email': email,
         'password': password,
       },
-      _language,
+      _languageCode,
     );
 
     final token = response['token'] as String;
@@ -50,7 +49,7 @@ class AuthRepository {
 
   Future<void> signOut() async {
     try {
-      await _apiClient.post(ApiEndpoints.logout, {}, _language);
+      await _apiClient.post(ApiEndpoints.logout, {}, _languageCode);
     } finally {
       await _secureStorage.delete(key: 'auth_token');
       _apiClient.setAuthToken('');
