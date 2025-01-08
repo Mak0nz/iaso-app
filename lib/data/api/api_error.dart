@@ -1,41 +1,53 @@
+import 'package:iaso/l10n/l10n.dart';
+
 class ApiError implements Exception {
-  final String message;
-  final int? statusCode;
+  final String code;
+  final int statusCode;
   final Map<String, List<String>>? validationErrors;
 
   ApiError({
-    required this.message,
-    this.statusCode,
+    required this.code,
+    required this.statusCode,
     this.validationErrors,
   });
 
   factory ApiError.fromJson(Map<String, dynamic> json, int statusCode) {
-    if (json.containsKey('errors') && json['errors'] is Map) {
-      return ApiError(
-        message: json['message'] ?? 'Validation failed',
-        statusCode: statusCode,
-        validationErrors: Map<String, List<String>>.from(
-          json['errors'].map((key, value) => MapEntry(
-                key,
-                (value as List).map((e) => e.toString()).toList(),
-              )),
-        ),
-      );
-    }
-
     return ApiError(
-      message: json['message'] ?? 'Unknown error occurred',
+      code: json['code'] as String? ?? 'unknown_error',
       statusCode: statusCode,
+      validationErrors: json['errors'] != null
+          ? Map<String, List<String>>.from(
+              json['errors'].map((key, value) => MapEntry(
+                    key,
+                    (value as List).map((e) => e.toString()).toList(),
+                  )),
+            )
+          : null,
     );
   }
 
-  String getFirstError() {
-    if (validationErrors != null && validationErrors!.isNotEmpty) {
-      final firstError = validationErrors!.values.first;
-      if (firstError.isNotEmpty) {
-        return firstError.first;
-      }
+  String getTranslatedMessage(AppLocalizations l10n) {
+    return l10n.translate(code);
+  }
+
+  String? getValidationError(String field) {
+    if (validationErrors == null || !validationErrors!.containsKey(field)) {
+      return null;
     }
-    return message;
+    return validationErrors![field]!.first;
+  }
+
+  List<String> getAllValidationErrors() {
+    if (validationErrors == null) {
+      return [];
+    }
+    return validationErrors!.values.expand((list) => list).toList();
+  }
+
+  String getFirstValidationError(AppLocalizations l10n) {
+    if (validationErrors == null || validationErrors!.isEmpty) {
+      return getTranslatedMessage(l10n);
+    }
+    return validationErrors!.values.first.first;
   }
 }

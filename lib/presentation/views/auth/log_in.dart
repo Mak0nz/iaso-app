@@ -9,6 +9,8 @@ import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
 import 'package:iaso/constants/images.dart';
 import 'package:iaso/constants/text_strings.dart';
+import 'package:iaso/data/api/api_error.dart';
+import 'package:iaso/utils/toast.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {
   const LogInScreen({super.key});
@@ -52,9 +54,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
                 Text(
                   appName.toUpperCase(),
                   style: const TextStyle(
@@ -63,9 +63,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                     fontFamily: 'LilitaOne',
                   ),
                 ),
-                const SizedBox(
-                  height: 25,
-                ),
+                const SizedBox(height: 25),
                 // Email form
                 FormContainer(
                   controller: _emailController,
@@ -73,9 +71,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                   isPasswordField: false,
                   autofillHints: const [AutofillHints.email],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 // Password form
                 FormContainer(
                   controller: _passwordController,
@@ -83,9 +79,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                   isPasswordField: true,
                   autofillHints: const [AutofillHints.password],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 // Reset password
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -93,61 +87,18 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                     ResetPasswordModal(),
                   ],
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
+                const SizedBox(height: 15),
                 // Login button
                 AnimatedButton(
                   onTap: _signIn,
                   text: l10n.translate('login'),
                   progressEvent: _loading,
                 ),
-
                 const SizedBox(height: 20),
-                /*
-              // or continue with
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey.shade500,
-                      )
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('Vagy jelentkezzen be google-al',),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey.shade500,
-                      )
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15,),
-              // login using google
-                InkWell(
-                  onTap: _signInWithGoogle,
-                  borderRadius: BorderRadius.circular(15),
-                  child: Ink(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.black12,
-                    ),
-                    child: Image.asset('assets/google.png', height: 40,),
-                  ),
-                ),
-              */
                 // Don't have an account? Register
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(l10n.translate('noaccount')),
-                  const SizedBox(
-                    width: 5,
-                  ),
+                  const SizedBox(width: 5),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushReplacementNamed(context, '/signup');
@@ -177,8 +128,27 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
       final authService = ref.read(authServiceProvider);
       await authService.signIn(_emailController.text.trim(),
           _passwordController.text.trim(), context);
-      // Navigation is handled by the Wrapper
-      //Navigator.pushNamedAndRemoveUntil(context, '/navigation_menu', (Route<dynamic> route) => false,);
+
+      if (mounted) {
+        updateAuthState(true);
+      }
+    } catch (e) {
+      if (mounted) {
+        final l10n = AppLocalizations.of(context);
+        if (e is ApiError) {
+          if (e.validationErrors != null) {
+            // Show all validation errors if present
+            final errors = e.getAllValidationErrors().join('\n');
+            ToastUtil.error(context, errors);
+          } else {
+            // Show translated error message
+            ToastUtil.error(context, e.getTranslatedMessage(l10n));
+          }
+        } else {
+          // Show unexpected error message
+          ToastUtil.error(context, l10n.translate('unexpected_error'));
+        }
+      }
     } finally {
       if (mounted) {
         setState(() {
