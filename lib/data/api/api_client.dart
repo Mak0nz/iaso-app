@@ -1,27 +1,26 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:iaso/data/api/api_error.dart';
-import 'package:iaso/l10n/l10n.dart';
 
 class ApiClient {
   final String baseUrl;
   String? _authToken;
+  final String languageCode;
 
-  ApiClient({required this.baseUrl});
+  ApiClient({
+    required this.baseUrl,
+    required this.languageCode,
+  });
 
   void setAuthToken(String token) {
     _authToken = token;
   }
 
-  Map<String, String> _getHeaders(String languageCode) {
-    // Validate the language code and fallback to 'en' if not supported
-    final validLanguageCode =
-        L10n.isSupported(languageCode) ? languageCode : 'en';
-
+  Map<String, String> _getHeaders() {
     final headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Accept-Language': validLanguageCode,
+      'Accept-Language': languageCode,
     };
 
     if (_authToken != null) {
@@ -34,11 +33,10 @@ class ApiClient {
   Future<Map<String, dynamic>> post(
     String endpoint,
     Map<String, dynamic> body,
-    String languageCode,
   ) async {
     final response = await http.post(
       Uri.parse('$baseUrl$endpoint'),
-      headers: _getHeaders(languageCode),
+      headers: _getHeaders(),
       body: jsonEncode(body),
     );
 
@@ -54,11 +52,10 @@ class ApiClient {
 
   Future<Map<String, dynamic>> get(
     String endpoint,
-    String languageCode,
   ) async {
     final response = await http.get(
       Uri.parse('$baseUrl$endpoint'),
-      headers: _getHeaders(languageCode),
+      headers: _getHeaders(),
     );
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
