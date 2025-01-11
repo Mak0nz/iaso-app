@@ -48,7 +48,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UsernameManager().getUsername();
     final username = ref.watch(usernameProvider) ?? 'User';
 
     return Scaffold(
@@ -197,8 +196,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     });
 
     try {
-      await UsernameManager().clearUsername();
-
       setState(() {
         _loading = false;
       });

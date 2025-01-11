@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:iaso/app_services/settings_sync.dart';
 import 'dart:ui' as ui;
 import 'package:iaso/l10n/l10n.dart';
 
@@ -12,14 +12,15 @@ class LanguageRepository {
   Future<void> setLanguage(String languageCode) async {
     if (!L10n.isSupported(languageCode)) return;
 
-    final pref = await ref.read(sharedPreferencesProvider.future);
-    await pref.setString(languageCodeKey, languageCode);
+    final settingsSync = ref.read(settingsSyncProvider.notifier);
+    await settingsSync.setSetting(languageCodeKey, languageCode);
     ref.read(languageProvider.notifier).state = languageCode;
   }
 
   Future<String> getLanguage() async {
-    final pref = await ref.read(sharedPreferencesProvider.future);
-    final code = pref.getString(languageCodeKey);
+    final settingsSync = ref.read(settingsSyncProvider.notifier);
+    final code = settingsSync.getSetting(languageCodeKey);
+
     if (code != null && L10n.isSupported(code)) {
       return code;
     }
@@ -40,9 +41,6 @@ class LanguageRepository {
     return deviceLanguageCode;
   }
 }
-
-final sharedPreferencesProvider =
-    FutureProvider<SharedPreferences>((ref) => SharedPreferences.getInstance());
 
 final languageRepositoryProvider =
     Provider<LanguageRepository>((ref) => LanguageRepository(ref: ref));

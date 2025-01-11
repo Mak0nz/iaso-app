@@ -1,48 +1,50 @@
-// ignore_for_file: await_only_futures
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/app_services/settings_sync.dart';
 import 'package:iaso/l10n/l10n.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-final sharedPreferencesProvider =
-    FutureProvider<SharedPreferences>((ref) async {
-  return await SharedPreferences.getInstance();
-});
-
-final initialSettingsProvider = FutureProvider<Map<String, bool>>((ref) async {
-  final prefs = await ref.watch(sharedPreferencesProvider.future);
-  return {
-    'weight': prefs.getBool('show_weight') ?? true,
-    'temperature': prefs.getBool('show_temperature') ?? true,
-    'nightTemperature': prefs.getBool('show_night_temperature') ?? true,
-    'morningBP': prefs.getBool('show_morning_bp') ?? true,
-    'nightBP': prefs.getBool('show_night_bp') ?? true,
-    'bloodSugar': prefs.getBool('show_blood_sugar') ?? true,
-    'urine': prefs.getBool('show_urine') ?? true,
-  };
-});
-
 final statsViewSettingsProvider = StateNotifierProvider<
     StatsViewSettingsNotifier, AsyncValue<Map<String, bool>>>((ref) {
-  final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
-  final initialSettings = ref.watch(initialSettingsProvider);
-  return StatsViewSettingsNotifier(
-      sharedPreferencesAsyncValue, initialSettings);
+  final settingsSync = ref.watch(settingsSyncProvider.notifier);
+  return StatsViewSettingsNotifier(settingsSync);
 });
 
 class StatsViewSettingsNotifier
     extends StateNotifier<AsyncValue<Map<String, bool>>> {
-  final AsyncValue<SharedPreferences> _sharedPreferencesAsyncValue;
+  final SettingsSync _settingsSync;
   bool _mounted = true;
 
-  StatsViewSettingsNotifier(this._sharedPreferencesAsyncValue,
-      AsyncValue<Map<String, bool>> initialSettings)
-      : super(initialSettings);
+  StatsViewSettingsNotifier(this._settingsSync)
+      : super(const AsyncValue.loading()) {
+    _loadSettings();
+  }
+
+  void _loadSettings() {
+    if (!_mounted) return;
+
+    final settings = {
+      'weight':
+          _settingsSync.getSetting('show_weight')?.toLowerCase() == 'true',
+      'temperature':
+          _settingsSync.getSetting('show_temperature')?.toLowerCase() == 'true',
+      'nightTemperature':
+          _settingsSync.getSetting('show_night_temperature')?.toLowerCase() ==
+              'true',
+      'morningBP':
+          _settingsSync.getSetting('show_morning_bp')?.toLowerCase() == 'true',
+      'nightBP':
+          _settingsSync.getSetting('show_night_bp')?.toLowerCase() == 'true',
+      'bloodSugar':
+          _settingsSync.getSetting('show_blood_sugar')?.toLowerCase() == 'true',
+      'urine': _settingsSync.getSetting('show_urine')?.toLowerCase() == 'true',
+    };
+
+    state = AsyncValue.data(settings);
+  }
 
   Future<void> toggleSetting(String key) async {
     if (!_mounted) return;
@@ -51,25 +53,8 @@ class StatsViewSettingsNotifier
       final currentSettings = state.value ?? {};
       final newValue = !(currentSettings[key] ?? true);
 
-      final prefs = await _sharedPreferencesAsyncValue.when(
-        data: (prefs) => prefs,
-        loading: () => throw Exception('SharedPreferences not initialized'),
-        error: (e, st) => throw Exception('Failed to load SharedPreferences'),
-      );
+      await _settingsSync.setSetting('show_$key', newValue.toString());
 
-      // Use consistent key names
-      final prefKey = switch (key) {
-        'weight' => 'show_weight',
-        'temperature' => 'show_temperature',
-        'nightTemperature' => 'show_night_temperature',
-        'morningBP' => 'show_morning_bp',
-        'nightBP' => 'show_night_bp',
-        'bloodSugar' => 'show_blood_sugar',
-        'urine' => 'show_urine',
-        _ => throw Exception('Invalid key'),
-      };
-
-      await prefs.setBool(prefKey, newValue);
       return {...currentSettings, key: newValue};
     });
   }
@@ -96,11 +81,9 @@ class StatsViewSettingsModal extends ConsumerWidget {
               WoltModalSheetPage(
                 topBarTitle: AppText.heading(l10n.translate('stats_view')),
                 isTopBarLayerAlwaysVisible: true,
-                child: const ProviderScope(
-                  child: Padding(
-                    padding: EdgeInsets.all(edgeInset),
-                    child: StatsViewSettingsContent(),
-                  ),
+                child: const Padding(
+                  padding: EdgeInsets.all(edgeInset),
+                  child: StatsViewSettingsContent(),
                 ),
               ),
             ];
