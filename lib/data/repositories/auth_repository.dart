@@ -1,6 +1,13 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iaso/data/api/api_client.dart';
 import 'package:iaso/data/api/api_endpoints.dart';
+import 'package:iaso/data/repositories/language_repository.dart';
+
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final languageCode = ref.watch(languageProvider);
+  return AuthRepository(languageCode: languageCode);
+});
 
 class AuthRepository {
   final ApiClient _apiClient;

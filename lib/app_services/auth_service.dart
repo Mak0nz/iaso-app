@@ -4,20 +4,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/app_services/settings_sync.dart';
 import 'package:iaso/data/repositories/auth_repository.dart';
 import 'package:iaso/data/api/api_error.dart';
-import 'package:iaso/data/repositories/language_repository.dart';
 import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/utils/toast.dart';
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final language = ref.watch(languageProvider);
-  return AuthRepository(languageCode: language);
-});
-
 final authServiceProvider = Provider<AuthService>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return AuthService(authRepository);
+  return AuthService(authRepository, ref);
 });
 
 final authStateProvider = StreamProvider<bool>((ref) async* {
@@ -46,17 +41,19 @@ void updateAuthState(bool isAuthenticated) {
 
 class AuthService {
   final AuthRepository _authRepository;
+  final Ref _ref;
 
-  AuthService(this._authRepository);
+  AuthService(this._authRepository, this._ref);
 
   Future<void> signIn(
       String email, String password, BuildContext context) async {
     try {
       await _authRepository.signIn(email, password);
+      await _ref.read(settingsSyncProvider.notifier).syncFromServer();
       // await _showSuccessToast(context, l10n.login_success);
     } catch (e) {
       _handleError(context, e);
-      rethrow; // Rethrow to let the UI handle the error state
+      rethrow;
     }
   }
 
@@ -66,10 +63,11 @@ class AuthService {
 
     try {
       await _authRepository.signUp(email, password, name);
+      await _ref.read(settingsSyncProvider.notifier).syncFromServer();
       await _showSuccessToast(context, l10n.translate('signup_success'));
     } catch (e) {
       _handleError(context, e);
-      rethrow; // Rethrow to let the UI handle the error state
+      rethrow;
     }
   }
 

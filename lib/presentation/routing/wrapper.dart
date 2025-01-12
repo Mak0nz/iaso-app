@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:iaso/app_services/settings_sync.dart';
+import 'package:iaso/data/repositories/auth_repository.dart';
 import 'package:iaso/data/repositories/language_repository.dart';
 import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/app_services/auth_service.dart';
@@ -30,6 +32,7 @@ class _WrapperState extends ConsumerState<Wrapper> {
     final authRepository = ref.read(authRepositoryProvider);
     try {
       await authRepository.initializeAuth();
+      await ref.read(settingsSyncProvider.notifier).syncFromServer();
       updateAuthState(true);
     } catch (e) {
       updateAuthState(false);
