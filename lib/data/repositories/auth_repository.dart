@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iaso/data/api/api_client.dart';
 import 'package:iaso/data/api/api_endpoints.dart';
+import 'package:iaso/data/api/api_error.dart';
 import 'package:iaso/data/repositories/language_repository.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
@@ -80,5 +81,42 @@ class AuthRepository {
         'new_password_confirmation': newPassword,
       },
     );
+  }
+
+  Future<void> forgotPassword(String email) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.forgotPassword,
+      {'email': email},
+    );
+
+    if (response['code'] != 'reset_email_sent') {
+      throw ApiError(
+        code: response['code'],
+        statusCode: 400,
+      );
+    }
+  }
+
+  Future<void> resetPassword({
+    required String token,
+    required String email,
+    required String password,
+  }) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.resetPassword,
+      {
+        'token': token,
+        'email': email,
+        'password': password,
+        'password_confirmation': password,
+      },
+    );
+
+    if (response['code'] != 'password_reset_success') {
+      throw ApiError(
+        code: response['code'],
+        statusCode: 400,
+      );
+    }
   }
 }
