@@ -19,7 +19,7 @@ const huError = {
   'validation_error': 'Kérjük, ellenőrizze az űrlapot',
   'required_field': 'Ez a mező kötelező',
   'email_format': 'Kérjük, adjon meg egy érvényes email címet',
-  'password_min_length':
+  'password_requirements':
       'A jelszónak legalább 8 karakter hosszúnak kell lennie',
   'password_confirmation': 'A jelszavak nem egyeznek',
   'name_max_length': 'A név nem lehet hosszabb 255 karakternél',

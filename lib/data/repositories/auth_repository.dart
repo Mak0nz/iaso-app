@@ -69,4 +69,16 @@ class AuthRepository {
       _apiClient.setAuthToken(token);
     }
   }
+
+  Future<void> changePassword(
+      String currentPassword, String newPassword) async {
+    await _apiClient.post(
+      '/auth/password',
+      {
+        'current_password': currentPassword,
+        'new_password': newPassword,
+        'new_password_confirmation': newPassword,
+      },
+    );
+  }
 }

@@ -19,7 +19,7 @@ const enError = {
   'validation_error': 'Please check the form for errors',
   'required_field': 'This field is required',
   'email_format': 'Please enter a valid email address',
-  'password_min_length': 'Password must be at least 8 characters',
+  'password_requirements': 'Password must be at least 8 characters',
   'password_confirmation': 'Passwords do not match',
   'name_max_length': 'Name cannot be longer than 255 characters',
 

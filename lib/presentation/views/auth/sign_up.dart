@@ -27,9 +27,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool _privacyPolicyAccepted = false;
 
   // Field error states
+  String? _usernameError;
   String? _emailError;
   String? _passwordError;
-  String? _nameError;
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -39,9 +39,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   void _clearErrors() {
     setState(() {
+      _usernameError = null;
       _emailError = null;
       _passwordError = null;
-      _nameError = null;
     });
   }
 
@@ -96,11 +96,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       isPasswordField: false,
                       autofillHints: const [AutofillHints.newUsername],
                     ),
-                    if (_nameError != null)
+                    if (_usernameError != null)
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0, top: 4.0),
                         child: Text(
-                          _nameError!,
+                          _usernameError!,
                           style: const TextStyle(
                             color: Colors.red,
                             fontSize: 12,
@@ -135,6 +135,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ],
                 ),
                 const SizedBox(height: 10),
+
+                // Password help text
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Text(
+                    l10n.translate('password_requirements'),
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
 
                 // password field
                 Column(
@@ -246,6 +259,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       return;
     }
 
+    if (_passwordController.text.length < 8) {
+      setState(() {
+        _passwordError = l10n.translate('password_requirements');
+      });
+      return;
+    }
+
     setState(() {
       _loading = true;
     });
@@ -273,13 +293,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             setState(() {
               _emailError = e.getValidationError('email');
               _passwordError = e.getValidationError('password');
-              _nameError = e.getValidationError('name');
+              _usernameError = e.getValidationError('name');
             });
 
             // Show a general validation error message if there are errors
             if (_emailError != null ||
                 _passwordError != null ||
-                _nameError != null) {
+                _usernameError != null) {
               ToastUtil.error(context, l10n.translate('validation_error'));
             }
           } else {
