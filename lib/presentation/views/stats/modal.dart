@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/constants/sizes.dart';
-import 'package:iaso/data/repositories/stats_repository.dart';
+import 'package:iaso/data/api/api_error.dart';
 import 'package:iaso/data/provider/stats_provider.dart';
 import 'package:iaso/domain/stats.dart';
 import 'package:iaso/l10n/l10n.dart';
@@ -213,6 +213,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
             width: 80.0,
             controller: _controllers['weight'],
             labelText: '00.0',
+            isInteger: false,
           ),
           const Text(
             "Kg",
@@ -238,6 +239,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
             width: 80.0,
             controller: _controllers['temp'],
             labelText: '00.0',
+            isInteger: false,
           ),
           const Text(
             "°C",
@@ -263,6 +265,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
             width: 80.0,
             controller: _controllers['nightTemp'],
             labelText: '00.0',
+            isInteger: false,
           ),
           const Text(
             "°C",
@@ -291,6 +294,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                   width: 60.0,
                   controller: _controllers['bpMorningSYS'],
                   labelText: 'SYS',
+                  isInteger: true,
                 ),
                 const Text(
                   "/",
@@ -300,6 +304,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                   width: 60.0,
                   controller: _controllers['bpMorningDIA'],
                   labelText: 'DIA',
+                  isInteger: true,
                 ),
                 const Text(
                   "mmHg",
@@ -312,6 +317,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                   width: 80.0,
                   controller: _controllers['bpMorningPulse'],
                   labelText: l10n.translate('pulse'),
+                  isInteger: true,
                 ),
                 const Text(
                   "bpm",
@@ -341,6 +347,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                   width: 60.0,
                   controller: _controllers['bpNightSYS'],
                   labelText: 'SYS',
+                  isInteger: true,
                 ),
                 const Text(
                   "/",
@@ -350,6 +357,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                   width: 60.0,
                   controller: _controllers['bpNightDIA'],
                   labelText: 'DIA',
+                  isInteger: true,
                 ),
                 const Text(
                   "mmHg",
@@ -362,6 +370,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
                   width: 80.0,
                   controller: _controllers['bpNightPulse'],
                   labelText: l10n.translate('pulse'),
+                  isInteger: true,
                 ),
                 const Text(
                   "bpm",
@@ -396,6 +405,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
             child: InputTextForm(
               controller: _bloodSugarControllers[index],
               labelText: 'mg/dL',
+              isInteger: false,
             ),
           ),
           IconButton(
@@ -440,6 +450,7 @@ class _StatsFormState extends ConsumerState<StatsForm> {
             child: InputTextForm(
               controller: _urineControllers[index],
               labelText: 'mL',
+              isInteger: false,
             ),
           ),
           IconButton(
@@ -468,49 +479,52 @@ class _StatsFormState extends ConsumerState<StatsForm> {
       _loading = true;
     });
 
-    if (_formKey.currentState!.validate()) {
-      final bloodSugarValues = _bloodSugarControllers
-          .map((controller) => double.tryParse(controller.text))
-          .where((value) => value != null)
-          .map((value) =>
-              value!) // This line ensures we have non-nullable doubles
-          .toList();
-
-      final urineValues = _urineControllers
-          .map((controller) => double.tryParse(controller.text))
-          .where((value) => value != null)
-          .map((value) =>
-              value!) // This line ensures we have non-nullable doubles
-          .toList();
-
+    try {
+      final statsRepository = ref.read(statsRepositoryProvider);
       final stats = Stats(
         bpMorningSYS: int.tryParse(_controllers['bpMorningSYS']!.text),
         bpMorningDIA: int.tryParse(_controllers['bpMorningDIA']!.text),
         bpMorningPulse: int.tryParse(_controllers['bpMorningPulse']!.text),
-        weight: double.tryParse(_controllers['weight']!.text),
-        temp: double.tryParse(_controllers['temp']!.text),
-        nightTemp: double.tryParse(_controllers['nightTemp']!.text),
+        weight:
+            double.tryParse(_controllers['weight']!.text.replaceAll(',', '.')),
+        temp: double.tryParse(_controllers['temp']!.text.replaceAll(',', '.')),
+        nightTemp: double.tryParse(
+            _controllers['nightTemp']!.text.replaceAll(',', '.')),
         bpNightSYS: int.tryParse(_controllers['bpNightSYS']!.text),
         bpNightDIA: int.tryParse(_controllers['bpNightDIA']!.text),
         bpNightPulse: int.tryParse(_controllers['bpNightPulse']!.text),
-        bloodSugar: bloodSugarValues.isNotEmpty ? bloodSugarValues : null,
-        urine: urineValues.isNotEmpty ? urineValues : null,
+        bloodSugar: _bloodSugarControllers
+            .map((controller) =>
+                double.tryParse(controller.text.replaceAll(',', '.')) ?? 0)
+            .where((value) => value > 0)
+            .toList(),
+        urine: _urineControllers
+            .map((controller) =>
+                double.tryParse(controller.text.replaceAll(',', '.')) ?? 0)
+            .where((value) => value > 0)
+            .toList(),
         dateField: ref.read(selectedDateProvider),
       );
 
-      try {
-        await StatsRepository().createStatsForUser(stats);
-        ref.invalidate(statsProvider);
-        Navigator.of(context).pop();
+      await statsRepository.saveStats(stats);
+      ref.invalidate(statsProvider);
 
-        ToastUtil.success(context, l10n.translate('saved'));
-      } catch (e) {
-        ToastUtil.error(context, "${l10n.translate('error_saving')}: \n $e");
+      if (mounted) {
+        Navigator.of(context).pop();
+        ToastUtil.success(context, l10n.translate('stats_saved'));
+      }
+    } catch (e) {
+      if (e is ApiError) {
+        ToastUtil.error(context, e.getTranslatedMessage(l10n));
+      } else {
+        ToastUtil.error(context, l10n.translate('server_error'));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
       }
     }
-
-    setState(() {
-      _loading = false;
-    });
   }
 }

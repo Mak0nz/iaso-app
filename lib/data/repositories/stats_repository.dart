@@ -1,40 +1,40 @@
+import 'package:iaso/data/api/api_client.dart';
+import 'package:iaso/data/api/api_error.dart';
 import 'package:iaso/domain/stats.dart';
 
 class StatsRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ApiClient _apiClient;
 
-  Future<void> createStatsForUser(Stats stats) async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('No user logged in');
+  StatsRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
-    final docRef = _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('StatsForUser')
-        .doc(stats.dateField.year.toString())
-        .collection(stats.dateField.month.toString())
-        .doc(stats.dateField.day.toString());
+  Future<Stats> fetchStats(DateTime date) async {
+    final response = await _apiClient.get('/stats/${date.toIso8601String()}');
 
-    await docRef.set(stats.toJson());
+    if (response['code'] == 'stats_not_found') {
+      throw ApiError(code: 'stats_not_found', statusCode: 404);
+    }
+
+    return Stats.fromJson(response['stats']);
   }
 
-  Future<Stats?> fetchStats(DateTime selectedDate) async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('No user logged in');
+  Future<List<Stats>> fetchStatsRange(
+      DateTime startDate, DateTime endDate) async {
+    final response = await _apiClient.post('/stats/range', {
+      'start_date': startDate.toIso8601String(),
+      'end_date': endDate.toIso8601String(),
+    });
 
-    final docRef = _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('StatsForUser')
-        .doc(selectedDate.year.toString())
-        .collection(selectedDate.month.toString())
-        .doc(selectedDate.day.toString());
+    return (response['stats'] as List)
+        .map((statsJson) => Stats.fromJson(statsJson))
+        .toList();
+  }
 
-    final docSnapshot = await docRef.get();
-    if (docSnapshot.exists) {
-      return Stats.fromJson(docSnapshot.data()!);
-    }
-    return null;
+  Future<Stats> saveStats(Stats stats) async {
+    final response = await _apiClient.post(
+      '/stats',
+      stats.toJson(),
+    );
+
+    return Stats.fromJson(response['stats']);
   }
 }

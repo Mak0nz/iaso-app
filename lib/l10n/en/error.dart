@@ -37,4 +37,9 @@ const enError = {
 
   // Channel errors
   'channel_error': 'All fields are required.',
+
+  // Stats errors
+  'stats_not_found': 'No statistics found for this date',
+  'stats_saved': 'Statistics saved successfully',
+  'stats_deleted': 'Statistics deleted successfully',
 };

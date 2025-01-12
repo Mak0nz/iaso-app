@@ -38,4 +38,9 @@ const huError = {
 
   // Channel errors
   'channel_error': 'Minden mező szükséges.',
+
+  // Stats errors
+  'stats_not_found': 'Nincs adat a jelen napra',
+  'stats_saved': 'Sikeresen mentve',
+  'stats_deleted': 'Sikeresen törölve',
 };

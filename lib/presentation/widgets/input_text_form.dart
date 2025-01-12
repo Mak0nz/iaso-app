@@ -1,18 +1,20 @@
 // ignore_for_file: unnecessary_new, avoid_unnecessary_containers, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
+import 'package:iaso/utils/double_formatter.dart';
 
 class InputTextForm extends StatefulWidget {
   final double? width;
   final TextEditingController? controller;
   final String? labelText;
+  final bool isInteger;
 
   const InputTextForm({
     this.width,
     this.controller,
     this.labelText,
-  }
-  );
+    this.isInteger = false, // Default to false (decimal)
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -29,16 +31,28 @@ class _InputTextFormState extends State<InputTextForm> {
           width: widget.width, // Set a fixed width for better layout control
           child: TextFormField(
             controller: widget.controller,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.numberWithOptions(
+              decimal: !widget.isInteger,
+              signed: false,
+            ),
+            inputFormatters: [
+              widget.isInteger
+                  ? IntegerInputFormatter()
+                  : DecimalInputFormatter(),
+            ],
             decoration: InputDecoration(
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.0,),
+                borderRadius: BorderRadius.circular(
+                  15.0,
+                ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderSide: Theme.of(context).brightness == Brightness.light
-                ? const BorderSide(color: Colors.black) // Light theme
-                : const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(15.0,),
+                    ? const BorderSide(color: Colors.black) // Light theme
+                    : const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(
+                  15.0,
+                ),
               ),
               labelText: widget.labelText,
             ),

@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Stats {
   final int? bpMorningSYS;
   final int? bpMorningDIA;
@@ -31,39 +29,72 @@ class Stats {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    if (bpMorningSYS != null) data['bpMorningSYS'] = bpMorningSYS;
-    if (bpMorningDIA != null) data['bpMorningDIA'] = bpMorningDIA;
-    if (bpMorningPulse != null) data['bpMorningPulse'] = bpMorningPulse;
+    if (bpMorningSYS != null) data['bp_morning_sys'] = bpMorningSYS;
+    if (bpMorningDIA != null) data['bp_morning_dia'] = bpMorningDIA;
+    if (bpMorningPulse != null) data['bp_morning_pulse'] = bpMorningPulse;
     if (weight != null) data['weight'] = weight;
     if (temp != null) data['temp'] = temp;
-    if (nightTemp != null) data['nightTemp'] = nightTemp;
-    if (bpNightSYS != null) data['bpNightSYS'] = bpNightSYS;
-    if (bpNightDIA != null) data['bpNightDIA'] = bpNightDIA;
-    if (bpNightPulse != null) data['bpNightPulse'] = bpNightPulse;
+    if (nightTemp != null) data['night_temp'] = nightTemp;
+    if (bpNightSYS != null) data['bp_night_sys'] = bpNightSYS;
+    if (bpNightDIA != null) data['bp_night_dia'] = bpNightDIA;
+    if (bpNightPulse != null) data['bp_night_pulse'] = bpNightPulse;
     if (bloodSugar != null && bloodSugar!.isNotEmpty) {
-      data['bloodSugar'] = bloodSugar;
+      data['blood_sugar'] = bloodSugar;
     }
     if (urine != null && urine!.isNotEmpty) data['urine'] = urine;
-    data['dateField'] = dateField;
+    data['date_field'] = dateField.toIso8601String();
     return data;
   }
 
   factory Stats.fromJson(Map<String, dynamic> json) {
+    List<double>? parseDoubleList(dynamic value) {
+      if (value == null) return null;
+      return (value as List).map((e) => (e as num).toDouble()).toList();
+    }
+
     return Stats(
-      bpMorningSYS: json['bpMorningSYS'],
-      bpMorningDIA: json['bpMorningDIA'],
-      bpMorningPulse: json['bpMorningPulse'],
-      weight: json['weight'],
-      temp: json['temp'],
-      nightTemp: json['nightTemp'],
-      bpNightSYS: json['bpNightSYS'],
-      bpNightDIA: json['bpNightDIA'],
-      bpNightPulse: json['bpNightPulse'],
-      bloodSugar: json['bloodSugar'] != null
-          ? List<double>.from(json['bloodSugar'])
-          : null,
-      urine: json['urine'] != null ? List<double>.from(json['urine']) : null,
-      dateField: (json['dateField'] as Timestamp).toDate(),
+      bpMorningSYS: json['bp_morning_sys'],
+      bpMorningDIA: json['bp_morning_dia'],
+      bpMorningPulse: json['bp_morning_pulse'],
+      weight: json['weight']?.toDouble(),
+      temp: json['temp']?.toDouble(),
+      nightTemp: json['night_temp']?.toDouble(),
+      bpNightSYS: json['bp_night_sys'],
+      bpNightDIA: json['bp_night_dia'],
+      bpNightPulse: json['bp_night_pulse'],
+      bloodSugar: parseDoubleList(json['blood_sugar']),
+      urine: parseDoubleList(json['urine']),
+      dateField: DateTime.parse(json['date_field']),
+    );
+  }
+
+  Stats copyWith({
+    int? bpMorningSYS,
+    int? bpMorningDIA,
+    int? bpMorningPulse,
+    double? weight,
+    double? temp,
+    double? nightTemp,
+    int? bpNightSYS,
+    int? bpNightDIA,
+    int? bpNightPulse,
+    List<double>? bloodSugar,
+    List<double>? urine,
+    DateTime? dateField,
+  }) {
+    return Stats(
+      bpMorningSYS: bpMorningSYS ?? this.bpMorningSYS,
+      bpMorningDIA: bpMorningDIA ?? this.bpMorningDIA,
+      bpMorningPulse: bpMorningPulse ?? this.bpMorningPulse,
+      weight: weight ?? this.weight,
+      temp: temp ?? this.temp,
+      nightTemp: nightTemp ?? this.nightTemp,
+      bpNightSYS: bpNightSYS ?? this.bpNightSYS,
+      bpNightDIA: bpNightDIA ?? this.bpNightDIA,
+      bpNightPulse: bpNightPulse ?? this.bpNightPulse,
+      bloodSugar: bloodSugar ?? this.bloodSugar,
+      urine: urine ?? this.urine,
+      dateField: dateField ?? this.dateField,
     );
   }
 }
