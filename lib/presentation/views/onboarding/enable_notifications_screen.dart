@@ -1,5 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/l10n/l10n.dart';
 
@@ -21,18 +22,39 @@ class _EnableNotificationsScreenState extends State<EnableNotificationsScreen> {
   }
 
   Future<void> _checkNotificationStatus() async {
-    final isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    final settings = await FirebaseMessaging.instance.getNotificationSettings();
     setState(() {
-      _notificationsEnabled = isAllowed;
+      _notificationsEnabled =
+          settings.authorizationStatus == AuthorizationStatus.authorized;
     });
   }
 
   Future<void> _enableNotifications() async {
-    final isAllowed =
-        await AwesomeNotifications().requestPermissionToSendNotifications();
+    final settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
     setState(() {
-      _notificationsEnabled = isAllowed;
+      _notificationsEnabled =
+          settings.authorizationStatus == AuthorizationStatus.authorized;
     });
+
+    if (_notificationsEnabled) {
+      // Get the token and send it to your server
+      final token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        // You would send this token to your server
+        if (kDebugMode) {
+          print('FCM Token: $token');
+        }
+      }
+    }
   }
 
   @override

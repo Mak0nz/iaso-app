@@ -1,62 +1,82 @@
-import 'package:iaso/domain/medication.dart';
+// lib/data/repositories/med_repository.dart
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/data/api/api_client.dart';
+import 'package:iaso/data/api/api_endpoints.dart';
+import 'package:iaso/data/repositories/language_repository.dart';
+import 'package:iaso/domain/medication_info.dart';
+import 'package:iaso/domain/user_medication.dart';
 
 class MedRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ApiClient _apiClient;
 
-  Stream<List<Medication>> getMedications() {
-    final user = _auth.currentUser;
-    if (user != null) {
-      return _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('MedsForUser')
-          .orderBy('name')
-          .snapshots()
-          .map((snapshot) => snapshot.docs
-              .map((doc) => Medication.fromFirestore(doc))
-              .toList());
-    }
-    return Stream.value([]);
+  MedRepository(this._apiClient);
+
+  Future<List<UserMedication>> getMedications() async {
+    final response = await _apiClient.get(ApiEndpoints.medications);
+    return (response['medications'] as List)
+        .map((json) => UserMedication.fromJson(json))
+        .toList();
   }
 
-  Future<List<Medication>> getMedicationsList() async {
-    final medicationsStream = getMedications();
-    return await medicationsStream.first;
+  Future<List<MedicationInfo>> searchMedications(String query) async {
+    if (query.length < 2) return [];
+
+    final response =
+        await _apiClient.get('${ApiEndpoints.medicationSearch}?query=$query');
+    return (response['medications'] as List)
+        .map((json) => MedicationInfo.fromJson(json))
+        .toList();
   }
 
-  Future<void> addMedication(Medication medication) async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('MedsForUser')
-          .add(medication.toFirestore());
-    }
+  Future<UserMedication> addMedication(UserMedication medication) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.medications,
+      medication.toJson(),
+    );
+    return UserMedication.fromJson(response['medication']);
   }
 
-  Future<void> updateMedication(Medication medication) async {
-    final user = _auth.currentUser;
-    if (user != null && medication.id != null) {
-      await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('MedsForUser')
-          .doc(medication.id)
-          .update(medication.toFirestore());
+  Future<UserMedication> updateMedication(UserMedication medication) async {
+    if (medication.id == null) {
+      throw Exception('Cannot update medication without id');
     }
+
+    final response = await _apiClient.put(
+      '${ApiEndpoints.medications}/${medication.id}',
+      medication.toJson(),
+    );
+    return UserMedication.fromJson(response['medication']);
   }
 
-  Future<void> deleteMedication(String medicationId) async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('MedsForUser')
-          .doc(medicationId)
-          .delete();
-    }
+  Future<void> deleteMedication(String id) async {
+    await _apiClient.delete('${ApiEndpoints.medications}/$id');
+  }
+
+  Future<Map<String, dynamic>> syncMedications(DateTime lastSync) async {
+    final response = await _apiClient.get(
+      '${ApiEndpoints.medicationSync}?last_sync=${lastSync.toIso8601String()}',
+    );
+
+    return {
+      'updated': (response['updated'] as List)
+          .map((json) => UserMedication.fromJson(json))
+          .toList(),
+      'deleted': (response['deleted'] as List).cast<String>(),
+    };
   }
 }
+
+final medRepositoryProvider = Provider<MedRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return MedRepository(apiClient);
+});
+
+// Separate provider for the ApiClient
+final apiClientProvider = Provider<ApiClient>((ref) {
+  final language = ref.watch(languageProvider);
+  return ApiClient(
+    baseUrl: ApiEndpoints.baseUrl,
+    languageCode: language,
+  );
+});

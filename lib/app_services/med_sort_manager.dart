@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/main.dart';
-import 'package:iaso/domain/medication.dart';
+import 'package:iaso/domain/user_medication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,11 +28,12 @@ enum MedSortMode {
 }
 
 class MedSortRepository {
-  MedSortRepository(this._prefs);
   final SharedPreferences _prefs;
 
   static const String sortModeKey = "med_sort_mode";
   static const String showZeroDosesKey = "show_zero_doses";
+
+  MedSortRepository(this._prefs);
 
   Future<void> setSortMode(MedSortMode sortMode) async {
     await _prefs.setString(sortModeKey, sortMode.name);
@@ -128,19 +129,23 @@ class ShowZeroDosesNotifier extends StateNotifier<AsyncValue<bool>> {
   }
 }
 
-List<Medication> sortMedications(
-    List<Medication> meds, MedSortMode sortMode, bool showZeroDoses) {
+List<UserMedication> sortMedications(
+    List<UserMedication> meds, MedSortMode sortMode, bool showZeroDoses) {
   final filteredMeds = showZeroDoses
       ? meds
       : meds.where((med) => med.takeQuantityPerDay > 0).toList();
 
   switch (sortMode) {
     case MedSortMode.nameAZ:
-      filteredMeds
-          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      filteredMeds.sort((a, b) => a.medicationInfo
+          .getLocalizedName('en')
+          .toLowerCase()
+          .compareTo(b.medicationInfo.getLocalizedName('en').toLowerCase()));
     case MedSortMode.nameZA:
-      filteredMeds
-          .sort((a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
+      filteredMeds.sort((a, b) => b.medicationInfo
+          .getLocalizedName('en')
+          .toLowerCase()
+          .compareTo(a.medicationInfo.getLocalizedName('en').toLowerCase()));
     case MedSortMode.dosesLowHigh:
       filteredMeds.sort((a, b) => a.totalDoses.compareTo(b.totalDoses));
     case MedSortMode.dosesHighLow:

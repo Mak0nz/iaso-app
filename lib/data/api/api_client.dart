@@ -68,6 +68,26 @@ class ApiClient {
     }
   }
 
+  Future<Map<String, dynamic>> put(
+    String endpoint,
+    Map<String, dynamic> body,
+  ) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: _getHeaders(),
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return jsonDecode(response.body);
+    } else {
+      throw ApiError.fromJson(
+        jsonDecode(response.body),
+        response.statusCode,
+      );
+    }
+  }
+
   Future<Map<String, dynamic>> delete(
     String endpoint,
   ) async {

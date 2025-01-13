@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/utils/number_formatter.dart';
-import 'package:iaso/domain/medication.dart';
+import 'package:iaso/domain/medication_info.dart';
 import 'package:iaso/presentation/views/meds/create_edit_med_modal.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';

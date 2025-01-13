@@ -5,7 +5,7 @@ import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/utils/dose_calculator.dart';
 import 'package:iaso/utils/number_formatter.dart';
 import 'package:iaso/constants/sizes.dart';
-import 'package:iaso/domain/medication.dart';
+import 'package:iaso/domain/medication_info.dart';
 import 'package:iaso/data/provider/med_provider.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/input_med_form.dart';

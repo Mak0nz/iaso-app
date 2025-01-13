@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,6 +49,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final username = ref.watch(usernameProvider) ?? 'User';
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
         appBar: CustomAppBar(
@@ -112,11 +113,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SettingChangeTheme(),
 
           SettingOption(
-            title: AppLocalizations.of(context).translate('notifications'),
+            title: l10n.translate('notifications'),
             trailing: GestureDetector(
-              onTap: () => {
-                AwesomeNotifications().requestPermissionToSendNotifications(),
-                _isNotificationsEnabled(),
+              onTap: () async {
+                final settings =
+                    await FirebaseMessaging.instance.requestPermission();
+                if (settings.authorizationStatus ==
+                    AuthorizationStatus.authorized) {
+                  final token = await FirebaseMessaging.instance.getToken();
+                  if (token != null) {
+                    // Send token to server
+                    print('FCM Token: $token');
+                  }
+                }
+                _isNotificationsEnabled();
               },
               child: Text(
                 notifStateText,
@@ -172,21 +182,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ]));
   }
 
-  void _isNotificationsEnabled() {
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        setState(() {
-          notifStateText = AppLocalizations.of(context).translate('enable');
-          notifTextColor = Colors.blue.shade400;
-        });
-      } else {
-        setState(() {
-          notifStateText = AppLocalizations.of(context).translate('enabled');
-          notifTextColor = Theme.of(context).brightness == Brightness.light
-              ? Colors.green.shade700 // Light theme color
-              : Colors.green;
-        });
-      }
+  Future<void> _isNotificationsEnabled() async {
+    final l10n = AppLocalizations.of(context);
+    final settings = await FirebaseMessaging.instance.getNotificationSettings();
+    setState(() {
+      notifStateText =
+          settings.authorizationStatus == AuthorizationStatus.authorized
+              ? l10n.translate('enabled')
+              : l10n.translate('enable');
+      notifTextColor =
+          settings.authorizationStatus == AuthorizationStatus.authorized
+              ? (Theme.of(context).brightness == Brightness.light
+                  ? Colors.green.shade700
+                  : Colors.green)
+              : Colors.blue.shade400;
     });
   }
 
