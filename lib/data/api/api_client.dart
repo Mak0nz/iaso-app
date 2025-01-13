@@ -67,4 +67,22 @@ class ApiClient {
       );
     }
   }
+
+  Future<Map<String, dynamic>> delete(
+    String endpoint,
+  ) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: _getHeaders(),
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return jsonDecode(response.body);
+    } else {
+      throw ApiError.fromJson(
+        jsonDecode(response.body),
+        response.statusCode,
+      );
+    }
+  }
 }

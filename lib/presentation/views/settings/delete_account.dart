@@ -1,78 +1,79 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:iaso/domain/username_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iaso/app_services/settings_sync.dart';
+import 'package:iaso/data/api/api_error.dart';
+import 'package:iaso/data/repositories/auth_repository.dart';
 import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/outlined_button.dart';
 import 'package:iaso/utils/toast.dart';
 
-class DeleteAccount extends StatefulWidget {
+class DeleteAccount extends ConsumerStatefulWidget {
   const DeleteAccount({super.key});
 
   @override
-  State<DeleteAccount> createState() => _DeleteAccountState();
+  ConsumerState<DeleteAccount> createState() => _DeleteAccountState();
 }
 
-class _DeleteAccountState extends State<DeleteAccount> {
+class _DeleteAccountState extends ConsumerState<DeleteAccount> {
   bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+
     return CustomOutlinedButton(
-      onTap: () => showConfirmationDialog(),
+      onTap: () => _showConfirmationDialog(context),
       text: l10n.translate('delete_account'),
       progressEvent: _loading,
       outlineColor: Colors.red.shade400,
     );
   }
 
-  void showConfirmationDialog() {
+  Future<void> _showConfirmationDialog(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    showDialog(
+
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Row(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 12),
-                child: Icon(
-                  FontAwesomeIcons.triangleExclamation,
-                  size: 44,
-                  color: Colors.red,
-                ),
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.red.shade400,
+                size: 24,
               ),
+              const SizedBox(width: 8),
               Expanded(
-                child: Text(l10n.translate('confirm_account_delete_heading')),
+                child: Text(
+                  l10n.translate('confirm_account_delete_heading'),
+                  style: const TextStyle(fontSize: 18),
+                ),
               ),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppText.subHeading(l10n.translate('non_cancellable')),
+              const SizedBox(height: 8),
               Text(l10n.translate('delete_account_description')),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(l10n.translate('cancel')),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
-                deleteAccount();
+                Navigator.of(context).pop();
+                _deleteAccount();
               },
-              child: Text(
-                l10n.translate('delete'),
-                style: const TextStyle(color: Colors.red),
-              ),
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: Text(l10n.translate('delete')),
             ),
           ],
         );
@@ -80,33 +81,41 @@ class _DeleteAccountState extends State<DeleteAccount> {
     );
   }
 
-  Future deleteAccount() async {
+  Future<void> _deleteAccount() async {
     final l10n = AppLocalizations.of(context);
+
     setState(() {
       _loading = true;
     });
 
-    final docRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid);
-
     try {
-      await UsernameManager().clearUsername();
-      await docRef.delete();
+      final authRepository = ref.read(authRepositoryProvider);
+      await authRepository.deleteAccount();
 
-      ToastUtil.success(context, l10n.translate('success_delete'));
+      await ref
+          .read(settingsSyncProvider.notifier)
+          .clearAllExceptLanguageAndTheme();
 
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/login',
-        (Route<dynamic> route) => false,
-      );
-    } catch (error) {
-      ToastUtil.error(context, error.toString());
+      if (mounted) {
+        ToastUtil.success(context, l10n.translate('account_deleted'));
+        // Navigate to login screen and clear navigation stack
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/login', (route) => false);
+      }
+    } catch (e) {
+      if (mounted) {
+        if (e is ApiError) {
+          ToastUtil.error(context, e.getTranslatedMessage(l10n));
+        } else {
+          ToastUtil.error(context, l10n.translate('unexpected_error'));
+        }
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
     }
-
-    setState(() {
-      _loading = false;
-    });
   }
 }

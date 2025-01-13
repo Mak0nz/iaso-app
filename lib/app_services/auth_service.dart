@@ -76,9 +76,27 @@ class AuthService {
 
     try {
       await _authRepository.signOut();
+      // Clear all preferences except language and theme
+      await _ref
+          .read(settingsSyncProvider.notifier)
+          .clearAllExceptLanguageAndTheme();
       //await _showSuccessToast(context, l10n.logout_success);
     } catch (e) {
       await _showErrorToast(context, l10n.translate('logout_error'));
+      rethrow;
+    }
+  }
+
+  Future<void> deleteAccount(BuildContext context) async {
+    try {
+      await _authRepository.deleteAccount();
+      // Clear all preferences except language and theme
+      await _ref
+          .read(settingsSyncProvider.notifier)
+          .clearAllExceptLanguageAndTheme();
+      // Handle navigation or other cleanup
+    } catch (e) {
+      _handleError(context, e);
       rethrow;
     }
   }

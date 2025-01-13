@@ -119,4 +119,15 @@ class AuthRepository {
       );
     }
   }
+
+  Future<void> deleteAccount() async {
+    final response = await _apiClient.delete(ApiEndpoints.deleteAccount);
+
+    if (response['code'] != 'account_deleted') {
+      throw ApiError(
+        code: response['code'],
+        statusCode: 400,
+      );
+    }
+  }
 }

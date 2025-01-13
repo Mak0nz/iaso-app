@@ -27,4 +27,5 @@ const huAuth = {
   'confirm_account_delete_heading': 'Biztosan törölni szeretné fiókját?',
   'delete_account_description':
       'Ezzel véglegesen törli fiókját és annak adatait, beleértve a napi statisztikákat és a gyógyszertárat.',
+  'account_deleted': 'Account deleted successfully',
 };

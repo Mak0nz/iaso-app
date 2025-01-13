@@ -27,4 +27,5 @@ const enAuth = {
       'Are you sure you want to delete your account?',
   'delete_account_description':
       'This will permanently delete your account and its data, including daily statistics and medications.',
+  'account_deleted': 'Account deleted successfully',
 };

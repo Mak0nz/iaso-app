@@ -95,6 +95,34 @@ class SettingsSync extends StateNotifier<Map<String, String>> {
   String? getSetting(String key) {
     return state[key];
   }
+
+  Future<void> clearAllExceptLanguageAndTheme() async {
+    // Keep the old values for language and theme
+    final language = _prefs.getString('language_code');
+    final theme = _prefs.getString('theme_mode');
+
+    // Clear all synced settings
+    final keysToKeep = {'language_code', 'theme_mode'};
+    for (final key in _syncedKeys) {
+      if (!keysToKeep.contains(key)) {
+        await _prefs.remove(key);
+      }
+    }
+
+    // Restore language and theme
+    if (language != null) {
+      await _prefs.setString('language_code', language);
+    }
+    if (theme != null) {
+      await _prefs.setString('theme_mode', theme);
+    }
+
+    // Update state
+    state = {
+      if (language != null) 'language_code': language,
+      if (theme != null) 'theme_mode': theme,
+    };
+  }
 }
 
 final settingsSyncProvider =
