@@ -123,7 +123,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   final token = await FirebaseMessaging.instance.getToken();
                   if (token != null) {
                     // Send token to server
-                    print('FCM Token: $token');
+                    if (kDebugMode) {
+                      print('FCM Token: $token');
+                    }
                   }
                 }
                 _isNotificationsEnabled();

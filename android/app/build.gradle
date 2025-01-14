@@ -1,8 +1,8 @@
 plugins {
     id "com.android.application"
-    // START: FlutterFire Configuration
     id 'com.google.gms.google-services'
-    // END: FlutterFire Configuration
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -90,5 +90,7 @@ flutter {
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.7.0'),
-    implementation 'com.google.firebase:firebase-analytics'
+    implementation("com.google.firebase:firebase-appcheck-playintegrity"),
+    implementation("com.google.firebase:firebase-analytics"),
+    implementation("com.google.firebase:firebase-perf")
 }

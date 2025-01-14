@@ -1,9 +1,11 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iaso/app_services/med_sync_manager.dart';
 import 'package:iaso/data/repositories/language_repository.dart';
 import 'package:iaso/presentation/routing/wrapper.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -15,15 +17,33 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final sharedPreferences = await SharedPreferences.getInstance();
+
+  await FirebaseAppCheck.instance.activate(
+    androidProvider:
+        kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+  );
 
   // Initialize FCM
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Stuff for Crashlytics
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  // Pass all uncaught "fatal" errors from the framework to Crashlytics
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
   // Set up background message handling
   FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+
+  final sharedPreferences = await SharedPreferences.getInstance();
 
   initializeDateFormatting();
 
