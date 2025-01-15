@@ -1,34 +1,32 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iaso/l10n/l10n.dart';
-import 'package:iaso/presentation/widgets/app_text.dart';
-import 'package:iaso/utils/dose_calculator.dart';
-import 'package:iaso/utils/number_formatter.dart';
 import 'package:iaso/constants/sizes.dart';
-import 'package:iaso/domain/medication_info.dart';
 import 'package:iaso/data/provider/med_provider.dart';
+import 'package:iaso/domain/user_medication.dart';
+import 'package:iaso/l10n/l10n.dart';
+import 'package:iaso/presentation/views/meds/med_info_view.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
+import 'package:iaso/presentation/widgets/app_text.dart';
 import 'package:iaso/presentation/widgets/input_med_form.dart';
 import 'package:iaso/presentation/widgets/outlined_button.dart';
 import 'package:iaso/utils/toast.dart';
 
+enum MedModalView { info, schedule }
+
 class CreateEditMedModal extends ConsumerStatefulWidget {
-  final Medication? medication;
+  final UserMedication? medication;
 
   const CreateEditMedModal({super.key, this.medication});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _CreateEditMedModalState createState() => _CreateEditMedModalState();
+  ConsumerState<CreateEditMedModal> createState() => _CreateEditMedModalState();
 }
 
 class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
-  late final l10n = AppLocalizations.of(context);
-  late TextEditingController nameController;
-  late TextEditingController nameReplacementController;
-  late TextEditingController activeAgentController;
-  late TextEditingController useCaseController;
-  late TextEditingController sideEffectController;
+  bool _loading = false;
+  MedModalView _currentView = MedModalView.info;
   late TextEditingController takeQuantityPerDayController;
   late TextEditingController currentQuantityController;
   late TextEditingController orderedByController;
@@ -37,26 +35,23 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
   late List<bool> originalTakeDays;
   late bool isAlternatingSchedule;
   late bool takeEveryDay;
-  bool _loading = false;
 
   @override
   void initState() {
     super.initState();
     final med = widget.medication;
-    nameController = TextEditingController(text: med?.name ?? '');
-    nameReplacementController =
-        TextEditingController(text: med?.nameReplacement ?? '');
-    activeAgentController = TextEditingController(text: med?.activeAgent ?? '');
-    useCaseController = TextEditingController(text: med?.useCase ?? '');
-    sideEffectController = TextEditingController(text: med?.sideEffect ?? '');
+    if (med != null) {
+      ref.read(selectedMedicationProvider.notifier).state = med.medicationInfo;
+    }
+
     takeQuantityPerDayController = TextEditingController(
-        text: NumberFormatter.formatDouble(med?.takeQuantityPerDay ?? 0)
-            .toString());
+      text: med?.takeQuantityPerDay.toString() ?? '',
+    );
     currentQuantityController = TextEditingController(
-        text:
-            NumberFormatter.formatDouble(med?.currentQuantity ?? 0).toString());
+      text: med?.currentQuantity.toString() ?? '',
+    );
     orderedByController = TextEditingController(text: med?.orderedBy ?? '');
-    isInCloud = med?.isInCloud ?? false;
+    isInCloud = med?.isInCloud ?? true;
     takeDays = [
       med?.takeMonday ?? false,
       med?.takeTuesday ?? false,
@@ -73,68 +68,116 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final selectedMedication = ref.watch(selectedMedicationProvider);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(edgeInset, edgeInset, edgeInset, 35),
       child: Column(
         children: [
-          InputMedForm(
-            controller: nameController,
-            labelText: l10n.translate('med_name'),
-            require: true,
-          ),
-          InputMedForm(
-            controller: nameReplacementController,
-            labelText: l10n.translate('med_replacement_name'),
-          ),
-          InputMedForm(
-            controller: activeAgentController,
-            labelText: l10n.translate('active_agent'),
-          ),
-          InputMedForm(
-              controller: useCaseController,
-              labelText: l10n.translate('use_case')),
-          InputMedForm(
-              controller: sideEffectController,
-              labelText: l10n.translate('side_effect')),
-          InputMedForm(
-            controller: takeQuantityPerDayController,
-            labelText: l10n.translate('daily_quantity'),
-            textInputType: TextInputType.number,
-            require: true,
-          ),
-          Padding(
-              padding: const EdgeInsets.only(left: edgeInset, top: 6),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      AppText.subHeading(l10n.translate('intake_which_days')),
-                      const Text(
-                        '*',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ))),
-          SwitchListTile(
-            title: Text(l10n.translate('take_every_day')),
-            value: takeEveryDay,
-            onChanged: (value) {
-              setState(() {
-                takeEveryDay = value;
-                if (takeEveryDay) {
-                  isAlternatingSchedule = false;
-                  takeDays = List.filled(7, true);
-                } else {
-                  takeDays = List.from(originalTakeDays);
-                }
-              });
+          // View selector
+          SegmentedButton<MedModalView>(
+            segments: [
+              ButtonSegment<MedModalView>(
+                value: MedModalView.info,
+                label: Text(l10n.translate('med_info')),
+              ),
+              ButtonSegment<MedModalView>(
+                value: MedModalView.schedule,
+                label: Text(l10n.translate('med_schedule')),
+              ),
+            ],
+            selected: {_currentView},
+            onSelectionChanged: (Set<MedModalView> newSelection) {
+              setState(() => _currentView = newSelection.first);
             },
           ),
-          if (!takeEveryDay && !isAlternatingSchedule) ..._buildDailySchedule(),
+          const SizedBox(height: 20),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: _currentView == MedModalView.info
+                  ? MedicationInfoView(
+                      initialMedication: widget.medication?.medicationInfo,
+                      isEditing: widget.medication != null,
+                    )
+                  : _buildScheduleView(l10n),
+            ),
+          ),
+
+          AnimatedButton(
+            onTap: selectedMedication != null ? _saveMed : null,
+            text: widget.medication == null
+                ? l10n.translate('create')
+                : l10n.translate('update'),
+            progressEvent: _loading,
+          ),
+
+          if (widget.medication != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 23),
+              child: CustomOutlinedButton(
+                onTap: _deleteMed,
+                text: l10n.translate('delete'),
+                progressEvent: _loading,
+                outlineColor: Colors.red,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScheduleView(AppLocalizations l10n) {
+    final days = [
+      l10n.translate('monday'),
+      l10n.translate('tuesday'),
+      l10n.translate('wednesday'),
+      l10n.translate('thursday'),
+      l10n.translate('friday'),
+      l10n.translate('saturday'),
+      l10n.translate('sunday'),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InputMedForm(
+          controller: takeQuantityPerDayController,
+          labelText: l10n.translate('daily_quantity'),
+          textInputType: TextInputType.number,
+          require: true,
+        ),
+        InputMedForm(
+          controller: currentQuantityController,
+          labelText: l10n.translate('current_quantity'),
+          textInputType: TextInputType.number,
+          require: true,
+        ),
+        InputMedForm(
+          controller: orderedByController,
+          labelText: l10n.translate('ordered_by'),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: edgeInset, top: 6),
+          child: AppText.subHeading(l10n.translate('intake_which_days')),
+        ),
+        SwitchListTile(
+          title: Text(l10n.translate('take_every_day')),
+          value: takeEveryDay,
+          onChanged: (value) {
+            setState(() {
+              takeEveryDay = value;
+              if (takeEveryDay) {
+                isAlternatingSchedule = false;
+                takeDays = List.filled(7, true);
+              } else {
+                takeDays = List.from(originalTakeDays);
+              }
+            });
+          },
+        ),
+        if (!takeEveryDay) ...[
           SwitchListTile(
             title: Text(l10n.translate('take_alternating_days')),
             value: isAlternatingSchedule,
@@ -150,133 +193,84 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
               });
             },
           ),
-          InputMedForm(
-            controller: currentQuantityController,
-            labelText: l10n.translate('current_quantity'),
-            textInputType: TextInputType.number,
-            require: true,
-          ),
-          InputMedForm(
-            controller: orderedByController,
-            labelText: l10n.translate('ordered_by'),
-          ),
-          CheckboxListTile(
-            title: Text(l10n.translate('is_in_cloud')),
-            value: isInCloud,
-            onChanged: (value) => setState(() => isInCloud = value!),
-          ),
-          AnimatedButton(
-            onTap: saveMed,
-            text: widget.medication == null
-                ? (l10n.translate('create'))
-                : (l10n.translate('update')),
-            progressEvent: _loading,
-          ),
-          if (widget.medication != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 23),
-              child: CustomOutlinedButton(
-                onTap: deleteMed,
-                text: l10n.translate('delete'),
-                progressEvent: _loading,
-                outlineColor: Colors.red,
-              ),
-            ),
+          if (!isAlternatingSchedule)
+            ...List.generate(7, (index) {
+              return CheckboxListTile(
+                title: Text(days[index]),
+                value: takeDays[index],
+                onChanged: (value) {
+                  setState(() {
+                    takeDays[index] = value ?? false;
+                    takeEveryDay = takeDays.every((day) => day);
+                  });
+                },
+              );
+            }),
         ],
-      ),
+        CheckboxListTile(
+          title: Text(l10n.translate('is_in_cloud')),
+          value: isInCloud,
+          onChanged: (value) => setState(() => isInCloud = value!),
+        ),
+      ],
     );
   }
 
-  List<Widget> _buildDailySchedule() {
-    final days = [
-      l10n.translate('monday'),
-      l10n.translate('tuesday'),
-      l10n.translate('wednesday'),
-      l10n.translate('thursday'),
-      l10n.translate('friday'),
-      l10n.translate('saturday'),
-      l10n.translate('sunday'),
-    ];
-    return [
-      ...List.generate(7, (index) {
-        return CheckboxListTile(
-          title: Text(days[index]),
-          value: takeDays[index],
-          onChanged: (value) {
-            setState(() {
-              takeDays[index] = value!;
-              takeEveryDay = takeDays.every((day) => day);
-            });
-          },
-        );
-      }),
-    ];
-  }
+  Future<void> _saveMed() async {
+    final l10n = AppLocalizations.of(context);
+    setState(() => _loading = true);
 
-  Future saveMed() async {
-    setState(() {
-      _loading = true;
-    });
+    try {
+      final selectedMedication = ref.read(selectedMedicationProvider);
+      if (selectedMedication == null) return;
 
-    final doseCalculator = DoseCalculator();
-    final currentQuantity =
-        double.tryParse(currentQuantityController.text) ?? 0;
-    final takeQuantityPerDay =
-        double.tryParse(takeQuantityPerDayController.text) ?? 0;
+      final medication = UserMedication(
+        id: widget.medication?.id,
+        medicationId: selectedMedication.id,
+        medicationInfo: selectedMedication,
+        takeQuantityPerDay: double.parse(takeQuantityPerDayController.text),
+        currentQuantity: double.parse(currentQuantityController.text),
+        takeMonday: takeDays[0],
+        takeTuesday: takeDays[1],
+        takeWednesday: takeDays[2],
+        takeThursday: takeDays[3],
+        takeFriday: takeDays[4],
+        takeSaturday: takeDays[5],
+        takeSunday: takeDays[6],
+        isAlternatingSchedule: isAlternatingSchedule,
+        orderedBy: orderedByController.text.isNotEmpty
+            ? orderedByController.text
+            : null,
+        isInCloud: isInCloud,
+        totalDoses: 0, // Will be calculated by the backend
+        lastUpdatedDate: DateTime.now(),
+      );
 
-    final totalDoses = doseCalculator.calculateTotalDoses(
-        currentQuantity, takeQuantityPerDay, isAlternatingSchedule);
+      if (widget.medication == null) {
+        await ref
+            .read(medicationSyncProvider.notifier)
+            .addMedication(medication);
+        ToastUtil.success(context, l10n.translate('saved'));
+      } else {
+        await ref
+            .read(medicationSyncProvider.notifier)
+            .updateMedication(medication);
+        ToastUtil.success(context, l10n.translate('saved'));
+      }
 
-    final medication = Medication(
-      id: widget.medication?.id,
-      name: nameController.text,
-      nameReplacement: nameReplacementController.text.isNotEmpty
-          ? nameReplacementController.text
-          : null,
-      activeAgent: activeAgentController.text.isNotEmpty
-          ? activeAgentController.text
-          : null,
-      useCase:
-          useCaseController.text.isNotEmpty ? useCaseController.text : null,
-      sideEffect: sideEffectController.text.isNotEmpty
-          ? sideEffectController.text
-          : null,
-      takeMonday: takeDays[0],
-      takeTuesday: takeDays[1],
-      takeWednesday: takeDays[2],
-      takeThursday: takeDays[3],
-      takeFriday: takeDays[4],
-      takeSaturday: takeDays[5],
-      takeSunday: takeDays[6],
-      isAlternatingSchedule: isAlternatingSchedule,
-      orderedBy:
-          orderedByController.text.isNotEmpty ? orderedByController.text : null,
-      isInCloud: isInCloud,
-      currentQuantity: currentQuantity,
-      takeQuantityPerDay: takeQuantityPerDay,
-      totalDoses: totalDoses,
-      lastUpdatedDate: DateTime.now(),
-    );
-
-    if (widget.medication == null) {
-      ref.read(medRepositoryProvider).addMedication(medication);
-      ToastUtil.success(context, l10n.translate('saved'));
-    } else {
-      ref.read(medRepositoryProvider).updateMedication(medication);
-      ToastUtil.success(context, l10n.translate('saved'));
+      Navigator.of(context).pop();
+    } catch (e) {
+      ToastUtil.error(context, e.toString());
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
-
-    Navigator.of(context).pop();
-
-    setState(() {
-      _loading = false;
-    });
   }
 
-  Future deleteMed() async {
-    setState(() {
-      _loading = true;
-    });
+  Future<void> _deleteMed() async {
+    final l10n = AppLocalizations.of(context);
+    setState(() => _loading = true);
 
     showDialog(
       context: context,
@@ -289,15 +283,16 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
             child: Text(l10n.translate('cancel')),
           ),
           TextButton(
-            onPressed: () {
-              ref
-                  .read(medRepositoryProvider)
+            onPressed: () async {
+              await ref
+                  .read(medicationSyncProvider.notifier)
                   .deleteMedication(widget.medication!.id!);
 
               ToastUtil.success(context, l10n.translate('success_delete'));
-
-              Navigator.of(context).pop(); // Close dialog
-              Navigator.of(context).pop(); // Close modal
+              if (mounted) {
+                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop(); // Close modal
+              }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: Text(l10n.translate('delete')),
@@ -306,8 +301,6 @@ class _CreateEditMedModalState extends ConsumerState<CreateEditMedModal> {
       ),
     );
 
-    setState(() {
-      _loading = false;
-    });
+    setState(() => _loading = false);
   }
 }

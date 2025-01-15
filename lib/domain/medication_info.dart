@@ -1,6 +1,7 @@
 class MedicationInfo {
   final int id;
   final String? originalId; // OpenFDA ID
+  final String? uniqueKey;
   final Map<String, String> names;
   final Map<String, String>? replacementNames;
   final Map<String, String>? activeAgents;
@@ -12,6 +13,7 @@ class MedicationInfo {
   MedicationInfo({
     required this.id,
     this.originalId,
+    this.uniqueKey,
     required this.names,
     this.replacementNames,
     this.activeAgents,
@@ -25,6 +27,7 @@ class MedicationInfo {
     return MedicationInfo(
       id: json['id'],
       originalId: json['original_id'],
+      uniqueKey: json['unique_key'],
       names: Map<String, String>.from(json['names']),
       replacementNames: json['replacement_names'] != null
           ? Map<String, String>.from(json['replacement_names'])
@@ -47,6 +50,7 @@ class MedicationInfo {
     return {
       'id': id,
       'original_id': originalId,
+      'unique_key': uniqueKey,
       'names': names,
       'replacement_names': replacementNames,
       'active_agents': activeAgents,

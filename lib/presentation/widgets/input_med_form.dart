@@ -9,12 +9,14 @@ class InputMedForm extends StatefulWidget {
   final TextEditingController? controller;
   final TextInputType? textInputType;
   final bool? require;
+  final ValueChanged<String>? onChanged;
 
   const InputMedForm({
     required this.labelText,
     required this.controller,
     this.textInputType,
     this.require,
+    this.onChanged,
   });
 
   @override
@@ -56,6 +58,7 @@ class _InputMedFormState extends State<InputMedForm> {
           child: TextFormField(
             controller: widget.controller,
             keyboardType: widget.textInputType,
+            onChanged: widget.onChanged,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(
