@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/app_services/med_sort_manager.dart';
 import 'package:iaso/data/provider/med_provider.dart';
-import 'package:iaso/domain/user_medication.dart';
 import 'package:iaso/l10n/l10n.dart';
 import 'package:iaso/presentation/views/meds/create_edit_med_modal.dart';
 import 'package:iaso/presentation/views/meds/med_card.dart';
 import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
+import 'package:iaso/presentation/widgets/card.dart';
 import 'package:iaso/presentation/widgets/floating_arrow.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,17 +29,28 @@ class DisplayMeds extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+
+    // Create an async value from the sync service state
     final medications = ref.watch(medicationSyncProvider);
+    final isLoading =
+        medications.isEmpty; // Consider empty state as loading initially
 
-    return medications.isEmpty
-        ? _buildEmptyState(context)
-        : _buildMedicationList(context, ref, l10n, medications.values.toList());
-  }
+    if (isLoading) {
+      return Skeletonizer(
+        enabled: true,
+        child: ListView.builder(
+          itemCount: 5,
+          itemBuilder: (context, index) => const MedCard(medication: null),
+        ),
+      );
+    }
 
-  Widget _buildMedicationList(BuildContext context, WidgetRef ref,
-      AppLocalizations l10n, List medications) {
-    final sortedMeds = sortMedications(
-        medications.cast<UserMedication>(), sortMode, showZeroDoses);
+    final meds = medications.values.toList();
+    if (meds.isEmpty) {
+      return _buildEmptyState(context);
+    }
+
+    final sortedMeds = sortMedications(meds, sortMode, showZeroDoses);
     final filteredMeds = showAll
         ? sortedMeds
         : sortedMeds.where((med) => med.totalDoses <= 14).toList();
@@ -54,15 +65,13 @@ class DisplayMeds extends ConsumerWidget {
           const SizedBox(height: 10),
         ],
         if (!showAll && filteredMeds.isEmpty)
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: edgeInset),
-              child: AppText.subHeading(l10n.translate('meds_not_running_out')))
+          CustomCard(
+            leading: const Icon(FontAwesomeIcons.pills),
+            title: AppText.subHeading(l10n.translate('meds_not_running_out')),
+          )
         else if (showAll)
           const SizedBox(height: edgeInset),
-        ...filteredMeds.map((med) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: edgeInset),
-              child: MedCard(medication: med),
-            )),
+        ...filteredMeds.map((med) => MedCard(medication: med)),
         const SizedBox(height: 75),
       ],
     );
