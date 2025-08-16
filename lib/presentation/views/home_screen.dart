@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/domain/user_avatar.dart';
 import 'package:iaso/domain/username_manager.dart';
-import 'package:iaso/app_services/med_sort_manager.dart';
+//import 'package:iaso/app_services/med_sort_manager.dart';
 import 'package:iaso/l10n/l10n.dart';
-import 'package:iaso/presentation/views/meds/meds_display.dart';
+//import 'package:iaso/presentation/views/meds/meds_display.dart';
 import 'package:iaso/presentation/widgets/appbar.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -26,11 +26,12 @@ class HomeScreen extends ConsumerWidget {
       extendBodyBehindAppBar: true,
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: edgeInset),
-        child: DisplayMeds(
-          showAll: false,
-          sortMode: MedSortMode.dosesLowHigh,
-          showZeroDoses: true,
-        ),
+        child: Center(child: Text('Welcome to Iaso!')),
+        //DisplayMeds(
+        //  showAll: false,
+        //  sortMode: MedSortMode.dosesLowHigh,
+        //  showZeroDoses: true,
+        //),
       ),
     );
   }

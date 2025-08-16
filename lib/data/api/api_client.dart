@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:iaso/data/api/api_error.dart';
 
@@ -34,11 +35,18 @@ class ApiClient {
     String endpoint,
     Map<String, dynamic> body,
   ) async {
+    final fullUrl = '$baseUrl$endpoint';
+    if (kDebugMode) {
+      print('POST request to: $fullUrl with body: $body');
+    }
     final response = await http.post(
-      Uri.parse('$baseUrl$endpoint'),
+      Uri.parse(fullUrl),
       headers: _getHeaders(),
       body: jsonEncode(body),
     );
+    if (kDebugMode) {
+      print('Response status: ${response.statusCode}, body: ${response.body}');
+    }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return jsonDecode(response.body);
@@ -53,10 +61,17 @@ class ApiClient {
   Future<Map<String, dynamic>> get(
     String endpoint,
   ) async {
+    final fullUrl = '$baseUrl$endpoint';
+    if (kDebugMode) {
+      print('GET request to: $fullUrl');
+    }
     final response = await http.get(
-      Uri.parse('$baseUrl$endpoint'),
+      Uri.parse(fullUrl),
       headers: _getHeaders(),
     );
+    if (kDebugMode) {
+      print('Response status: ${response.statusCode}, body: ${response.body}');
+    }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return jsonDecode(response.body);

@@ -87,9 +87,9 @@ class AuthService {
     }
   }
 
-  Future<void> deleteAccount(BuildContext context) async {
+  Future<void> deleteAccount(BuildContext context, String password) async {
     try {
-      await _authRepository.deleteAccount();
+      await _authRepository.deleteAccount(password);
       // Clear all preferences except language and theme
       await _ref
           .read(settingsSyncProvider.notifier)

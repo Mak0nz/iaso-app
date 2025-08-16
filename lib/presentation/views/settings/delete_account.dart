@@ -90,7 +90,9 @@ class _DeleteAccountState extends ConsumerState<DeleteAccount> {
 
     try {
       final authRepository = ref.read(authRepositoryProvider);
-      await authRepository.deleteAccount();
+      // Provide the password argument here, e.g. from a password field
+      final password = await _getPasswordFromUserInput();
+      await authRepository.deleteAccount(password);
 
       await ref
           .read(settingsSyncProvider.notifier)
@@ -117,5 +119,12 @@ class _DeleteAccountState extends ConsumerState<DeleteAccount> {
         });
       }
     }
+  }
+
+  Future<String> _getPasswordFromUserInput() async {
+    // Implement a method to get the password from the user input
+    // For example, show a dialog to enter password and return it
+    // Placeholder implementation:
+    return 'user_password';
   }
 }

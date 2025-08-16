@@ -1,15 +1,20 @@
 class ApiEndpoints {
   // static const String baseUrl = 'https://iaso.benedek.site/api';
-  static const String baseUrl = 'http://127.0.0.1:8000/api';
+  //redirect to the local server outside of emulator (127.0.0.1)
+  static const String baseUrl = 'http://10.0.2.2:8000/api';
 
   // Auth endpoints
-  static const String register = '/auth/register';
-  static const String login = '/auth/login';
-  static const String logout = '/auth/logout';
-  static const String user = '/auth/user';
-  static const String deleteAccount = '/auth/user';
-  static const String forgotPassword = '/auth/forgot-password';
-  static const String resetPassword = '/auth/reset-password';
+  static const String register = '/register';
+  static const String login = '/login';
+  static const String logout = '/logout';
+  static const String user = '/user';
+  static const String updateUsername = '/update-username';
+  static const String updatePassword = '/update-password';
+  static const String deleteAccount = '/delete-account';
+  static const String forgotPassword = '/forgot-password';
+
+  // UserStats endpoints
+  static const String userStats = '/UserStats';
 
   // Medication endpoints
   static const String medications = '/medications';

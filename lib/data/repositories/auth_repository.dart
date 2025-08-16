@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iaso/data/api/api_client.dart';
@@ -25,20 +26,32 @@ class AuthRepository {
             ),
         _secureStorage = secureStorage ?? const FlutterSecureStorage();
 
-  Future<void> signUp(String email, String password, String username) async {
+  Future<void> signUp(String email, String password, String name) async {
     final response = await _apiClient.post(
       ApiEndpoints.register,
       {
         'email': email,
         'password': password,
         'password_confirmation': password,
-        'name': username,
+        'name': name,
       },
     );
 
     final token = response['token'] as String;
     await _secureStorage.write(key: 'auth_token', value: token);
     _apiClient.setAuthToken(token);
+  }
+
+  Future<Map<String, dynamic>> fetchCurrentUser() async {
+    if (kDebugMode) {
+      print(
+          'fetchCurrentUser called, sending GET request to ${ApiEndpoints.user}');
+    }
+    final response = await _apiClient.get(ApiEndpoints.user);
+    if (kDebugMode) {
+      print('fetchCurrentUser response: $response');
+    }
+    return response;
   }
 
   Future<void> signIn(String email, String password) async {
@@ -71,10 +84,19 @@ class AuthRepository {
     }
   }
 
+  Future<void> updateUsername(String username) async {
+    await _apiClient.post(
+      ApiEndpoints.updateUsername,
+      {
+        'username': username,
+      },
+    );
+  }
+
   Future<void> changePassword(
       String currentPassword, String newPassword) async {
     await _apiClient.post(
-      '/auth/password',
+      ApiEndpoints.updatePassword,
       {
         'current_password': currentPassword,
         'new_password': newPassword,
@@ -83,47 +105,24 @@ class AuthRepository {
     );
   }
 
+  Future<void> deleteAccount(String password) async {
+    await _apiClient.post(
+      ApiEndpoints.deleteAccount,
+      {
+        'password': password,
+      },
+    );
+  }
+
   Future<void> forgotPassword(String email) async {
     final response = await _apiClient.post(
       ApiEndpoints.forgotPassword,
-      {'email': email},
-    );
-
-    if (response['code'] != 'reset_email_sent') {
-      throw ApiError(
-        code: response['code'],
-        statusCode: 400,
-      );
-    }
-  }
-
-  Future<void> resetPassword({
-    required String token,
-    required String email,
-    required String password,
-  }) async {
-    final response = await _apiClient.post(
-      ApiEndpoints.resetPassword,
       {
-        'token': token,
         'email': email,
-        'password': password,
-        'password_confirmation': password,
       },
     );
 
-    if (response['code'] != 'password_reset_success') {
-      throw ApiError(
-        code: response['code'],
-        statusCode: 400,
-      );
-    }
-  }
-
-  Future<void> deleteAccount() async {
-    final response = await _apiClient.delete(ApiEndpoints.deleteAccount);
-
-    if (response['code'] != 'account_deleted') {
+    if (response['code'] != 'reset_email_sent') {
       throw ApiError(
         code: response['code'],
         statusCode: 400,
