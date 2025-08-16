@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/data/auth_repository.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iaso/l10n/app_localizations.dart';
 import 'package:iaso/utils/toast.dart';
 
 final authRepositoryProvider =

@@ -8,7 +8,7 @@ import 'package:iaso/presentation/widgets/animated_button.dart';
 import 'package:iaso/presentation/widgets/form_container.dart';
 import 'package:iaso/constants/images.dart';
 import 'package:iaso/constants/text_strings.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iaso/l10n/app_localizations.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {
   const LogInScreen({super.key});

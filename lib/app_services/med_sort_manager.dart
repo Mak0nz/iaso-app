@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/main.dart';
 import 'package:iaso/domain/medication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iaso/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum MedSortMode {

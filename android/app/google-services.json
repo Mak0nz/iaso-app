@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "595855593593",
     "project_id": "heamed-1d38d",
-    "storage_bucket": "heamed-1d38d.appspot.com"
+    "storage_bucket": "heamed-1d38d.firebasestorage.app"
   },
   "client": [
     {
@@ -14,8 +14,12 @@
       },
       "oauth_client": [
         {
-          "client_id": "595855593593-abc93ists8srjart49c5sv3c7m9c96b1.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "595855593593-cl57dlt4nev37r9jd2a6g37q21b89mb3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.benedekszesztai.iaso",
+            "certificate_hash": "db062a39a128526050b21e33310805b1051a3e53"
+          }
         }
       ],
       "api_key": [
@@ -27,14 +31,10 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "595855593593-3ma5gjrg7cju4t4fkjollavi176kdal8.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "595855593593-elnn6h5jlk2ihqptn3lh734pj93kgt8b.apps.googleusercontent.com",
+              "client_id": "595855593593-hir5pktafhbadcfdjrkru9h7isb8o994.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.heamed.RunnerTests"
+                "bundle_id": "com.example.iaso"
               }
             }
           ]

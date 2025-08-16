@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iaso/l10n/app_localizations.dart';
 import 'package:animations/animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:iaso/presentation/views/onboarding/battery_optimization_screen.dart';
 import 'package:iaso/presentation/views/onboarding/welcome_screen.dart';
 import 'package:iaso/presentation/views/onboarding/enable_notifications_screen.dart';
 import 'package:iaso/presentation/views/onboarding/stats_view_screen.dart';
@@ -18,13 +17,12 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  final int _numPages = 5;
+  final int _numPages = 4;
 
   final List<Widget> _pages = const [
     WelcomeScreen(),
     StatsViewSettingsScreen(),
     AddMedScreen(),
-    BatteryOptimizationScreen(),
     EnableNotificationsScreen(),
   ];
 

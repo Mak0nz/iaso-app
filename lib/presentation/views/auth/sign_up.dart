@@ -3,7 +3,7 @@ import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iaso/app_services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iaso/l10n/app_localizations.dart';
 import 'package:iaso/constants/images.dart';
 import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/constants/text_strings.dart';
