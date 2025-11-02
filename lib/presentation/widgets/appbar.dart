@@ -7,11 +7,11 @@ import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final title;
-  final leading;
-  final leadingEvent;
-  final actions;
-  final actionsEvent;
+  final String title;
+  final Widget? leading;
+  final VoidCallback? leadingEvent;
+  final Widget? actions;
+  final VoidCallback? actionsEvent;
 
   const CustomAppBar({
     super.key,

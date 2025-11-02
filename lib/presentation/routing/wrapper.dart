@@ -33,8 +33,8 @@ class _WrapperState extends ConsumerState<Wrapper> {
     final authRepository = ref.read(authRepositoryProvider);
     try {
       await authRepository.initializeAuth();
-      //await authRepository.fetchCurrentUser();
-      await ref.read(settingsSyncProvider.notifier).syncFromServer();
+      await authRepository.fetchCurrentUser();
+      //await ref.read(settingsSyncProvider.notifier).syncFromServer();
       updateAuthState(true);
     } catch (e) {
       updateAuthState(false);

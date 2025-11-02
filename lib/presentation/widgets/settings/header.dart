@@ -5,7 +5,7 @@ import 'package:iaso/constants/sizes.dart';
 import 'package:iaso/presentation/widgets/app_text.dart';
 
 class SettingHeader extends StatefulWidget {
-  final title;
+  final String title;
   final IconData icon;
 
   const SettingHeader({super.key, required this.title, required this.icon});

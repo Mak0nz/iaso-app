@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 
 class AnimatedButton extends StatefulWidget {
-  final onTap;
-  final text;
-  final progressEvent;
+  final VoidCallback? onTap;
+  final String text;
+  final bool progressEvent;
   const AnimatedButton({
     super.key,
     required this.onTap,

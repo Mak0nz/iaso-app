@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 
 class CustomOutlinedButton extends StatefulWidget {
-  final onTap;
-  final text;
-  final progressEvent;
-  final outlineColor;
+  final VoidCallback onTap;
+  final String text;
+  final bool progressEvent;
+  final Color outlineColor;
 
   const CustomOutlinedButton({
-    super.key, 
+    super.key,
     required this.onTap,
     required this.text,
     required this.progressEvent,
@@ -27,13 +27,24 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
       onPressed: widget.onTap,
       style: OutlinedButton.styleFrom(
         minimumSize: const Size.fromHeight(55),
-        side: BorderSide(width: 3, color: widget.outlineColor,), 
+        side: BorderSide(
+          width: 3,
+          color: widget.outlineColor,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       ),
-      child: Center( child: widget.progressEvent ? const CircularProgressIndicator(color: Colors.white,):
-        Text(widget.text, 
-          style: TextStyle(color: widget.outlineColor, fontWeight: FontWeight.bold, fontSize: 20),
-        ),
+      child: Center(
+        child: widget.progressEvent
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+              )
+            : Text(
+                widget.text,
+                style: TextStyle(
+                    color: widget.outlineColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
       ),
     );
   }

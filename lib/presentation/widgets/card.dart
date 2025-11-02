@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatefulWidget {
-  final borderColor;
-  final leading;
-  final title;
-  final subtitle;
-  final trailing;
+  final Color? borderColor;
+  final Widget? leading;
+  final Widget? title;
+  final Widget? subtitle;
+  final Widget? trailing;
 
   const CustomCard({
-    super.key, 
+    super.key,
     this.borderColor,
     this.leading,
     this.title,
